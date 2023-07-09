@@ -8,10 +8,10 @@
 */
 
 
-(function() {
+(function () {
   var Timer, exports;
 
-  Timer = (function() {
+  Timer = (function () {
     /*
         Creates a new timer, inactive by default.
         Call Timer.start() to activate.
@@ -33,7 +33,7 @@
     */
 
 
-    Timer.prototype.start = function() {
+    Timer.prototype.start = function () {
       var now;
       now = (new Date).getTime();
       this.time.start = now;
@@ -51,7 +51,7 @@
     */
 
 
-    Timer.prototype.pause = function(doPause) {
+    Timer.prototype.pause = function (doPause) {
       return this.active = !doPause;
     };
 
@@ -60,7 +60,7 @@
     */
 
 
-    Timer.prototype.update = function() {
+    Timer.prototype.update = function () {
       var now;
       if (!this.active) {
         return;
@@ -77,7 +77,7 @@
     */
 
 
-    Timer.prototype.getElapsedTime = function() {
+    Timer.prototype.getElapsedTime = function () {
       return this.constructor.msToTime(this.time.elapsed);
     };
 
@@ -89,7 +89,7 @@
     */
 
 
-    Timer.msToTime = function(t) {
+    Timer.msToTime = function (t) {
       var h, m, ms, s;
       ms = t % 1000;
       s = Math.floor((t / 1000) % 60);
@@ -112,7 +112,7 @@
     */
 
 
-    Timer.msToTimeString = function(t) {
+    Timer.msToTimeString = function (t) {
       var time;
       time = this.msToTime(t);
       time.h = this.zfill(time.h, 2);
@@ -130,7 +130,7 @@
     */
 
 
-    Timer.zfill = function(num, size) {
+    Timer.zfill = function (num, size) {
       var len;
       len = size - num.toString().length;
       if (len > 0) {

@@ -1,9 +1,9 @@
- /*
- * HexGL
- * @author Thibaut 'BKcore' Despoulain <http://bkcore.com>
- * @license This work is licensed under the Creative Commons Attribution-NonCommercial 3.0 Unported License.
- *          To view a copy of this license, visit http://creativecommons.org/licenses/by-nc/3.0/.
- */
+/*
+* HexGL
+* @author Thibaut 'BKcore' Despoulain <http://bkcore.com>
+* @license This work is licensed under the Creative Commons Attribution-NonCommercial 3.0 Unported License.
+*          To view a copy of this license, visit http://creativecommons.org/licenses/by-nc/3.0/.
+*/
 
 'use strict';
 'v1.0.1';
@@ -11,8 +11,7 @@
 var bkcore = bkcore || {};
 bkcore.hexgl = bkcore.hexgl || {};
 
-bkcore.hexgl.HexGL = function(opts)
-{
+bkcore.hexgl.HexGL = function (opts) {
 	var self = this;
 
 	this.document = opts.document || document;
@@ -23,16 +22,16 @@ bkcore.hexgl.HexGL = function(opts)
 	this.displayHUD = opts.hud == undefined ? true : opts.hud;
 	this.width = opts.width == undefined ? window.innerWidth : opts.width;
 	this.height = opts.height == undefined ? window.innerHeight : opts.height;
-	
+
 	this.difficulty = opts.difficulty == undefined ? 0 : opts.difficulty;
 	this.player = opts.player == undefined ? "Anonym" : opts.player;
 
-	this.track = bkcore.hexgl.tracks[ opts.track == undefined ? 'Cityscape' : opts.track ];
+	this.track = bkcore.hexgl.tracks[opts.track == undefined ? 'Cityscape' : opts.track];
 
 	this.mode = opts.mode == undefined ? 'timeattack' : opts.mode;
 
 	this.controlType = opts.controlType == undefined ? 1 : opts.controlType;
-	
+
 	// 0 == low, 1 == mid, 2 == high, 3 == very high
 	// the old platform+quality combinations map to these new quality values
 	// as follows:
@@ -42,10 +41,9 @@ bkcore.hexgl.HexGL = function(opts)
 	// desktop + mid or high quality => 3 (VERY HIGH)
 	this.quality = opts.quality == undefined ? 3 : opts.quality;
 
-	if(this.quality === 0)
-	{
+	if (this.quality === 0) {
 		this.width /= 2;
-		this.height /=2;
+		this.height /= 2;
 	}
 
 	this.settings = null;
@@ -78,10 +76,8 @@ bkcore.hexgl.HexGL = function(opts)
 
 	this.initRenderer();
 
-	function onKeyPress(event)
-	{
-		if(event.keyCode == 27/*escape*/)
-		{
+	function onKeyPress(event) {
+		if (event.keyCode == 27/*escape*/) {
 			self.reset();
 		}
 	}
@@ -89,27 +85,24 @@ bkcore.hexgl.HexGL = function(opts)
 	this.document.addEventListener('keydown', onKeyPress, false);
 }
 
-bkcore.hexgl.HexGL.prototype.start = function()
-{
+bkcore.hexgl.HexGL.prototype.start = function () {
 
 	this.manager.setCurrent("game");
 
 	var self = this;
 
-	function raf()
-	{
-		if(self && self.active) requestAnimationFrame( raf );
+	function raf() {
+		if (self && self.active) requestAnimationFrame(raf);
 		self.update();
 	}
 
 	//if(this.a[15] == "o")
-		raf();
+	raf();
 
 	this.initGameplay();
 }
 
-bkcore.hexgl.HexGL.prototype.reset = function()
-{
+bkcore.hexgl.HexGL.prototype.reset = function () {
 	this.manager.get('game').objects.lowFPS = 0;
 	this.gameplay.start();
 
@@ -120,27 +113,24 @@ bkcore.hexgl.HexGL.prototype.reset = function()
 	bkcore.Audio.play('wind');
 }
 
-bkcore.hexgl.HexGL.prototype.restart = function()
-{
-	try{ this.document.getElementById('finish').style.display = 'none'; }
-	catch(e){};
+bkcore.hexgl.HexGL.prototype.restart = function () {
+	try { this.document.getElementById('finish').style.display = 'none'; }
+	catch (e) { };
 	this.reset();
 }
 
-bkcore.hexgl.HexGL.prototype.update = function()
-{
-	if(!this.active) return;
+bkcore.hexgl.HexGL.prototype.update = function () {
+	if (!this.active) return;
 
-	if(this.gameplay != null)
+	if (this.gameplay != null)
 		this.gameplay.update();
 
 	this.manager.renderCurrent();
 }
 
-bkcore.hexgl.HexGL.prototype.init = function()
-{
+bkcore.hexgl.HexGL.prototype.init = function () {
 	this.initHUD();
-	
+
 	this.track.buildMaterials(this.quality);
 
 	this.track.buildScenes(this, this.quality);
@@ -148,13 +138,11 @@ bkcore.hexgl.HexGL.prototype.init = function()
 	this.initGameComposer();
 }
 
-bkcore.hexgl.HexGL.prototype.load = function(opts)
-{
+bkcore.hexgl.HexGL.prototype.load = function (opts) {
 	this.track.load(opts, this.quality);
 }
 
-bkcore.hexgl.HexGL.prototype.initGameplay = function()
-{
+bkcore.hexgl.HexGL.prototype.initGameplay = function () {
 	var self = this;
 
 	this.gameplay = new bkcore.hexgl.Gameplay({
@@ -165,7 +153,7 @@ bkcore.hexgl.HexGL.prototype.initGameplay = function()
 		analyser: this.track.analyser,
 		pixelRatio: this.track.pixelRatio,
 		track: this.track,
-		onFinish: function() {
+		onFinish: function () {
 			self.components.shipControls.terminate();
 			self.displayScore(this.finishTime, this.lapTimes);
 		}
@@ -178,8 +166,7 @@ bkcore.hexgl.HexGL.prototype.initGameplay = function()
 	bkcore.Audio.volume('wind', 0.35);
 }
 
-bkcore.hexgl.HexGL.prototype.displayScore = function(f, l)
-{
+bkcore.hexgl.HexGL.prototype.displayScore = function (f, l) {
 	this.active = false;
 
 	var tf = bkcore.Timer.msToTimeString(f);
@@ -189,8 +176,7 @@ bkcore.hexgl.HexGL.prototype.displayScore = function(f, l)
 		bkcore.Timer.msToTimeString(l[2])
 	];
 
-	if(this.gameover !== null)
-	{
+	if (this.gameover !== null) {
 		this.gameover.style.display = "block";
 		this.gameover.children[0].innerHTML = tf.m + "'" + tf.s + "''" + tf.ms;
 		this.containers.main.parentElement.style.display = "none";
@@ -213,33 +199,27 @@ bkcore.hexgl.HexGL.prototype.displayScore = function(f, l)
 	var d = this.difficulty == 0 ? 'casual' : 'hard';
 	var ts = this.hud.timeSeparators;
 
-	if(this.gameplay.result == this.gameplay.results.FINISH)
-	{
+	if (this.gameplay.result == this.gameplay.results.FINISH) {
 		ds != undefined && (ds.innerHTML = "Finished!");
 		// local record
-		if(typeof(Storage)!=="undefined")
-		{
-			if(localStorage['score-'+t+'-'+d] == undefined || localStorage['score-'+t+'-'+d] > f)
-			{
+		if (typeof (Storage) !== "undefined") {
+			if (localStorage['score-' + t + '-' + d] == undefined || localStorage['score-' + t + '-' + d] > f) {
 				dr != undefined && (dr.innerHTML = "New local record!");
-				localStorage['score-'+t+'-'+d] = f;
+				localStorage['score-' + t + '-' + d] = f;
 
 				// Export race data
-				localStorage['race-'+t+'-replay'] = JSON.Stringify(this.gameplay.raceData.export());
+				localStorage['race-' + t + '-replay'] = JSON.Stringify(this.gameplay.raceData.export());
 			}
-			else
-			{
+			else {
 				dr != undefined && (dr.innerHTML = "Well done!");
 			}
 		}
 		// ladder record
-		var p = bkcore.hexgl.Ladder.global[t][d][bkcore.hexgl.Ladder.global[t][d].length-2];
-		if(p != undefined && p['score'] > f)
-		{
+		var p = bkcore.hexgl.Ladder.global[t][d][bkcore.hexgl.Ladder.global[t][d].length - 2];
+		if (p != undefined && p['score'] > f) {
 			dh != undefined && (dh.innerHTML = "You made it to the HOF!");
 		}
-		else
-		{
+		else {
 			dh != undefined && (dh.innerHTML = "Hall Of Fame");
 		}
 
@@ -251,8 +231,7 @@ bkcore.hexgl.HexGL.prototype.displayScore = function(f, l)
 		// Ladder save
 		// Undisclosed
 	}
-	else
-	{
+	else {
 		ds != undefined && (ds.innerHTML = "Destroyed!");
 		dr != undefined && (dr.innerHTML = "Maybe next time!");
 		dh != undefined && (dh.innerHTML = "Hall Of Fame");
@@ -263,16 +242,16 @@ bkcore.hexgl.HexGL.prototype.displayScore = function(f, l)
 	}
 
 	dd != undefined && (dd.innerHTML = d);
-	st != undefined && (st.href='http://twitter.com/share?text='+encodeURIComponent('I just scored '+dt.innerHTML+' in '+'Cityscape ('+d+') on #HexGL! Come try it and beat my record on '));
-	sf != undefined && (sf.href='http://www.facebook.com/sharer.php?s=100'
-		+'&p[title]='+encodeURIComponent('I just scored '+dt.innerHTML+' in '+'Cityscape ('+d+') on HexGL!')
-		+'&p[summary]='+encodeURIComponent('HexGL is a futuristic racing game built by Thibaut Despoulain (BKcore) using HTML5, Javascript and WebGL. Come challenge your friends on this fast-paced 3D game!')
-		+'&p[url]='+encodeURIComponent('http://hexgl.bkcore.com')
-		+'&p[images][0]='+encodeURIComponent('http://hexgl.bkcore.com/image.png'));
+	st != undefined && (st.href = 'http://twitter.com/share?text=' + encodeURIComponent('I just scored ' + dt.innerHTML + ' in ' + 'Cityscape (' + d + ') on #HexGL! Come try it and beat my record on '));
+	sf != undefined && (sf.href = 'http://www.facebook.com/sharer.php?s=100'
+		+ '&p[title]=' + encodeURIComponent('I just scored ' + dt.innerHTML + ' in ' + 'Cityscape (' + d + ') on HexGL!')
+		+ '&p[summary]=' + encodeURIComponent('HexGL is a futuristic racing game built by Thibaut Despoulain (BKcore) using HTML5, Javascript and WebGL. Come challenge your friends on this fast-paced 3D game!')
+		+ '&p[url]=' + encodeURIComponent('http://hexgl.bkcore.com')
+		+ '&p[images][0]=' + encodeURIComponent('http://hexgl.bkcore.com/image.png'));
 
 	bkcore.hexgl.Ladder.displayLadder('finish-ladder', t, d, 8);
 
-	if(this.manager.get('game').objects.lowFPS >= 999)
+	if (this.manager.get('game').objects.lowFPS >= 999)
 		sl != undefined && (sl.innerHTML = 'Note: Your framerate was pretty low, you should try a lesser graphic setting!');
 	else
 		sl != undefined && (sl.innerHTML = '');
@@ -280,16 +259,14 @@ bkcore.hexgl.HexGL.prototype.displayScore = function(f, l)
 	dc.style.display = 'block';
 }
 
-bkcore.hexgl.HexGL.prototype.initRenderer = function()
-{
+bkcore.hexgl.HexGL.prototype.initRenderer = function () {
 	var renderer = new THREE.WebGLRenderer({
 		antialias: false,
 		clearColor: 0x000000
 	});
 
 	// desktop + quality mid or high
-	if(this.quality > 2)
-	{
+	if (this.quality > 2) {
 		renderer.physicallyBasedShading = true;
 		renderer.gammaInput = true;
 		renderer.gammaOutput = true;
@@ -299,18 +276,17 @@ bkcore.hexgl.HexGL.prototype.initRenderer = function()
 
 	renderer.autoClear = false;
 	renderer.sortObjects = false;
-	renderer.setSize( this.width, this.height );
+	renderer.setSize(this.width, this.height);
 	renderer.domElement.style.position = "relative";
 
-	this.containers.main.appendChild( renderer.domElement );
+	this.containers.main.appendChild(renderer.domElement);
 	this.canvas = renderer.domElement;
 	this.renderer = renderer;
 	this.manager = new bkcore.threejs.RenderManager(renderer);
 }
 
-bkcore.hexgl.HexGL.prototype.initHUD = function()
-{
-	if(!this.displayHUD) return;
+bkcore.hexgl.HexGL.prototype.initHUD = function () {
+	if (!this.displayHUD) return;
 	this.hud = new bkcore.hexgl.HUD({
 		width: this.width,
 		height: this.height,
@@ -322,34 +298,33 @@ bkcore.hexgl.HexGL.prototype.initHUD = function()
 	this.containers.overlay.appendChild(this.hud.canvas);
 }
 
-bkcore.hexgl.HexGL.prototype.initGameComposer = function()
-{
+bkcore.hexgl.HexGL.prototype.initGameComposer = function () {
 	var renderTargetParameters = { minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBFormat, stencilBuffer: false };
-	var renderTarget = new THREE.WebGLRenderTarget( this.width, this.height, renderTargetParameters );
+	var renderTarget = new THREE.WebGLRenderTarget(this.width, this.height, renderTargetParameters);
 
 	// GAME COMPOSER
-	var renderSky = new THREE.RenderPass( this.manager.get("sky").scene, this.manager.get("sky").camera );
+	var renderSky = new THREE.RenderPass(this.manager.get("sky").scene, this.manager.get("sky").camera);
 
-	var renderModel = new THREE.RenderPass( this.manager.get("game").scene, this.manager.get("game").camera );
+	var renderModel = new THREE.RenderPass(this.manager.get("game").scene, this.manager.get("game").camera);
 	renderModel.clear = false;
 
-	this.composers.game = new THREE.EffectComposer( this.renderer, renderTarget );
+	this.composers.game = new THREE.EffectComposer(this.renderer, renderTarget);
 
-	var effectScreen = new THREE.ShaderPass( THREE.ShaderExtras[ "screen" ] );
+	var effectScreen = new THREE.ShaderPass(THREE.ShaderExtras["screen"]);
 	effectScreen.renderToScreen = true;
-	var effectVignette = new THREE.ShaderPass( THREE.ShaderExtras[ "vignette" ] );
+	var effectVignette = new THREE.ShaderPass(THREE.ShaderExtras["vignette"]);
 
-	var effectHex = new THREE.ShaderPass( bkcore.threejs.Shaders[ "hexvignette" ] );
-	effectHex.uniforms[ 'size' ].value = 512.0 * (this.width/1633);
-	effectHex.uniforms[ 'rx' ].value = this.width;
-	effectHex.uniforms[ 'ry' ].value = this.height;
-	effectHex.uniforms[ 'tHex' ].texture = this.track.lib.get("textures", "hex");
-	effectHex.uniforms[ 'color' ].value = this.extras.vignetteColor;
+	var effectHex = new THREE.ShaderPass(bkcore.threejs.Shaders["hexvignette"]);
+	effectHex.uniforms['size'].value = 512.0 * (this.width / 1633);
+	effectHex.uniforms['rx'].value = this.width;
+	effectHex.uniforms['ry'].value = this.height;
+	effectHex.uniforms['tHex'].texture = this.track.lib.get("textures", "hex");
+	effectHex.uniforms['color'].value = this.extras.vignetteColor;
 
 	effectHex.renderToScreen = true;
 
-	this.composers.game.addPass( renderSky );
-	this.composers.game.addPass( renderModel );
+	this.composers.game.addPass(renderSky);
+	this.composers.game.addPass(renderModel);
 
 	// if(this.quality > 0 && !this.mobile)
 	// {
@@ -359,15 +334,14 @@ bkcore.hexgl.HexGL.prototype.initGameComposer = function()
 	// 	this.composers.game.addPass( effectFXAA );
 
 	// 	this.extras.fxaa = effectFXAA;
-	
-	// }
-	
-	// desktop + quality mid or high
-	if(this.quality > 2)
-	{
-		var effectBloom = new THREE.BloomPass( 0.8, 25, 4 , 256);
 
-		this.composers.game.addPass( effectBloom );
+	// }
+
+	// desktop + quality mid or high
+	if (this.quality > 2) {
+		var effectBloom = new THREE.BloomPass(0.8, 25, 4, 256);
+
+		this.composers.game.addPass(effectBloom);
 
 		this.extras.bloom = effectBloom;
 	}
@@ -375,23 +349,21 @@ bkcore.hexgl.HexGL.prototype.initGameComposer = function()
 	// desktop + quality low, mid or high
 	// OR
 	// mobile + quality mid or high
-	if(this.quality > 0)
-		this.composers.game.addPass( effectHex );
+	if (this.quality > 0)
+		this.composers.game.addPass(effectHex);
 	else
-		this.composers.game.addPass( effectScreen );
+		this.composers.game.addPass(effectScreen);
 }
 
-bkcore.hexgl.HexGL.prototype.createMesh = function(parent, geometry, x, y, z, mat)
-{
+bkcore.hexgl.HexGL.prototype.createMesh = function (parent, geometry, x, y, z, mat) {
 	geometry.computeTangents();
 
-	var mesh = new THREE.Mesh( geometry, mat );
-	mesh.position.set( x, y, z );
+	var mesh = new THREE.Mesh(geometry, mat);
+	mesh.position.set(x, y, z);
 	parent.add(mesh);
 
 	// desktop + quality mid or high
-	if(this.quality > 2)
-	{
+	if (this.quality > 2) {
 		mesh.castShadow = true;
 		mesh.receiveShadow = true;
 	}
@@ -399,11 +371,9 @@ bkcore.hexgl.HexGL.prototype.createMesh = function(parent, geometry, x, y, z, ma
 	return mesh;
 }
 
-bkcore.hexgl.HexGL.prototype.tweakShipControls = function()
-{
+bkcore.hexgl.HexGL.prototype.tweakShipControls = function () {
 	var c = this.components.shipControls;
-	if(this.difficulty == 1)
-	{
+	if (this.difficulty == 1) {
 		c.airResist = 0.035;
 		c.airDrift = 0.07;
 		c.thrust = 0.035;
@@ -421,8 +391,7 @@ bkcore.hexgl.HexGL.prototype.tweakShipControls = function()
 		c.driftLerp = 0.4;
 		c.angularLerp = 0.4;
 	}
-	else if(this.difficulty == 0)
-	{
+	else if (this.difficulty == 0) {
 		c.airResist = 0.02;
 		c.airDrift = 0.06;
 		c.thrust = 0.02;
@@ -441,6 +410,6 @@ bkcore.hexgl.HexGL.prototype.tweakShipControls = function()
 		c.angularLerp = 0.4;
 	}
 
-	if(this.godmode)
+	if (this.godmode)
 		c.shieldDamage = 0.0;
 }

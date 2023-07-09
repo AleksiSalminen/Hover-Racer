@@ -2,28 +2,28 @@
  * @author alteredq / http://alteredqualia.com/
  */
 
-THREE.SavePass = function ( renderTarget ) {
+THREE.SavePass = function (renderTarget) {
 
-	var shader = THREE.ShaderExtras[ "screen" ];
+	var shader = THREE.ShaderExtras["screen"];
 
 	this.textureID = "tDiffuse";
 
-	this.uniforms = THREE.UniformsUtils.clone( shader.uniforms );
+	this.uniforms = THREE.UniformsUtils.clone(shader.uniforms);
 
-	this.material = new THREE.ShaderMaterial( {
+	this.material = new THREE.ShaderMaterial({
 
 		uniforms: this.uniforms,
 		vertexShader: shader.vertexShader,
 		fragmentShader: shader.fragmentShader
 
-	} );
+	});
 
 	this.renderTarget = renderTarget;
 
-	if ( this.renderTarget === undefined ) {
+	if (this.renderTarget === undefined) {
 
 		this.renderTargetParameters = { minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBFormat, stencilBuffer: false };
-		this.renderTarget = new THREE.WebGLRenderTarget( window.innerWidth, window.innerHeight, this.renderTargetParameters );
+		this.renderTarget = new THREE.WebGLRenderTarget(window.innerWidth, window.innerHeight, this.renderTargetParameters);
 
 	}
 
@@ -35,17 +35,17 @@ THREE.SavePass = function ( renderTarget ) {
 
 THREE.SavePass.prototype = {
 
-	render: function ( renderer, writeBuffer, readBuffer, delta ) {
+	render: function (renderer, writeBuffer, readBuffer, delta) {
 
-		if ( this.uniforms[ this.textureID ] ) {
+		if (this.uniforms[this.textureID]) {
 
-			this.uniforms[ this.textureID ].texture = readBuffer;
+			this.uniforms[this.textureID].texture = readBuffer;
 
 		}
 
 		THREE.EffectComposer.quad.material = this.material;
 
-		renderer.render( THREE.EffectComposer.scene, THREE.EffectComposer.camera, this.renderTarget, this.clear );
+		renderer.render(THREE.EffectComposer.scene, THREE.EffectComposer.camera, this.renderTarget, this.clear);
 
 	}
 

@@ -8,10 +8,10 @@
 */
 
 
-(function() {
+(function () {
   var Particle, Particles, exports, _base;
 
-  Particles = (function() {
+  Particles = (function () {
     /*
         Creates a new particle system using given parameters
         
@@ -63,7 +63,7 @@
     */
 
 
-    Particles.prototype.emit = function(count) {
+    Particles.prototype.emit = function (count) {
       var emitable, i, p, _i, _results;
       emitable = Math.min(count, this.pool.length);
       _results = [];
@@ -87,7 +87,7 @@
     */
 
 
-    Particles.prototype.build = function() {
+    Particles.prototype.build = function () {
       var i, p, _i, _ref;
       this.geometry = new THREE.Geometry();
       this.geometry.dynamic = true;
@@ -111,7 +111,7 @@
     */
 
 
-    Particles.prototype.randomVector = function() {
+    Particles.prototype.randomVector = function () {
       return new THREE.Vector3(Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1);
     };
 
@@ -121,7 +121,7 @@
     */
 
 
-    Particles.prototype.update = function(dt) {
+    Particles.prototype.update = function (dt) {
       var df, dv, i, l, p, _i, _ref;
       df = new THREE.Vector3();
       dv = new THREE.Vector3();
@@ -165,7 +165,7 @@
   */
 
 
-  Particle = (function() {
+  Particle = (function () {
 
     function Particle() {
       this.position = new THREE.Vector3(-10000, -10000, -10000);
@@ -177,7 +177,7 @@
       this.available = true;
     }
 
-    Particle.prototype.reset = function() {
+    Particle.prototype.reset = function () {
       this.position.set(0, -100000, 0);
       this.velocity.set(0, 0, 0);
       this.force.set(0, 0, 0);

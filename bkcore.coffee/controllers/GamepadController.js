@@ -7,11 +7,11 @@
 */
 
 
-(function() {
+(function () {
   var GamepadController, exports, _base;
 
-  GamepadController = (function() {
-    GamepadController.isCompatible = function() {
+  GamepadController = (function () {
+    GamepadController.isCompatible = function () {
       return ('getGamepads' in navigator) || ('webkitGetGamepads' in navigator);
     };
 
@@ -32,7 +32,7 @@
     */
 
 
-    GamepadController.prototype.updateAvailable = function() {
+    GamepadController.prototype.updateAvailable = function () {
       var accel, gamepads, gp, lt, rt, sel, _ref, _ref1, _ref2, _ref3;
       if (!this.active) {
         return false;

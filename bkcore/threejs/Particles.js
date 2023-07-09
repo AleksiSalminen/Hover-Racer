@@ -8,7 +8,7 @@
 
 /*!
  * @package bkcore.threejs
- */ 
+ */
 var bkcore = bkcore || {};
 bkcore.threejs = bkcore.threejs || {};
 
@@ -16,8 +16,7 @@ bkcore.threejs = bkcore.threejs || {};
  * Creates a new particle system using given parameters
  * @param {Object{max, spawnRate, spawn, velocity, randomness, force, spawnRadius, life, friction, color, color2, tint, texture, size, blending, depthTest, transparent, opacity}} opts 
  */
-bkcore.threejs.Particles = function(opts)
-{
+bkcore.threejs.Particles = function (opts) {
 	this.black = new THREE.Color(0x000000);
 	this.white = new THREE.Color(0xffffff);
 
@@ -59,16 +58,14 @@ bkcore.threejs.Particles = function(opts)
 	this.build();
 }
 
-bkcore.threejs.Particles.prototype.build = function()
-{
+bkcore.threejs.Particles.prototype.build = function () {
 	this.geometry = new THREE.Geometry();
 	this.geometry.dynamic = true;
 
 	this.pool = [];
 	this.buffer = [];
 
-	for(var i = 0; i < this.max; ++i)
-	{
+	for (var i = 0; i < this.max; ++i) {
 		var p = new bkcore.threejs.Particle();
 		this.pool.push(p);
 		this.buffer.push(p);
@@ -86,59 +83,53 @@ bkcore.threejs.Particles.prototype.build = function()
  * Emits given number of particles
  * @param  int count
  */
-bkcore.threejs.Particles.prototype.emit = function(count)
-{
+bkcore.threejs.Particles.prototype.emit = function (count) {
 	var emitable = Math.min(count, this.pool.length);
-	for(var i = 0; i < emitable; ++i)
-	{
+	for (var i = 0; i < emitable; ++i) {
 		var p = this.pool.pop();
 		p.available = false;
 		p.position.copy(this.spawn)
 			.addSelf(
 				this.randomVector()
-				.multiplySelf(this.spawnRadius)
+					.multiplySelf(this.spawnRadius)
 			);
 		p.velocity.copy(this.velocity)
 			.addSelf(
 				this.randomVector()
-				.multiplySelf(this.randomness)
+					.multiplySelf(this.randomness)
 			);
 		p.force.copy(this.force);
 		p.basecolor.copy(this.color);
-		if(this.color2 != undefined) p.basecolor.lerpSelf(this.color2, Math.random());
+		if (this.color2 != undefined) p.basecolor.lerpSelf(this.color2, Math.random());
 		p.life = 1.0;
 	}
 }
 
-bkcore.threejs.Particles.prototype.randomVector = function()
-{
+bkcore.threejs.Particles.prototype.randomVector = function () {
 	return new THREE.Vector3(
-			Math.random()*2-1,
-			Math.random()*2-1,
-			Math.random()*2-1
-		);
+		Math.random() * 2 - 1,
+		Math.random() * 2 - 1,
+		Math.random() * 2 - 1
+	);
 }
 
 /**
  * Updates particles (should be call in a RAF loop)
  * @param  float dt time delta ~1.0
  */
-bkcore.threejs.Particles.prototype.update = function(dt)
-{
+bkcore.threejs.Particles.prototype.update = function (dt) {
 	var p, l;
 	var df = new THREE.Vector3();
 	var dv = new THREE.Vector3();
-	for(var i = 0; i < this.buffer.length; ++i)
-	{
+	for (var i = 0; i < this.buffer.length; ++i) {
 
 		p = this.buffer[i];
 
-		if(p.available) continue;
+		if (p.available) continue;
 
 		p.life -= this.ageing;
 
-		if(p.life <= 0 && !p.available)
-		{
+		if (p.life <= 0 && !p.available) {
 			p.reset();
 			this.pool.push(p);
 			continue;
@@ -146,12 +137,12 @@ bkcore.threejs.Particles.prototype.update = function(dt)
 
 		l = p.life > 0.5 ? 1.0 : p.life + 0.5;
 		p.color.setRGB(
-			l * p.basecolor.r, 
-			l * p.basecolor.g, 
+			l * p.basecolor.r,
+			l * p.basecolor.g,
 			l * p.basecolor.b
 		);
 
-		if(this.friction != 1.0)
+		if (this.friction != 1.0)
 			p.velocity.multiplyScalar(this.friction);
 
 		df.copy(p.force).multiplyScalar(dt);
@@ -161,16 +152,15 @@ bkcore.threejs.Particles.prototype.update = function(dt)
 		p.position.addSelf(dv);
 	}
 
-	if(this.spawnRate > 0)
+	if (this.spawnRate > 0)
 		this.emit(this.spawnRate);
 
 	this.geometry.verticesNeedUpdate = true;
 	this.geometry.colorsNeedUpdate = true;
 }
 
-bkcore.threejs.Particle = function()
-{
-	this.position = new THREE.Vector3(-10000,-10000,-10000);
+bkcore.threejs.Particle = function () {
+	this.position = new THREE.Vector3(-10000, -10000, -10000);
 	this.velocity = new THREE.Vector3();
 	this.force = new THREE.Vector3();
 	this.color = new THREE.Color(0x000000);
@@ -179,13 +169,12 @@ bkcore.threejs.Particle = function()
 	this.available = true;
 }
 
-bkcore.threejs.Particle.prototype.reset = function()
-{
-	this.position.set(0,-100000,0);
-	this.velocity.set(0,0,0);
-	this.force.set(0,0,0);
-	this.color.setRGB(0,0,0);
-	this.basecolor.setRGB(0,0,0);
+bkcore.threejs.Particle.prototype.reset = function () {
+	this.position.set(0, -100000, 0);
+	this.velocity.set(0, 0, 0);
+	this.force.set(0, 0, 0);
+	this.color.setRGB(0, 0, 0);
+	this.basecolor.setRGB(0, 0, 0);
 	this.life = 0.0;
 	this.available = true;
 }

@@ -38,35 +38,29 @@ gamecore.Base = gamecore.Class('gamecore.Base',
         ERROR: 'ERROR',
         INFO: 'INFO',
 
-        log: function(id, type, message)
-        {
+        log: function (id, type, message) {
             var idString = '';
-            if (id) idString = ':'+id;
+            if (id) idString = ':' + id;
             console.log(this.fullName + idString + ' [' + type + '] ' + message);
         },
 
-        warn: function (message)
-        {
+        warn: function (message) {
             this.log(null, this.WARN, message);
         },
 
-        debug: function (message)
-        {
+        debug: function (message) {
             this.log(null, this.DEBUG, message);
         },
 
-        error: function (message)
-        {
+        error: function (message) {
             this.log(null, this.ERROR, message);
         },
 
-        info: function (message)
-        {
+        info: function (message) {
             this.log(null, this.INFO, message);
         },
 
-        assert: function(msg, condition)
-        {
+        assert: function (msg, condition) {
             if (!condition)
                 throw msg;
         }
@@ -79,12 +73,10 @@ gamecore.Base = gamecore.Class('gamecore.Base',
         objectId: 0,
         uniqueId: null,
 
-        init: function()
-        {
+        init: function () {
         },
 
-        setup: function()
-        {
+        setup: function () {
             this.objectId = this.Class.totalObjects++;
             this.uniqueId = this.Class.fullName + ':' + this.objectId;
         },
@@ -92,8 +84,7 @@ gamecore.Base = gamecore.Class('gamecore.Base',
         /**
          * @returns {String} A system-wide unique Id for this object instance
          */
-        getUniqueId: function()
-        {
+        getUniqueId: function () {
             // if you see a null error here, then likely you have forgotten to call
             // this._super in a subclassed init method.
             return this.uniqueId;
@@ -103,30 +94,24 @@ gamecore.Base = gamecore.Class('gamecore.Base',
          * @returns {String} A hash matching this object. Override this to implement different
          * kinds of object hashing in derived classes.
          */
-        hashCode: function()
-        {
+        hashCode: function () {
             return this.getUniqueId();
         },
 
-        warn: function (message)
-        {
+        warn: function (message) {
             this.Class.log(this.objectId, this.Class.WARN, message);
         },
-        debug: function (message)
-        {
+        debug: function (message) {
             this.Class.log(this.objectId, this.Class.DEBUG, message);
         },
-        error: function (message)
-        {
+        error: function (message) {
             this.Class.log(this.objectId, this.Class.ERROR, message);
         },
-        info: function (message)
-        {
+        info: function (message) {
             this.Class.log(this.objectId, this.Class.INFO, message);
         },
 
-        toString: function()
-        {
+        toString: function () {
             return this.Class.fullName + ' [id: ' + this.objectId + ']';
         }
     });

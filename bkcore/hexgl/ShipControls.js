@@ -1,15 +1,14 @@
- /*
- * HexGL
- * @author Thibaut 'BKcore' Despoulain <http://bkcore.com>
- * @license This work is licensed under the Creative Commons Attribution-NonCommercial 3.0 Unported License.
- *          To view a copy of this license, visit http://creativecommons.org/licenses/by-nc/3.0/.
- */
+/*
+* HexGL
+* @author Thibaut 'BKcore' Despoulain <http://bkcore.com>
+* @license This work is licensed under the Creative Commons Attribution-NonCommercial 3.0 Unported License.
+*          To view a copy of this license, visit http://creativecommons.org/licenses/by-nc/3.0/.
+*/
 
 var bkcore = bkcore || {};
 bkcore.hexgl = bkcore.hexgl || {};
 
-bkcore.hexgl.ShipControls = function(ctx)
-{
+bkcore.hexgl.ShipControls = function (ctx) {
 	var self = this;
 	var domElement = ctx.document;
 
@@ -21,7 +20,7 @@ bkcore.hexgl.ShipControls = function(ctx)
 	this.mesh = null;
 
 	this.epsilon = 0.00000001;
-	this.zero = new THREE.Vector3(0,0,0);
+	this.zero = new THREE.Vector3(0, 0, 0);
 	this.airResist = 0.02;
 	this.airDrift = 0.1;
 	this.thrust = 0.02;
@@ -43,8 +42,8 @@ bkcore.hexgl.ShipControls = function(ctx)
 	this.driftLerp = 0.35;
 	this.angularLerp = 0.35;
 
-	this.movement = new THREE.Vector3(0,0,0);
-	this.rotation = new THREE.Vector3(0,0,0);
+	this.movement = new THREE.Vector3(0, 0, 0);
+	this.rotation = new THREE.Vector3(0, 0, 0);
 	this.roll = 0.0;
 	this.rollAxis = new THREE.Vector3();
 	this.drift = 0.0;
@@ -74,30 +73,30 @@ bkcore.hexgl.ShipControls = function(ctx)
 
 	this.rollAngle = 0.6;
 	this.rollLerp = 0.08;
-	this.rollDirection = new THREE.Vector3(0,0,1);
+	this.rollDirection = new THREE.Vector3(0, 0, 1);
 
 	this.gradient = 0.0;
 	this.gradientTarget = 0.0;
 	this.gradientLerp = 0.05;
 	this.gradientScale = 4.0;
-	this.gradientVector = new THREE.Vector3(0,0,5);
-	this.gradientAxis = new THREE.Vector3(1,0,0);
+	this.gradientVector = new THREE.Vector3(0, 0, 5);
+	this.gradientAxis = new THREE.Vector3(1, 0, 0);
 
 	this.tilt = 0.0;
 	this.tiltTarget = 0.0;
 	this.tiltLerp = 0.05;
 	this.tiltScale = 4.0;
-	this.tiltVector = new THREE.Vector3(5,0,0);
-	this.tiltAxis = new THREE.Vector3(0,0,1);
+	this.tiltVector = new THREE.Vector3(5, 0, 0);
+	this.tiltAxis = new THREE.Vector3(0, 0, 1);
 
-	this.repulsionVLeft = new THREE.Vector3(1,0,0);
-	this.repulsionVRight = new THREE.Vector3(-1,0,0);
-	this.repulsionVFront = new THREE.Vector3(0,0,1);
+	this.repulsionVLeft = new THREE.Vector3(1, 0, 0);
+	this.repulsionVRight = new THREE.Vector3(-1, 0, 0);
+	this.repulsionVFront = new THREE.Vector3(0, 0, 1);
 	this.repulsionVScale = 4.0;
 	this.repulsionAmount = 0.0;
 	this.repulsionForce = new THREE.Vector3();
 
-	this.fallVector = new THREE.Vector3(0,-20,0);
+	this.fallVector = new THREE.Vector3(0, -20, 0);
 
 	this.resetPos = null;
 	this.resetRot = null;
@@ -122,14 +121,13 @@ bkcore.hexgl.ShipControls = function(ctx)
 	this.orientationController = null;
 	this.gamepadController = null
 
-	if(ctx.controlType == 1 && bkcore.controllers.TouchController.isCompatible())
-	{
+	if (ctx.controlType == 1 && bkcore.controllers.TouchController.isCompatible()) {
 		this.touchController = new bkcore.controllers.TouchController(
-			domElement, ctx.width/2,
-			function(state, touch, event){
-				if(event.touches.length >= 4)
+			domElement, ctx.width / 2,
+			function (state, touch, event) {
+				if (event.touches.length >= 4)
 					window.location.reload(false);
-				else if(event.touches.length == 3)
+				else if (event.touches.length == 3)
 					ctx.restart();
 				// touch was on the right-hand side of the screen
 				else if (touch.clientX > (ctx.width / 2)) {
@@ -140,38 +138,35 @@ bkcore.hexgl.ShipControls = function(ctx)
 				}
 			});
 	}
-	else if(ctx.controlType == 4 && bkcore.controllers.OrientationController.isCompatible())
-	{
+	else if (ctx.controlType == 4 && bkcore.controllers.OrientationController.isCompatible()) {
 		this.orientationController = new bkcore.controllers.OrientationController(
 			domElement, true,
-			function(state, touch, event){
-				if(event.touches.length >= 4)
+			function (state, touch, event) {
+				if (event.touches.length >= 4)
 					window.location.reload(false);
-				else if(event.touches.length == 3)
+				else if (event.touches.length == 3)
 					ctx.restart();
-				else if(event.touches.length < 1)
+				else if (event.touches.length < 1)
 					self.key.forward = false;
 				else
 					self.key.forward = true;
 			});
 	}
-	else if(ctx.controlType == 3 && bkcore.controllers.GamepadController.isCompatible())
-	{
+	else if (ctx.controlType == 3 && bkcore.controllers.GamepadController.isCompatible()) {
 		this.gamepadController = new bkcore.controllers.GamepadController(
-      function(controller){
-        if (controller.select)
-          ctx.restart();
-        else
-          self.key.forward = controller.acceleration > 0;
-          self.key.ltrigger = controller.ltrigger > 0;
-          self.key.rtrigger = controller.rtrigger > 0;
-          self.key.left = controller.lstickx < -0.1;
-          self.key.right = controller.lstickx > 0.1;
-      });
+			function (controller) {
+				if (controller.select)
+					ctx.restart();
+				else
+					self.key.forward = controller.acceleration > 0;
+				self.key.ltrigger = controller.ltrigger > 0;
+				self.key.rtrigger = controller.rtrigger > 0;
+				self.key.left = controller.lstickx < -0.1;
+				self.key.right = controller.lstickx > 0.1;
+			});
 	}
-	else if(ctx.controlType == 2)
-	{
-		if(Leap == null)
+	else if (ctx.controlType == 2) {
+		if (Leap == null)
 			throw new Error("Unable to reach LeapJS!");
 
 		var leapInfo = this.leapInfo = document.getElementById('leapinfo');
@@ -182,63 +177,50 @@ bkcore.hexgl.ShipControls = function(ctx)
 			palmNormal: [0, 0, 0]
 		};
 
-		function updateInfo()
-		{
-			if(!isServerConnected)
-			{
+		function updateInfo() {
+			if (!isServerConnected) {
 				leapInfo.innerHTML = 'Waiting for the Leap Motion Controller server...'
 				leapInfo.style.display = 'block';
 			}
-			else if(lb.isConnected && lb.hasHands)
-			{
+			else if (lb.isConnected && lb.hasHands) {
 				leapInfo.style.display = 'none';
 			}
-			else if(!lb.isConnected)
-			{
+			else if (!lb.isConnected) {
 				leapInfo.innerHTML = 'Please connect your Leap Motion Controller.'
 				leapInfo.style.display = 'block';
 			}
-			else if(!lb.hasHands)
-			{
+			else if (!lb.hasHands) {
 				leapInfo.innerHTML = 'Put your hand over the Leap Motion Controller to play.'
 				leapInfo.style.display = 'block';
 			}
 		}
 		updateInfo();
 
-		var lc = this.leapController =  new Leap.Controller({enableGestures: false});
-		lc.on('connect', function()
-		{
+		var lc = this.leapController = new Leap.Controller({ enableGestures: false });
+		lc.on('connect', function () {
 			isServerConnected = true;
 			updateInfo();
 		});
-		lc.on('deviceConnected', function()
-		{
+		lc.on('deviceConnected', function () {
 			lb.isConnected = true;
 			updateInfo();
 		});
-		lc.on('deviceDisconnected', function()
-		{
+		lc.on('deviceDisconnected', function () {
 			lb.isConnected = false;
 			updateInfo();
 		});
-		lc.on('frame', function(frame)
-		{
-			if(!lb.isConnected) return;
-		  hand = frame.hands[0];
-			if(typeof hand === 'undefined')
-			{
-				if(lb.hasHands)
-				{
+		lc.on('frame', function (frame) {
+			if (!lb.isConnected) return;
+			hand = frame.hands[0];
+			if (typeof hand === 'undefined') {
+				if (lb.hasHands) {
 					lb.hasHands = false;
 					updateInfo();
 				}
 				lb.palmNormal = [0, 0, 0];
 			}
-			else
-			{
-				if(!lb.hasHands)
-				{
+			else {
+				if (!lb.hasHands) {
 					lb.hasHands = true;
 					updateInfo();
 				}
@@ -248,10 +230,8 @@ bkcore.hexgl.ShipControls = function(ctx)
 		lc.connect();
 	}
 
-	function onKeyDown(event)
-	{
-		switch(event.keyCode)
-		{
+	function onKeyDown(event) {
+		switch (event.keyCode) {
 			case 38: /*up*/	self.key.forward = true; break;
 
 			case 40: /*down*/self.key.backward = true; break;
@@ -268,10 +248,8 @@ bkcore.hexgl.ShipControls = function(ctx)
 		}
 	};
 
-	function onKeyUp(event)
-	{
-		switch(event.keyCode)
-		{
+	function onKeyUp(event) {
+		switch (event.keyCode) {
 			case 38: /*up*/	self.key.forward = false; break;
 
 			case 40: /*down*/self.key.backward = false; break;
@@ -292,18 +270,16 @@ bkcore.hexgl.ShipControls = function(ctx)
 	domElement.addEventListener('keyup', onKeyUp, false);
 };
 
-bkcore.hexgl.ShipControls.prototype.control = function(threeMesh)
-{
+bkcore.hexgl.ShipControls.prototype.control = function (threeMesh) {
 	this.mesh = threeMesh;
 	this.mesh.martixAutoUpdate = false;
 	this.dummy.position = this.mesh.position;
 };
 
-bkcore.hexgl.ShipControls.prototype.reset = function(position, rotation)
-{
+bkcore.hexgl.ShipControls.prototype.reset = function (position, rotation) {
 	this.resetPos = position;
 	this.resetRot = rotation;
-	this.movement.set(0,0,0);
+	this.movement.set(0, 0, 0);
 	this.rotation.copy(rotation);
 	this.roll = 0.0;
 	this.drift = 0.0;
@@ -315,7 +291,7 @@ bkcore.hexgl.ShipControls.prototype.reset = function(position, rotation)
 
 	this.dummy.position.copy(position);
 	this.quaternion.set(rotation.x, rotation.y, rotation.z, 1).normalize();
-	this.dummy.quaternion.set(0,0,0,1);
+	this.dummy.quaternion.set(0, 0, 0, 1);
 	this.dummy.quaternion.multiplySelf(this.quaternion);
 
 	this.dummy.matrix.setPosition(this.dummy.position);
@@ -325,19 +301,16 @@ bkcore.hexgl.ShipControls.prototype.reset = function(position, rotation)
 	this.mesh.applyMatrix(this.dummy.matrix);
 }
 
-bkcore.hexgl.ShipControls.prototype.terminate = function()
-{
+bkcore.hexgl.ShipControls.prototype.terminate = function () {
 	this.destroy();
 
-	if(this.leapController != null)
-	{
+	if (this.leapController != null) {
 		this.leapController.disconnect();
 		this.leapInfo.style.display = 'none';
 	}
 }
 
-bkcore.hexgl.ShipControls.prototype.destroy = function()
-{
+bkcore.hexgl.ShipControls.prototype.destroy = function () {
 	bkcore.Audio.play('destroyed');
 	bkcore.Audio.stop('bg');
 	bkcore.Audio.stop('wind');
@@ -349,29 +322,26 @@ bkcore.hexgl.ShipControls.prototype.destroy = function()
 	this.collision.right = false;
 }
 
-bkcore.hexgl.ShipControls.prototype.fall = function()
-{
+bkcore.hexgl.ShipControls.prototype.fall = function () {
 	this.active = false;
 	this.collision.front = false;
 	this.collision.left = false;
 	this.collision.right = false;
 	this.falling = true;
 	_this = this;
-	setTimeout(function(){
+	setTimeout(function () {
 		_this.destroyed = true;
 	}, 1500);
 }
 
-bkcore.hexgl.ShipControls.prototype.update = function(dt)
-{
-	if(this.falling)
-	{
+bkcore.hexgl.ShipControls.prototype.update = function (dt) {
+	if (this.falling) {
 		this.mesh.position.addSelf(this.fallVector);
 		return;
 	}
 
 	this.rotation.y = 0;
-	this.movement.set(0,0,0);
+	this.movement.set(0, 0, 0);
 	this.drift += (0.0 - this.drift) * this.driftLerp;
 	this.angular += (0.0 - this.angular) * this.angularLerp * 0.5;
 
@@ -379,76 +349,65 @@ bkcore.hexgl.ShipControls.prototype.update = function(dt)
 	var angularAmount = 0.0;
 	var yawLeap = 0.0;
 
-	if(this.leapBridge != null && this.leapBridge.hasHands)
-	{
+	if (this.leapBridge != null && this.leapBridge.hasHands) {
 		rollAmount -= this.leapBridge.palmNormal[0] * 3.5 * this.rollAngle;
 		yawLeap = -this.leapBridge.palmNormal[2] * 0.6;
 	}
 
-	if(this.active)
-	{
+	if (this.active) {
 
-		if(this.touchController != null)
-		{
-			angularAmount -= this.touchController.stickVector.x/100 * this.angularSpeed * dt;
-			rollAmount += this.touchController.stickVector.x/100 * this.rollAngle;
+		if (this.touchController != null) {
+			angularAmount -= this.touchController.stickVector.x / 100 * this.angularSpeed * dt;
+			rollAmount += this.touchController.stickVector.x / 100 * this.rollAngle;
 		}
-		else if(this.orientationController != null)
-		{
-			angularAmount += this.orientationController.beta/45 * this.angularSpeed * dt;
-			rollAmount -= this.orientationController.beta/45 * this.rollAngle;
+		else if (this.orientationController != null) {
+			angularAmount += this.orientationController.beta / 45 * this.angularSpeed * dt;
+			rollAmount -= this.orientationController.beta / 45 * this.rollAngle;
 		}
-		else if(this.gamepadController != null && this.gamepadController.updateAvailable())
-		{
+		else if (this.gamepadController != null && this.gamepadController.updateAvailable()) {
 			angularAmount -= this.gamepadController.lstickx * this.angularSpeed * dt;
 			rollAmount += this.gamepadController.lstickx * this.rollAngle;
 		}
-		else if(this.leapBridge != null && this.leapBridge.hasHands)
-		{
+		else if (this.leapBridge != null && this.leapBridge.hasHands) {
 			angularAmount += this.leapBridge.palmNormal[0] * 2 * this.angularSpeed * dt;
 			this.speed += Math.max(0.0, (0.5 + this.leapBridge.palmNormal[2])) * 3 * this.thrust * dt;
 		}
-		else
-		{
-			if(this.key.left)
-			{
+		else {
+			if (this.key.left) {
 				angularAmount += this.angularSpeed * dt;
 				rollAmount -= this.rollAngle;
 			}
-			if(this.key.right)
-			{
+			if (this.key.right) {
 				angularAmount -= this.angularSpeed * dt;
 				rollAmount += this.rollAngle;
 			}
 		}
 
-		if(this.key.forward)
+		if (this.key.forward)
 			this.speed += this.thrust * dt;
 		else
 			this.speed -= this.airResist * dt;
-		if(this.key.ltrigger)
-		{
-			if(this.key.left)
+		if (this.key.ltrigger) {
+			if (this.key.left)
 				angularAmount += this.airAngularSpeed * dt;
 			else
 				angularAmount += this.airAngularSpeed * 0.5 * dt;
 			this.speed -= this.airBrake * dt;
 			this.drift += (this.airDrift - this.drift) * this.driftLerp;
 			this.movement.x += this.speed * this.drift * dt;
-			if(this.drift > 0.0)
+			if (this.drift > 0.0)
 				this.movement.z -= this.speed * this.drift * dt;
 			rollAmount -= this.rollAngle * 0.7;
 		}
-		if(this.key.rtrigger)
-		{
-			if(this.key.right)
+		if (this.key.rtrigger) {
+			if (this.key.right)
 				angularAmount -= this.airAngularSpeed * dt;
 			else
 				angularAmount -= this.airAngularSpeed * 0.5 * dt;
 			this.speed -= this.airBrake * dt;
 			this.drift += (-this.airDrift - this.drift) * this.driftLerp;
 			this.movement.x += this.speed * this.drift * dt;
-			if(this.drift < 0.0)
+			if (this.drift < 0.0)
 				this.movement.z += this.speed * this.drift * dt;
 			rollAmount += this.rollAngle * 0.7;
 		}
@@ -461,15 +420,13 @@ bkcore.hexgl.ShipControls.prototype.update = function(dt)
 	this.speedRatio = this.speed / this.maxSpeed;
 	this.movement.z += this.speed * dt;
 
-	if(this.repulsionForce.isZero())
-	{
-		this.repulsionForce.set(0,0,0);
+	if (this.repulsionForce.isZero()) {
+		this.repulsionForce.set(0, 0, 0);
 	}
-	else
-	{
-		if(this.repulsionForce.z != 0.0) this.movement.z = 0;
+	else {
+		if (this.repulsionForce.z != 0.0) this.movement.z = 0;
 		this.movement.addSelf(this.repulsionForce);
-		this.repulsionForce.lerpSelf(this.zero, dt > 1.5 ? this.repulsionLerp*2 : this.repulsionLerp);
+		this.repulsionForce.lerpSelf(this.zero, dt > 1.5 ? this.repulsionLerp * 2 : this.repulsionLerp);
 	}
 
 	this.collisionPreviousPosition.copy(this.dummy.position);
@@ -496,39 +453,34 @@ bkcore.hexgl.ShipControls.prototype.update = function(dt)
 	this.dummy.matrix.setPosition(this.dummy.position);
 	this.dummy.matrix.setRotationFromQuaternion(this.dummy.quaternion);
 
-	if(this.shield <= 0.0)
-	{
+	if (this.shield <= 0.0) {
 		this.shield = 0.0;
 		this.destroy();
 	}
 
-	if(this.mesh != null)
-	{
+	if (this.mesh != null) {
 		this.mesh.matrix.identity();
 
 		// Gradient (Mesh only, no dummy physics impact)
 		var gradientDelta = (this.gradientTarget - (yawLeap + this.gradient)) * this.gradientLerp;
-		if(Math.abs(gradientDelta) > this.epsilon) this.gradient += gradientDelta;
-		if(Math.abs(this.gradient) > this.epsilon)
-		{
-			this.gradientAxis.set(1,0,0);
+		if (Math.abs(gradientDelta) > this.epsilon) this.gradient += gradientDelta;
+		if (Math.abs(this.gradient) > this.epsilon) {
+			this.gradientAxis.set(1, 0, 0);
 			this.mesh.matrix.rotateByAxis(this.gradientAxis, this.gradient);
 		}
 
 		// Tilting (Idem)
 		var tiltDelta = (this.tiltTarget - this.tilt) * this.tiltLerp;
-		if(Math.abs(tiltDelta) > this.epsilon) this.tilt += tiltDelta;
-		if(Math.abs(this.tilt) > this.epsilon)
-		{
-			this.tiltAxis.set(0,0,1);
+		if (Math.abs(tiltDelta) > this.epsilon) this.tilt += tiltDelta;
+		if (Math.abs(this.tilt) > this.epsilon) {
+			this.tiltAxis.set(0, 0, 1);
 			this.mesh.matrix.rotateByAxis(this.tiltAxis, this.tilt);
 		}
 
 		// Rolling (Idem)
 		var rollDelta = (rollAmount - this.roll) * this.rollLerp;
-		if(Math.abs(rollDelta) > this.epsilon) this.roll += rollDelta;
-		if(Math.abs(this.roll) > this.epsilon)
-		{
+		if (Math.abs(rollDelta) > this.epsilon) this.roll += rollDelta;
+		if (Math.abs(this.roll) > this.epsilon) {
 			this.rollAxis.copy(this.rollDirection);
 			this.mesh.matrix.rotateByAxis(this.rollAxis, this.roll);
 		}
@@ -542,8 +494,7 @@ bkcore.hexgl.ShipControls.prototype.update = function(dt)
 	bkcore.Audio.setListenerVelocity(this.currentVelocity);
 };
 
-bkcore.hexgl.ShipControls.prototype.teleport = function(pos, quat)
-{
+bkcore.hexgl.ShipControls.prototype.teleport = function (pos, quat) {
 	this.quaternion.copy(quat);
 	this.dummy.quaternion.copy(this.quaternion);
 
@@ -554,25 +505,22 @@ bkcore.hexgl.ShipControls.prototype.teleport = function(pos, quat)
 
 	this.dummy.matrix.setRotationFromQuaternion(this.dummy.quaternion);
 
-	if(this.mesh != null)
-	{
+	if (this.mesh != null) {
 		this.mesh.matrix.identity();
 
 		// Gradient (Mesh only, no dummy physics impact)
 		var gradientDelta = (this.gradientTarget - this.gradient) * this.gradientLerp;
-		if(Math.abs(gradientDelta) > this.epsilon) this.gradient += gradientDelta;
-		if(Math.abs(this.gradient) > this.epsilon)
-		{
-			this.gradientAxis.set(1,0,0);
+		if (Math.abs(gradientDelta) > this.epsilon) this.gradient += gradientDelta;
+		if (Math.abs(this.gradient) > this.epsilon) {
+			this.gradientAxis.set(1, 0, 0);
 			this.mesh.matrix.rotateByAxis(this.gradientAxis, this.gradient);
 		}
 
 		// Tilting (Idem)
 		var tiltDelta = (this.tiltTarget - this.tilt) * this.tiltLerp;
-		if(Math.abs(tiltDelta) > this.epsilon) this.tilt += tiltDelta;
-		if(Math.abs(this.tilt) > this.epsilon)
-		{
-			this.tiltAxis.set(0,0,1);
+		if (Math.abs(tiltDelta) > this.epsilon) this.tilt += tiltDelta;
+		if (Math.abs(this.tilt) > this.epsilon) {
+			this.tiltAxis.set(0, 0, 1);
 			this.mesh.matrix.rotateByAxis(this.tiltAxis, this.tilt);
 		}
 
@@ -581,24 +529,23 @@ bkcore.hexgl.ShipControls.prototype.teleport = function(pos, quat)
 	}
 }
 
-bkcore.hexgl.ShipControls.prototype.boosterCheck = function(dt)
-{
-	if(!this.collisionMap || !this.collisionMap.loaded)
+bkcore.hexgl.ShipControls.prototype.boosterCheck = function (dt) {
+	if (!this.collisionMap || !this.collisionMap.loaded)
 		return false;
 
 	this.boost -= this.boosterDecay * dt;
-	if(this.boost < 0){
+	if (this.boost < 0) {
 		this.boost = 0.0;
 		bkcore.Audio.stop('boost');
 	}
 
-	var x = Math.round(this.collisionMap.pixels.width/2 + this.dummy.position.x * this.collisionPixelRatio);
-	var z = Math.round(this.collisionMap.pixels.height/2 + this.dummy.position.z * this.collisionPixelRatio);
+	var x = Math.round(this.collisionMap.pixels.width / 2 + this.dummy.position.x * this.collisionPixelRatio);
+	var z = Math.round(this.collisionMap.pixels.height / 2 + this.dummy.position.z * this.collisionPixelRatio);
 	var pos = new THREE.Vector3(x, 0, z);
 
 	var color = this.collisionMap.getPixel(x, z);
 
-	if(color.r == 255 && color.g < 127 && color.b < 127) {
+	if (color.r == 255 && color.g < 127 && color.b < 127) {
 		bkcore.Audio.play('boost');
 		this.boost = this.boosterSpeed;
 	}
@@ -606,28 +553,26 @@ bkcore.hexgl.ShipControls.prototype.boosterCheck = function(dt)
 	this.movement.z += this.boost * dt;
 }
 
-bkcore.hexgl.ShipControls.prototype.collisionCheck = function(dt)
-{
-	if(!this.collisionDetection || !this.collisionMap || !this.collisionMap.loaded)
+bkcore.hexgl.ShipControls.prototype.collisionCheck = function (dt) {
+	if (!this.collisionDetection || !this.collisionMap || !this.collisionMap.loaded)
 		return false;
 
-	if(this.shieldDelay > 0)
+	if (this.shieldDelay > 0)
 		this.shieldDelay -= dt;
 
 	this.collision.left = false;
 	this.collision.right = false;
 	this.collision.front = false;
 
-	var x = Math.round(this.collisionMap.pixels.width/2 + this.dummy.position.x * this.collisionPixelRatio);
-	var z = Math.round(this.collisionMap.pixels.height/2 + this.dummy.position.z * this.collisionPixelRatio);
+	var x = Math.round(this.collisionMap.pixels.width / 2 + this.dummy.position.x * this.collisionPixelRatio);
+	var z = Math.round(this.collisionMap.pixels.height / 2 + this.dummy.position.z * this.collisionPixelRatio);
 	var pos = new THREE.Vector3(x, 0, z);
 
 	//console.log({c: this.collisionMap.getPixel(414, 670), d: this.dummy.position, x: x, y: y, p: this.collisionMap.getPixel(x, y)})
 
 	var collision = this.collisionMap.getPixelBilinear(x, z);
 
-	if(collision.r < 255)
-	{
+	if (collision.r < 255) {
 		bkcore.Audio.play('crash');
 
 		// Shield
@@ -635,8 +580,8 @@ bkcore.hexgl.ShipControls.prototype.collisionCheck = function(dt)
 		this.shield -= sr * sr * 0.8 * this.shieldDamage;
 
 		// Repulsion
-		this.repulsionVLeft.set(1,0,0);
-		this.repulsionVRight.set(-1,0,0);
+		this.repulsionVLeft.set(1, 0, 0);
+		this.repulsionVRight.set(-1, 0, 0);
 		this.dummy.matrix.rotateAxis(this.repulsionVLeft);
 		this.dummy.matrix.rotateAxis(this.repulsionVRight);
 		this.repulsionVLeft.multiplyScalar(this.repulsionVScale);
@@ -650,157 +595,139 @@ bkcore.hexgl.ShipControls.prototype.collisionCheck = function(dt)
 		this.repulsionAmount = Math.max(0.8,
 			Math.min(this.repulsionCap,
 				this.speed * this.repulsionRatio
-				)
-			);
+			)
+		);
 
-		if(rCol > lCol)
-		{// Repulse right
+		if (rCol > lCol) {// Repulse right
 			this.repulsionForce.x += -this.repulsionAmount;
 			this.collision.left = true;
 		}
-		else if(rCol < lCol)
-		{// Repulse left
+		else if (rCol < lCol) {// Repulse left
 			this.repulsionForce.x += this.repulsionAmount;
 			this.collision.right = true;
 		}
-		else
-		{
+		else {
 			//console.log(collision.r+"  --  "+fCol+"  @  "+lCol+"  /  "+rCol);
-			this.repulsionForce.z += -this.repulsionAmount*4;
+			this.repulsionForce.z += -this.repulsionAmount * 4;
 			this.collision.front = true;
 			this.speed = 0;
 		}
 
 		// DIRTY GAMEOVER
-		if(rCol < 128 && lCol < 128)
-		{
-			var fCol = this.collisionMap.getPixel(Math.round(pos.x+2), Math.round(pos.z+2)).r;
-			if(fCol < 128)
-			{
+		if (rCol < 128 && lCol < 128) {
+			var fCol = this.collisionMap.getPixel(Math.round(pos.x + 2), Math.round(pos.z + 2)).r;
+			if (fCol < 128) {
 				console.log('GAMEOVER');
 				this.fall();
 			}
 		}
 
 		this.speed *= this.collisionSpeedDecrease;
-		this.speed *= (1-this.collisionSpeedDecreaseCoef*(1-collision.r/255));
+		this.speed *= (1 - this.collisionSpeedDecreaseCoef * (1 - collision.r / 255));
 		this.boost = 0;
 
 		return true;
 	}
-	else
-	{
+	else {
 		return false;
 	}
 }
 
-bkcore.hexgl.ShipControls.prototype.heightCheck = function(dt)
-{
-	if(!this.heightMap || !this.heightMap.loaded)
+bkcore.hexgl.ShipControls.prototype.heightCheck = function (dt) {
+	if (!this.heightMap || !this.heightMap.loaded)
 		return false;
 
-	var x = this.heightMap.pixels.width/2 + this.dummy.position.x * this.heightPixelRatio;
-	var z = this.heightMap.pixels.height/2 + this.dummy.position.z * this.heightPixelRatio;
+	var x = this.heightMap.pixels.width / 2 + this.dummy.position.x * this.heightPixelRatio;
+	var z = this.heightMap.pixels.height / 2 + this.dummy.position.z * this.heightPixelRatio;
 	var height = this.heightMap.getPixelFBilinear(x, z) / this.heightScale + this.heightBias;
 
 	var color = this.heightMap.getPixel(x, z);
 
-	if(height < 16777)
-	{
+	if (height < 16777) {
 		var delta = (height - this.dummy.position.y);
 
-		if(delta > 0)
-		{
+		if (delta > 0) {
 			this.movement.y += delta;
 		}
-		else
-		{
+		else {
 			this.movement.y += delta * this.heightLerp;
 		}
 	}
 
 	// gradient
-	this.gradientVector.set(0,0,5);
+	this.gradientVector.set(0, 0, 5);
 	this.dummy.matrix.rotateAxis(this.gradientVector);
 	this.gradientVector.addSelf(this.dummy.position);
 
-	x = this.heightMap.pixels.width/2 + this.gradientVector.x * this.heightPixelRatio;
-	z = this.heightMap.pixels.height/2 + this.gradientVector.z * this.heightPixelRatio;
+	x = this.heightMap.pixels.width / 2 + this.gradientVector.x * this.heightPixelRatio;
+	z = this.heightMap.pixels.height / 2 + this.gradientVector.z * this.heightPixelRatio;
 
 	var nheight = this.heightMap.getPixelFBilinear(x, z) / this.heightScale + this.heightBias;
 
-	if(nheight < 16777)
-		this.gradientTarget = -Math.atan2(nheight-height, 5.0)*this.gradientScale;
+	if (nheight < 16777)
+		this.gradientTarget = -Math.atan2(nheight - height, 5.0) * this.gradientScale;
 
 	// tilt
-	this.tiltVector.set(5,0,0);
+	this.tiltVector.set(5, 0, 0);
 	this.dummy.matrix.rotateAxis(this.tiltVector);
 	this.tiltVector.addSelf(this.dummy.position);
 
-	x = this.heightMap.pixels.width/2 + this.tiltVector.x * this.heightPixelRatio;
-	z = this.heightMap.pixels.height/2 + this.tiltVector.z * this.heightPixelRatio;
+	x = this.heightMap.pixels.width / 2 + this.tiltVector.x * this.heightPixelRatio;
+	z = this.heightMap.pixels.height / 2 + this.tiltVector.z * this.heightPixelRatio;
 
 	nheight = this.heightMap.getPixelFBilinear(x, z) / this.heightScale + this.heightBias;
 
-	if(nheight >= 16777) // If right project out of bounds, try left projection
+	if (nheight >= 16777) // If right project out of bounds, try left projection
 	{
 		this.tiltVector.subSelf(this.dummy.position).multiplyScalar(-1).addSelf(this.dummy.position);
 
-		x = this.heightMap.pixels.width/2 + this.tiltVector.x * this.heightPixelRatio;
-		z = this.heightMap.pixels.height/2 + this.tiltVector.z * this.heightPixelRatio;
+		x = this.heightMap.pixels.width / 2 + this.tiltVector.x * this.heightPixelRatio;
+		z = this.heightMap.pixels.height / 2 + this.tiltVector.z * this.heightPixelRatio;
 
 		nheight = this.heightMap.getPixelFBilinear(x, z) / this.heightScale + this.heightBias;
 	}
 
-	if(nheight < 16777)
-		this.tiltTarget = Math.atan2(nheight-height, 5.0)*this.tiltScale;
+	if (nheight < 16777)
+		this.tiltTarget = Math.atan2(nheight - height, 5.0) * this.tiltScale;
 };
 
-bkcore.hexgl.ShipControls.prototype.getRealSpeed = function(scale)
-{
+bkcore.hexgl.ShipControls.prototype.getRealSpeed = function (scale) {
 	return Math.round(
-		(this.speed+this.boost)
+		(this.speed + this.boost)
 		* (scale == undefined ? 1 : scale)
 	);
 };
 
-bkcore.hexgl.ShipControls.prototype.getRealSpeedRatio = function()
-{
+bkcore.hexgl.ShipControls.prototype.getRealSpeedRatio = function () {
 	return Math.min(
 		this.maxSpeed,
-		this.speed+this.boost
+		this.speed + this.boost
 	) / this.maxSpeed;
 };
 
-bkcore.hexgl.ShipControls.prototype.getSpeedRatio = function()
-{
-	return (this.speed+this.boost)/ this.maxSpeed;
+bkcore.hexgl.ShipControls.prototype.getSpeedRatio = function () {
+	return (this.speed + this.boost) / this.maxSpeed;
 };
 
-bkcore.hexgl.ShipControls.prototype.getBoostRatio = function()
-{
+bkcore.hexgl.ShipControls.prototype.getBoostRatio = function () {
 	return this.boost / this.boosterSpeed;
 };
 
-bkcore.hexgl.ShipControls.prototype.getShieldRatio = function()
-{
+bkcore.hexgl.ShipControls.prototype.getShieldRatio = function () {
 	return this.shield / this.maxShield;
 };
 
-bkcore.hexgl.ShipControls.prototype.getShield = function(scale)
-{
+bkcore.hexgl.ShipControls.prototype.getShield = function (scale) {
 	return Math.round(
 		this.shield
 		* (scale == undefined ? 1 : scale)
 	);
 };
 
-bkcore.hexgl.ShipControls.prototype.getPosition = function()
-{
+bkcore.hexgl.ShipControls.prototype.getPosition = function () {
 	return this.dummy.position;
 }
 
-bkcore.hexgl.ShipControls.prototype.getQuaternion = function()
-{
+bkcore.hexgl.ShipControls.prototype.getQuaternion = function () {
 	return this.dummy.quaternion;
 }

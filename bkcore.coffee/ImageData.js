@@ -8,10 +8,10 @@
 */
 
 
-(function() {
+(function () {
   var ImageData, exports;
 
-  ImageData = (function() {
+  ImageData = (function () {
     /*
         Creates a new ImageData object
         
@@ -26,7 +26,7 @@
       this.pixels = null;
       this.canvas = null;
       this.loaded = false;
-      this.image.onload = function() {
+      this.image.onload = function () {
         var context;
         _this.canvas = document.createElement('canvas');
         _this.canvas.width = _this.image.width;
@@ -53,7 +53,7 @@
     */
 
 
-    ImageData.prototype.getPixel = function(x, y) {
+    ImageData.prototype.getPixel = function (x, y) {
       var i;
       if (!(this.pixels != null) || x < 0 || y < 0 || x >= this.pixels.width || y >= this.pixels.height) {
         return {
@@ -81,7 +81,7 @@
     */
 
 
-    ImageData.prototype.getPixelBilinear = function(fx, fy) {
+    ImageData.prototype.getPixelBilinear = function (fx, fy) {
       var ax, ay, c, cf1, cf2, cx, cxy, cy, dx, dy, rx, ry, x, y;
       x = Math.floor(fx);
       y = Math.floor(fy);
@@ -115,7 +115,7 @@
     */
 
 
-    ImageData.prototype.getPixelF = function(x, y) {
+    ImageData.prototype.getPixelF = function (x, y) {
       var c;
       c = this.getPixel(x, y);
       return c.r + c.g * 255 + c.b * 255 * 255;
@@ -131,7 +131,7 @@
     */
 
 
-    ImageData.prototype.getPixelFBilinear = function(fx, fy) {
+    ImageData.prototype.getPixelFBilinear = function (fx, fy) {
       var c;
       c = this.getPixelBilinear(fx, fy);
       return c.r + c.g * 255 + c.b * 255 * 255;

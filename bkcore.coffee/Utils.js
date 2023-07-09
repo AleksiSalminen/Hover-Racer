@@ -7,18 +7,18 @@
   @author Thibaut 'BKcore' Despoulain <http://bkcore.com>
  */
 
-(function() {
+(function () {
   var Utils, exports;
 
-  Utils = (function() {
+  Utils = (function () {
 
     /*
       Creates a bkcore.threejs.Shaders["normalV"|"normal"] material
       with given parameters
      */
-    function Utils() {}
+    function Utils() { }
 
-    Utils.createNormalMaterial = function(opts) {
+    Utils.createNormalMaterial = function (opts) {
       var material, parameters, shader, shadername, uniforms;
       if (opts == null) {
         opts = {};
@@ -75,7 +75,7 @@
       @return THEE.Vector3 Projected verctor
      */
 
-    Utils.projectOnScreen = function(object, camera) {
+    Utils.projectOnScreen = function (object, camera) {
       var c, lPos, mat;
       mat = new THREE.Matrix4();
       mat.multiply(camera.matrixWorldInverse, object.matrixWorld);
@@ -94,11 +94,11 @@
 
     Utils.URLParameters = null;
 
-    Utils.getURLParameter = function(name) {
+    Utils.getURLParameter = function (name) {
       if (this.URLParameters == null) {
         this.URLParameters = {};
-        window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, (function(_this) {
-          return function(m, key, val) {
+        window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, (function (_this) {
+          return function (m, key, val) {
             return _this.URLParameters[key] = val;
           };
         })(this));
@@ -112,7 +112,7 @@
       @param obj HTMLElement
      */
 
-    Utils.getOffsetTop = function(obj) {
+    Utils.getOffsetTop = function (obj) {
       var curtop;
       curtop = obj.offsetTop;
       if (obj.offsetParent) {
@@ -129,7 +129,7 @@
       @param  string id The ID of the element
      */
 
-    Utils.scrollTo = function(id) {
+    Utils.scrollTo = function (id) {
       return window.scroll(0, this.getOffsetTop(document.getElementById(id)));
     };
 
@@ -141,7 +141,7 @@
       @param  bool active   [description]
      */
 
-    Utils.updateClass = function(id, cssclass, active) {
+    Utils.updateClass = function (id, cssclass, active) {
       var e;
       e = document.getElementById(id);
       if (e == null) {
@@ -163,20 +163,20 @@
       @param  {Object}   data     [description]
      */
 
-    Utils.request = function(url, postData, callback, data) {
+    Utils.request = function (url, postData, callback, data) {
       var XMLHttpFactories, createXMLHTTPObject, i, method, qdata, req, val;
       XMLHttpFactories = [
-        function() {
+        function () {
           return new XMLHttpRequest();
-        }, function() {
+        }, function () {
           return new ActiveXObject("Msxml2.XMLHTTP");
-        }, function() {
+        }, function () {
           return new ActiveXObject("Msxml3.XMLHTTP");
-        }, function() {
+        }, function () {
           return new ActiveXObject("Microsoft.XMLHTTP");
         }
       ];
-      createXMLHTTPObject = function() {
+      createXMLHTTPObject = function () {
         var e, i, xmlhttp, _i, _ref;
         xmlhttp = false;
         for (i = _i = 0, _ref = XMLHttpFactories.length; 0 <= _ref ? _i <= _ref : _i >= _ref; i = 0 <= _ref ? ++_i : --_i) {
@@ -209,7 +209,7 @@
       if (postData != null) {
         req.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
       }
-      req.onreadystatechange = function() {
+      req.onreadystatechange = function () {
         if (req.readyState !== 4) {
           return;
         }
@@ -227,7 +227,7 @@
       Checks whether the device supports Touch input
      */
 
-    Utils.isTouchDevice = function() {
+    Utils.isTouchDevice = function () {
       return ('ontouchstart' in window) || (navigator.MaxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0);
     };
 

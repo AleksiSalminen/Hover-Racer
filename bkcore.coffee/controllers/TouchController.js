@@ -8,11 +8,11 @@
   @author Thibaut 'BKcore' Despoulain <http://bkcore.com>
  */
 
-(function() {
+(function () {
   var TouchController, Vec2, exports, _base;
 
-  TouchController = (function() {
-    TouchController.isCompatible = function() {
+  TouchController = (function () {
+    TouchController.isCompatible = function () {
       return 'ontouchstart' in document.documentElement;
     };
 
@@ -35,18 +35,18 @@
       this.stickPos = new Vec2(0, 0);
       this.stickStartPos = new Vec2(0, 0);
       this.stickVector = new Vec2(0, 0);
-      this.dom.addEventListener('touchstart', ((function(_this) {
-        return function(e) {
+      this.dom.addEventListener('touchstart', ((function (_this) {
+        return function (e) {
           return _this.touchStart(e);
         };
       })(this)), false);
-      this.dom.addEventListener('touchmove', ((function(_this) {
-        return function(e) {
+      this.dom.addEventListener('touchmove', ((function (_this) {
+        return function (e) {
           return _this.touchMove(e);
         };
       })(this)), false);
-      this.dom.addEventListener('touchend', ((function(_this) {
-        return function(e) {
+      this.dom.addEventListener('touchend', ((function (_this) {
+        return function (e) {
           return _this.touchEnd(e);
         };
       })(this)), false);
@@ -57,7 +57,7 @@
       @private
      */
 
-    TouchController.prototype.touchStart = function(event) {
+    TouchController.prototype.touchStart = function (event) {
       var touch, _i, _len, _ref;
       if (!this.active) {
         return;
@@ -86,7 +86,7 @@
       @private
      */
 
-    TouchController.prototype.touchMove = function(event) {
+    TouchController.prototype.touchMove = function (event) {
       var touch, _i, _len, _ref;
       event.preventDefault();
       if (!this.active) {
@@ -110,7 +110,7 @@
       @private
      */
 
-    TouchController.prototype.touchEnd = function(event) {
+    TouchController.prototype.touchEnd = function (event) {
       var touch, _i, _len, _ref;
       if (!this.active) {
         return;
@@ -143,25 +143,25 @@
     @private
    */
 
-  Vec2 = (function() {
+  Vec2 = (function () {
     function Vec2(x, y) {
       this.x = x != null ? x : 0;
       this.y = y != null ? y : 0;
     }
 
-    Vec2.prototype.substract = function(vec) {
+    Vec2.prototype.substract = function (vec) {
       this.x -= vec.x;
       this.y -= vec.y;
       return this;
     };
 
-    Vec2.prototype.copy = function(vec) {
+    Vec2.prototype.copy = function (vec) {
       this.x = vec.x;
       this.y = vec.y;
       return this;
     };
 
-    Vec2.prototype.set = function(x, y) {
+    Vec2.prototype.set = function (x, y) {
       this.x = x;
       this.y = y;
       return this;

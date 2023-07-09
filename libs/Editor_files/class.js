@@ -61,8 +61,7 @@
  */
 
 // compatible with jquery classing
-(function ($)
-{
+(function ($) {
     var regs = {
         undHash: /_|-/,
         colons: /::/,
@@ -72,17 +71,14 @@
         replacer: /\{([^\}]+)\}/g,
         dot: /\./
     },
-        getNext = function (current, nextPart, add)
-        {
-            return current[nextPart] || ( add && (current[nextPart] = {}) );
+        getNext = function (current, nextPart, add) {
+            return current[nextPart] || (add && (current[nextPart] = {}));
         },
-        isContainer = function (current)
-        {
+        isContainer = function (current) {
             var type = typeof current;
-            return type && (  type == 'function' || type == 'object' );
+            return type && (type == 'function' || type == 'object');
         },
-        getObject = function (objectName, roots, add)
-        {
+        getObject = function (objectName, roots, add) {
             var parts = objectName ? objectName.split(regs.dot) : [],
                 length = parts.length,
                 currents = $.isArray(roots) ? roots : [roots || window],
@@ -92,26 +88,20 @@
                 c = 0,
                 type;
 
-            if (length == 0)
-            {
+            if (length == 0) {
                 return currents[0];
             }
-            while (current = currents[c++])
-            {
-                for (i = 0; i < length - 1 && isContainer(current); i++)
-                {
+            while (current = currents[c++]) {
+                for (i = 0; i < length - 1 && isContainer(current); i++) {
                     current = getNext(current, parts[i], add);
                 }
-                if (isContainer(current))
-                {
+                if (isContainer(current)) {
 
                     ret = getNext(current, parts[i], add);
 
-                    if (ret !== undefined)
-                    {
+                    if (ret !== undefined) {
 
-                        if (add === false)
-                        {
+                        if (add === false) {
                             delete current[parts[i]];
                         }
                         return ret;
@@ -128,7 +118,7 @@
          * A collection of useful string helpers.
          *
          */
-            str = $.String = $.extend($.String || {}, {
+        str = $.String = $.extend($.String || {}, {
             /**
              * @function
              * Gets an object from a string.
@@ -144,8 +134,7 @@
              * @param {String} s the string.
              * @return {String} a string with the first character capitalized.
              */
-            capitalize: function (s, cache)
-            {
+            capitalize: function (s, cache) {
                 return s.charAt(0).toUpperCase() + s.substr(1);
             },
             /**
@@ -157,8 +146,7 @@
              * @param {String} s
              * @return {String} a the camelized string
              */
-            camelize: function (s)
-            {
+            camelize: function (s) {
                 s = str.classize(s);
                 return s.charAt(0).toLowerCase() + s.substr(1);
             },
@@ -167,12 +155,10 @@
              * @param {String} s
              * @return {String} the classized string
              */
-            classize: function (s, join)
-            {
+            classize: function (s, join) {
                 var parts = s.split(regs.undHash),
                     i = 0;
-                for (; i < parts.length; i++)
-                {
+                for (; i < parts.length; i++) {
                     parts[i] = str.capitalize(parts[i]);
                 }
 
@@ -186,8 +172,7 @@
              * @param {String} s
              * @return {String} the niceName
              */
-            niceName: function (s)
-            {
+            niceName: function (s) {
                 return str.classize(s, ' ');
             },
 
@@ -199,8 +184,7 @@
              * @param {String} s
              * @return {String} the underscored string
              */
-            underscore: function (s)
-            {
+            underscore: function (s) {
                 return s.replace(regs.colons, '/').replace(regs.words, '$1_$2').replace(regs.lowUp, '$1_$2').replace(regs.dash, '_').toLowerCase();
             },
             /**
@@ -214,20 +198,16 @@
              * objects can be used.
              * @param {Boolean} [remove] if a match is found, remove the property from the object
              */
-            sub: function (s, data, remove)
-            {
+            sub: function (s, data, remove) {
                 var obs = [];
-                obs.push(s.replace(regs.replacer, function (whole, inside)
-                {
+                obs.push(s.replace(regs.replacer, function (whole, inside) {
                     //convert inside to type
                     var ob = getObject(inside, data, typeof remove == 'boolean' ? !remove : remove),
                         type = typeof ob;
-                    if ((type === 'object' || type === 'function') && type !== null)
-                    {
+                    if ((type === 'object' || type === 'function') && type !== null) {
                         obs.push(ob);
                         return "";
-                    } else
-                    {
+                    } else {
                         return "" + ob;
                     }
                 }));
@@ -236,8 +216,7 @@
         });
 
 })(jQuery);
-(function ($)
-{
+(function ($) {
 
     // if we are initializing a new class
     var initializing = false,
@@ -249,14 +228,12 @@
         /**
          *
          */
-        cloneObject = function(object)
-        {
-            if (!object || typeof(object) != 'object')
+        cloneObject = function (object) {
+            if (!object || typeof (object) != 'object')
                 return object;
 
             // special case handling of array (deep copy them)
-            if (object instanceof Array)
-            {
+            if (object instanceof Array) {
                 var clone = [];
                 for (var c = 0; c < object.length; c++)
                     clone[c] = cloneObject(object[c]);
@@ -271,42 +248,36 @@
             }
         },
 
-        concatArgs = function (arr, args)
-        {
+        concatArgs = function (arr, args) {
             return arr.concat(makeArray(args));
         },
         // tests if we can get super in .toString()
-        fnTest = /xyz/.test(function ()
-        {
+        fnTest = /xyz/.test(function () {
             xyz;
         }) ? /\b_super\b/ : /.*/,
         // overwrites an object with methods, sets up _super
         // newProps - new properties
         // oldProps - where the old properties might be
         // addTo - what we are adding to
-        inheritProps = function (newProps, oldProps, addTo)
-        {
+        inheritProps = function (newProps, oldProps, addTo) {
             addTo = addTo || newProps
-            for (var name in newProps)
-            {
+            for (var name in newProps) {
                 // Check if we're overwriting an existing function
                 addTo[name] = isFunction(newProps[name]) &&
                     isFunction(oldProps[name]) &&
-                    fnTest.test(newProps[name]) ? (function (name, fn)
-                {
-                    return function ()
-                    {
-                        var tmp = this._super, ret;
+                    fnTest.test(newProps[name]) ? (function (name, fn) {
+                        return function () {
+                            var tmp = this._super, ret;
 
-                        // Add a new ._super() method that is the same method but on the super-class
-                        this._super = oldProps[name];
+                            // Add a new ._super() method that is the same method but on the super-class
+                            this._super = oldProps[name];
 
-                        // The method only need to be bound temporarily, so we remove it when we're done executing
-                        ret = fn.apply(this, arguments);
-                        this._super = tmp;
-                        return ret;
-                    };
-                })(name, newProps[name]) : newProps[name];
+                            // The method only need to be bound temporarily, so we remove it when we're done executing
+                            ret = fn.apply(this, arguments);
+                            this._super = tmp;
+                            return ret;
+                        };
+                    })(name, newProps[name]) : newProps[name];
             }
         },
 
@@ -570,10 +541,8 @@
          *
          */
 
-        clss = $.Class = function ()
-        {
-            if (arguments.length)
-            {
+        clss = $.Class = function () {
+            if (arguments.length) {
                 return clss.extend.apply(clss, arguments);
             }
         };
@@ -632,31 +601,27 @@
          * next function.
          * @return {Function} the callback function.
          */
-        callback: function (funcs)
-        {
+        callback: function (funcs) {
             //args that should be curried
             var args = makeArray(arguments),
                 self;
 
             funcs = args.shift();
 
-            if (!isArray(funcs))
-            {
+            if (!isArray(funcs)) {
                 funcs = [funcs];
             }
 
             self = this;
 
-            return function class_cb()
-            {
+            return function class_cb() {
                 var cur = concatArgs(args, arguments),
                     isString,
                     length = funcs.length,
                     f = 0,
                     func;
 
-                for (; f < length; f++)
-                {
+                for (; f < length; f++) {
                     func = funcs[f];
                     if (!func)
                         continue;
@@ -697,8 +662,7 @@
          * @codeend
          * @return {class} instance of the class
          */
-        newInstance: function ()
-        {
+        newInstance: function () {
             var inst = this.rawInstance();
             var args;
 
@@ -740,8 +704,7 @@
          * @param {Object} staticProps the static properties of the new class
          * @param {Object} protoProps the prototype properties of the new class
          */
-        setup: function (baseClass, fullName)
-        {
+        setup: function (baseClass, fullName) {
             this.defaults = extend(true, {}, baseClass.defaults, this.defaults);
             if (this._types == undefined) this._types = [];
             this._types.push(this.fullName);
@@ -749,8 +712,7 @@
             this._fullTypeName += this.fullName + '|';
             return arguments;
         },
-        rawInstance: function ()
-        {
+        rawInstance: function () {
             initializing = true;
             var inst = new this();
             initializing = false;
@@ -772,17 +734,14 @@
          * @param {Object} [proto]  the new classes prototype functions
          * @return {jQuery.Class} returns the new class
          */
-        extend: function (fullName, klass, proto)
-        {
+        extend: function (fullName, klass, proto) {
             // figure out what was passed
-            if (typeof fullName != 'string')
-            {
+            if (typeof fullName != 'string') {
                 proto = klass;
                 klass = fullName;
                 fullName = null;
             }
-            if (!proto)
-            {
+            if (!proto) {
                 proto = klass;
                 klass = null;
             }
@@ -793,9 +752,8 @@
                 name, shortName, namespace, prototype;
 
             // append the isA function
-            this.isA = function(typeName)
-            {
-                return this._fullTypeName.indexOf('|'+typeName+'|') != -1;
+            this.isA = function (typeName) {
+                return this._fullTypeName.indexOf('|' + typeName + '|') != -1;
             };
 
             // Instantiate a base class (but only create the instance,
@@ -808,17 +766,14 @@
 
             // The dummy class constructor
 
-            function Class()
-            {
+            function Class() {
                 // All construction is actually done in the init method
                 if (initializing) return;
 
-                if (this.constructor !== Class && arguments.length)
-                { //we are being called w/o new
+                if (this.constructor !== Class && arguments.length) { //we are being called w/o new
                     return arguments.callee.extend.apply(arguments.callee, arguments)
-                } else
-                { //we are being called w/ new
-                                   // copy objects
+                } else { //we are being called w/ new
+                    // copy objects
 
                     return this.Class.newInstance.apply(this.Class, arguments)
                 }
@@ -833,17 +788,15 @@
             inheritProps(klass, this, Class);
 
             // do namespace stuff
-            if (fullName)
-            {
+            if (fullName) {
                 var parts = fullName.split(/\./);
                 var shortName = parts.pop();
 
                 // Martin Wells (playcraft): bug fix. Don't add a namespace object if the class name
                 // has no namespace elements (i.e. it's just "MyClass", not "MyProject.MyClass")
-                if (parts.length > 0)
-                {
+                if (parts.length > 0) {
                     current = clss.getObject(parts.join('.'), window, true),
-                    namespace = current;
+                        namespace = current;
                 }
 
                 current[shortName] = Class;
@@ -874,8 +827,7 @@
 
             var args = Class.setup.apply(Class, concatArgs([_super_class], arguments));
 
-            if (Class.init)
-            {
+            if (Class.init) {
                 Class.init.apply(Class, args || []);
             }
 
@@ -973,16 +925,16 @@
 
 
     clss.prototype.
-    /**
-     * @function callback
-     * Returns a callback function.  This does the same thing as and is described better in [jQuery.Class.static.callback].
-     * The only difference is this callback works
-     * on a instance instead of a class.
-     * @param {String|Array} fname If a string, it represents the function to be called.
-     * If it is an array, it will call each function in order and pass the return value of the prior function to the
-     * next function.
-     * @return {Function} the callback function
-     */
+        /**
+         * @function callback
+         * Returns a callback function.  This does the same thing as and is described better in [jQuery.Class.static.callback].
+         * The only difference is this callback works
+         * on a instance instead of a class.
+         * @param {String|Array} fname If a string, it represents the function to be called.
+         * If it is an array, it will call each function in order and pass the return value of the prior function to the
+         * next function.
+         * @return {Function} the callback function
+         */
         callback = clss.callback;
 
 

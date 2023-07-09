@@ -3,9 +3,9 @@ var bkcore = bkcore || {};
 bkcore.Audio = {};
 bkcore.Audio.sounds = {};
 
-bkcore.Audio.init = function(){
-	if(window.AudioContext||window.webkitAudioContext){
-		bkcore.Audio._ctx = new (window.AudioContext||window.webkitAudioContext)();
+bkcore.Audio.init = function () {
+	if (window.AudioContext || window.webkitAudioContext) {
+		bkcore.Audio._ctx = new (window.AudioContext || window.webkitAudioContext)();
 		bkcore.Audio._panner = bkcore.Audio._ctx.createPanner();
 		bkcore.Audio._panner.connect(bkcore.Audio._ctx.destination);
 	}
@@ -18,21 +18,21 @@ bkcore.Audio.init = function(){
 
 bkcore.Audio.init();
 
-bkcore.Audio.addSound = function(src, id, loop, callback, usePanner){
+bkcore.Audio.addSound = function (src, id, loop, callback, usePanner) {
 	var ctx = bkcore.Audio._ctx;
 	var audio = new Audio();
-	
-	if(ctx){
+
+	if (ctx) {
 		var audio = { src: null, gainNode: null, bufferNode: null, loop: loop };
 		var xhr = new XMLHttpRequest();
 		xhr.responseType = 'arraybuffer';
 
-		xhr.onload = function(){
-			ctx.decodeAudioData(xhr.response, function(b){
+		xhr.onload = function () {
+			ctx.decodeAudioData(xhr.response, function (b) {
 				// Create Gain Node
 				var gainNode = ctx.createGain();
 
-				if(usePanner === true){
+				if (usePanner === true) {
 					gainNode.connect(bkcore.Audio._panner);
 				}
 				else {
@@ -44,9 +44,9 @@ bkcore.Audio.addSound = function(src, id, loop, callback, usePanner){
 
 				//Remember the gain node
 				audio.gainNode = gainNode;
-				
+
 				callback();
-			}, function(e){
+			}, function (e) {
 				console.error('Audio decode failed!', e);
 			});
 		};
@@ -56,7 +56,7 @@ bkcore.Audio.addSound = function(src, id, loop, callback, usePanner){
 	}
 	else {
 		// Workaround for old Safari
-		audio.addEventListener('canplay', function(){
+		audio.addEventListener('canplay', function () {
 			audio.pause();
 			audio.currentTime = 0;
 
@@ -67,17 +67,17 @@ bkcore.Audio.addSound = function(src, id, loop, callback, usePanner){
 		audio.loop = loop;
 		audio.src = src;
 	}
-	
+
 	bkcore.Audio.sounds[id] = audio;
 };
 
-bkcore.Audio.play = function(id){
+bkcore.Audio.play = function (id) {
 	var ctx = bkcore.Audio._ctx;
 
-	if(ctx){
+	if (ctx) {
 		var sound = ctx.createBufferSource();
 		sound.connect(bkcore.Audio.sounds[id].gainNode);
-		
+
 		sound.buffer = bkcore.Audio.sounds[id].src;
 		sound.loop = bkcore.Audio.sounds[id].loop;
 
@@ -87,7 +87,7 @@ bkcore.Audio.play = function(id){
 		sound.start ? sound.start(0) : sound.noteOn(0);
 	}
 	else {
-		if(bkcore.Audio.sounds[id].currentTime > 0){
+		if (bkcore.Audio.sounds[id].currentTime > 0) {
 			bkcore.Audio.sounds[id].pause();
 			bkcore.Audio.sounds[id].currentTime = 0;
 		}
@@ -96,11 +96,11 @@ bkcore.Audio.play = function(id){
 	}
 };
 
-bkcore.Audio.stop = function(id){
+bkcore.Audio.stop = function (id) {
 	var ctx = bkcore.Audio._ctx;
 
-	if(ctx){
-		if(bkcore.Audio.sounds[id].bufferNode !== null){
+	if (ctx) {
+		if (bkcore.Audio.sounds[id].bufferNode !== null) {
 			var bufferNode = bkcore.Audio.sounds[id].bufferNode;
 			bufferNode.stop ? bufferNode.stop(ctx.currentTime) : bufferNode.noteOff(ctx.currentTime);
 		}
@@ -111,10 +111,10 @@ bkcore.Audio.stop = function(id){
 	}
 };
 
-bkcore.Audio.volume = function(id, volume){
+bkcore.Audio.volume = function (id, volume) {
 	var ctx = bkcore.Audio._ctx;
 
-	if(ctx){
+	if (ctx) {
 		bkcore.Audio.sounds[id].gainNode.gain.value = volume;
 	}
 	else {
@@ -122,8 +122,8 @@ bkcore.Audio.volume = function(id, volume){
 	}
 };
 
-bkcore.Audio.setListenerPos = function(vec){
-	if(bkcore.Audio._ctx){
+bkcore.Audio.setListenerPos = function (vec) {
+	if (bkcore.Audio._ctx) {
 		var panner = bkcore.Audio._panner;
 		var vec2 = vec.normalize();
 		panner.setPosition(
@@ -134,8 +134,8 @@ bkcore.Audio.setListenerPos = function(vec){
 	}
 };
 
-bkcore.Audio.setListenerVelocity = function(vec){
-	if(bkcore.Audio._ctx){
+bkcore.Audio.setListenerVelocity = function (vec) {
+	if (bkcore.Audio._ctx) {
 		var panner = bkcore.Audio._panner;
 		//panner.setVelocity(vec.x, vec.y, vec.z);
 	}

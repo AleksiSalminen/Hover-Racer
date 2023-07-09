@@ -8,12 +8,12 @@
 */
 
 
-(function() {
+(function () {
   var OrientationController, exports, _base;
 
-  OrientationController = (function() {
+  OrientationController = (function () {
 
-    OrientationController.isCompatible = function() {
+    OrientationController.isCompatible = function () {
       return 'DeviceOrientationEvent' in window;
     };
 
@@ -39,14 +39,14 @@
       this.dbeta = null;
       this.dgamma = null;
       this.touches = null;
-      window.addEventListener('deviceorientation', (function(e) {
+      window.addEventListener('deviceorientation', (function (e) {
         return _this.orientationChange(e);
       }), false);
       if (this.registerTouch) {
-        this.dom.addEventListener('touchstart', (function(e) {
+        this.dom.addEventListener('touchstart', (function (e) {
           return _this.touchStart(e);
         }), false);
-        this.dom.addEventListener('touchend', (function(e) {
+        this.dom.addEventListener('touchend', (function (e) {
           return _this.touchEnd(e);
         }), false);
       }
@@ -57,7 +57,7 @@
     */
 
 
-    OrientationController.prototype.orientationChange = function(event) {
+    OrientationController.prototype.orientationChange = function (event) {
       if (!this.active) {
         return;
       }
@@ -78,7 +78,7 @@
     */
 
 
-    OrientationController.prototype.touchStart = function(event) {
+    OrientationController.prototype.touchStart = function (event) {
       var touch, _i, _len, _ref;
       if (!this.active) {
         return;
@@ -99,7 +99,7 @@
     */
 
 
-    OrientationController.prototype.touchEnd = function(event) {
+    OrientationController.prototype.touchEnd = function (event) {
       var touch, _i, _len, _ref;
       if (!this.active) {
         return;
