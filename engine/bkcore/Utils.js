@@ -1,7 +1,9 @@
+import THREE from "../libs/Three.dev.js";
+import Shaders from "./threejs/Shaders.js";
 
 
 /*
-  Creates a bkcore.threejs.Shaders["normalV"|"normal"] material
+  Creates a Shaders["normalV"|"normal"] material
   with given parameters
 */
 function createNormalMaterial(opts) {
@@ -25,7 +27,7 @@ function createNormalMaterial(opts) {
     opts.metal = false;
   }
   shadername = opts.perPixel ? "normalV" : "normal";
-  shader = bkcore.threejs.Shaders[shadername];
+  shader = Shaders[shadername];
   uniforms = THREE.UniformsUtils.clone(shader.uniforms);
   uniforms["enableDiffuse"].value = true;
   uniforms["enableSpecular"].value = true;

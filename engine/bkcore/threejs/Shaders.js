@@ -1,13 +1,13 @@
+import THREE from "../../libs/Three.dev.js";
+
 /**
  * @author Thibaut Despoulain / http://bkcore.com
  * @author alteredq / http://alteredqualia.com/
  * @author mr.doob / http://mrdoob.com/
  */
-var bkcore = bkcore || {};
-bkcore.threejs = bkcore.threejs || {};
 
-bkcore.threejs.Shaders =
-{
+
+const Shaders = {
 	'additive': {
 		uniforms: {
 			tDiffuse: { type: "t", value: 0, texture: null },
@@ -950,3 +950,4 @@ bkcore.threejs.Shaders =
 	}
 
 };
+export default Shaders;
