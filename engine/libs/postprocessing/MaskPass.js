@@ -1,8 +1,11 @@
+import THREE from "../Three.dev.js";
+
 /**
  * @author alteredq / http://alteredqualia.com/
  */
 
-THREE.MaskPass = function (scene, camera) {
+
+const MaskPass = function (scene, camera) {
 
 	this.scene = scene;
 	this.camera = camera;
@@ -15,7 +18,7 @@ THREE.MaskPass = function (scene, camera) {
 
 };
 
-THREE.MaskPass.prototype = {
+MaskPass.prototype = {
 
 	render: function (renderer, writeBuffer, readBuffer, delta) {
 
@@ -67,13 +70,13 @@ THREE.MaskPass.prototype = {
 };
 
 
-THREE.ClearMaskPass = function () {
+const ClearMaskPass = function () {
 
 	this.enabled = true;
 
 };
 
-THREE.ClearMaskPass.prototype = {
+ClearMaskPass.prototype = {
 
 	render: function (renderer, writeBuffer, readBuffer, delta) {
 
@@ -83,4 +86,9 @@ THREE.ClearMaskPass.prototype = {
 
 	}
 
+};
+
+
+export {
+	MaskPass, ClearMaskPass
 };

@@ -3,6 +3,9 @@ import ShaderExtras from "../ShaderExtras.js";
 THREE.ShaderExtras = ShaderExtras;
 import ShaderPass from "./ShaderPass.js";
 THREE.ShaderPass = ShaderPass;
+import { MaskPass, ClearMaskPass } from "./MaskPass.js";
+THREE.MaskPass = MaskPass;
+THREE.ClearMaskPass = ClearMaskPass;
 
 /**
  * @author alteredq / http://alteredqualia.com/

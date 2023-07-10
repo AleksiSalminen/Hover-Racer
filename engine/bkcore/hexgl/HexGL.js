@@ -3,8 +3,11 @@ import RenderPass from "../../libs/postprocessing/RenderPass.js";
 THREE.RenderPass = RenderPass;
 import EffectComposer from "../../libs/postprocessing/EffectComposer.js";
 THREE.EffectComposer = EffectComposer;
+import BloomPass from "../../libs/postprocessing/BloomPass.js";
+THREE.BloomPass = BloomPass;
 
 import RenderManagerC from "../threejs/RenderManager.js";
+import Shaders from "../threejs/Shaders.js";
 import HUD from "./HUD.js";
 import tracks from "./Tracks.js";
 
@@ -346,7 +349,7 @@ export default class HexGLC {
 		effectScreen.renderToScreen = true;
 		let effectVignette = new THREE.ShaderPass(THREE.ShaderExtras["vignette"]);
 
-		let effectHex = new THREE.ShaderPass(bkcore.threejs.Shaders["hexvignette"]);
+		let effectHex = new THREE.ShaderPass(Shaders["hexvignette"]);
 		effectHex.uniforms['size'].value = 512.0 * (this.width / 1633);
 		effectHex.uniforms['rx'].value = this.width;
 		effectHex.uniforms['ry'].value = this.height;

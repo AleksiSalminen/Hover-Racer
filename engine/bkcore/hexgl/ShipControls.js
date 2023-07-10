@@ -573,8 +573,8 @@ export default class ShipControls {
 		}
 	
 		//Update listener position
-		bkcore.Audio.setListenerPos(this.movement);
-		bkcore.Audio.setListenerVelocity(this.currentVelocity);
+		//bkcore.Audio.setListenerPos(this.movement);
+		//bkcore.Audio.setListenerVelocity(this.currentVelocity);
 	}
 
 	teleport(pos, quat) {
@@ -619,7 +619,7 @@ export default class ShipControls {
 		this.boost -= this.boosterDecay * dt;
 		if (this.boost < 0) {
 			this.boost = 0.0;
-			bkcore.Audio.stop('boost');
+			//bkcore.Audio.stop('boost');
 		}
 	
 		let x = Math.round(this.collisionMap.pixels.width / 2 + this.dummy.position.x * this.collisionPixelRatio);
