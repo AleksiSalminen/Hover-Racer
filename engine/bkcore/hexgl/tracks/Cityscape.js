@@ -61,15 +61,15 @@ const Cityscape = {
 					'skybox.dawnclouds': "textures/skybox/dawnclouds/%1.jpg"
 				},
 				geometries: {
-					'bonus.base': "geometries/bonus/base/base.js",
-					'booster': "geometries/booster/booster.js",
-					'ship.feisar': "geometries/ships/feisar/feisar.js",
-					'track.cityscape': "geometries/tracks/cityscape/track.js",
-					'track.cityscape.scrapers1': "geometries/tracks/cityscape/scrapers1.js",
-					'track.cityscape.scrapers2': "geometries/tracks/cityscape/scrapers2.js",
-					'track.cityscape.start': "geometries/tracks/cityscape/start.js",
-					'track.cityscape.start.banner': "geometries/tracks/cityscape/startbanner.js",
-					'track.cityscape.bonus.speed': "geometries/tracks/cityscape/bonus/speed.js"
+					'bonus.base': "geometries/bonus/base/base.json",
+					'booster': "geometries/booster/booster.json",
+					'ship.feisar': "geometries/ships/feisar/feisar.json",
+					'track.cityscape': "geometries/tracks/cityscape/track.json",
+					'track.cityscape.scrapers1': "geometries/tracks/cityscape/scrapers1.json",
+					'track.cityscape.scrapers2': "geometries/tracks/cityscape/scrapers2.json",
+					'track.cityscape.start': "geometries/tracks/cityscape/start.json",
+					'track.cityscape.start.banner': "geometries/tracks/cityscape/startbanner.json",
+					'track.cityscape.bonus.speed': "geometries/tracks/cityscape/bonus/speed.json"
 				},
 				analysers: {
 					'track.cityscape.collision': "textures/tracks/cityscape/collision.png",
@@ -146,15 +146,15 @@ const Cityscape = {
 					'skybox.dawnclouds': "textures.full/skybox/dawnclouds/%1.jpg"
 				},
 				geometries: {
-					'bonus.base': "geometries/bonus/base/base.js",
-					'booster': "geometries/booster/booster.js",
-					'ship.feisar': "geometries/ships/feisar/feisar.js",
-					'track.cityscape': "geometries/tracks/cityscape/track.js",
-					'track.cityscape.scrapers1': "geometries/tracks/cityscape/scrapers1.js",
-					'track.cityscape.scrapers2': "geometries/tracks/cityscape/scrapers2.js",
-					'track.cityscape.start': "geometries/tracks/cityscape/start.js",
-					'track.cityscape.start.banner': "geometries/tracks/cityscape/startbanner.js",
-					'track.cityscape.bonus.speed': "geometries/tracks/cityscape/bonus/speed.js"
+					'bonus.base': "geometries/bonus/base/base.json",
+					'booster': "geometries/booster/booster.json",
+					'ship.feisar': "geometries/ships/feisar/feisar.json",
+					'track.cityscape': "geometries/tracks/cityscape/track.json",
+					'track.cityscape.scrapers1': "geometries/tracks/cityscape/scrapers1.json",
+					'track.cityscape.scrapers2': "geometries/tracks/cityscape/scrapers2.json",
+					'track.cityscape.start': "geometries/tracks/cityscape/start.json",
+					'track.cityscape.start.banner': "geometries/tracks/cityscape/startbanner.json",
+					'track.cityscape.bonus.speed': "geometries/tracks/cityscape/bonus/speed.json"
 				},
 				analysers: {
 					'track.cityscape.collision': "textures.full/tracks/cityscape/collision.png",
