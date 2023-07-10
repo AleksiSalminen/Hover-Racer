@@ -3,6 +3,7 @@ import LoaderC from "../../threejs/Loader.js";
 import Utils from "../../Utils.js";
 import ShipControls from "../ShipControls.js";
 import ShipEffects from "../ShipEffects.js";
+import CameraChase from "../CameraChase.js";
 
 
 const Cityscape = {
@@ -457,7 +458,7 @@ const Cityscape = {
 		startbanner.doubleSided = true;
 
 		// CAMERA
-		ctx.components.cameraChase = new bkcore.hexgl.CameraChase({
+		ctx.components.cameraChase = new CameraChase({
 			target: ship,
 			camera: camera,
 			cameraCube: ctx.manager.get("sky").camera,

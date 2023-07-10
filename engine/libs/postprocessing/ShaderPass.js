@@ -1,8 +1,11 @@
+import THREE from "../Three.dev.js";
+
 /**
  * @author alteredq / http://alteredqualia.com/
  */
 
-THREE.ShaderPass = function (shader, textureID) {
+
+const ShaderPass = function (shader, textureID) {
 
 	this.textureID = (textureID !== undefined) ? textureID : "tDiffuse";
 
@@ -24,7 +27,7 @@ THREE.ShaderPass = function (shader, textureID) {
 
 };
 
-THREE.ShaderPass.prototype = {
+ShaderPass.prototype = {
 
 	render: function (renderer, writeBuffer, readBuffer, delta) {
 
@@ -49,3 +52,6 @@ THREE.ShaderPass.prototype = {
 	}
 
 };
+
+
+export default ShaderPass;

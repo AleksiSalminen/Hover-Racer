@@ -1,3 +1,5 @@
+import THREE from "./Three.dev.js";
+
 /**
  * @author alteredq / http://alteredqualia.com/
  * @author zz85 / http://www.lab4games.net/zz85/blog
@@ -29,7 +31,8 @@
  *  unpackDepthRGBA
  */
 
-THREE.ShaderExtras = {
+
+const ShaderExtras = {
 
 	/* -------------------------------------------------------------------------
 	//	Full-screen textured quad shader
@@ -1787,3 +1790,5 @@ THREE.ShaderExtras = {
 	}
 
 };
+
+export default ShaderExtras;

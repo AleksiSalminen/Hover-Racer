@@ -1,4 +1,9 @@
 import THREE from "../../libs/Three.dev.js";
+import RenderPass from "../../libs/postprocessing/RenderPass.js";
+THREE.RenderPass = RenderPass;
+import EffectComposer from "../../libs/postprocessing/EffectComposer.js";
+THREE.EffectComposer = EffectComposer;
+
 import RenderManagerC from "../threejs/RenderManager.js";
 import HUD from "./HUD.js";
 import tracks from "./Tracks.js";
@@ -160,11 +165,8 @@ export default class HexGLC {
 
 	init() {
 		this.initHUD();
-
 		this.track.buildMaterials(this.quality);
-
 		this.track.buildScenes(this, this.quality);
-
 		this.initGameComposer();
 	}
 

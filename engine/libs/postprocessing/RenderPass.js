@@ -1,8 +1,11 @@
+import THREE from "../Three.dev.js";
+
 /**
  * @author alteredq / http://alteredqualia.com/
  */
 
-THREE.RenderPass = function (scene, camera, overrideMaterial, clearColor, clearAlpha) {
+
+const RenderPass = function (scene, camera, overrideMaterial, clearColor, clearAlpha) {
 
 	this.scene = scene;
 	this.camera = camera;
@@ -23,7 +26,7 @@ THREE.RenderPass = function (scene, camera, overrideMaterial, clearColor, clearA
 	this.postPass = null;
 };
 
-THREE.RenderPass.prototype = {
+RenderPass.prototype = {
 
 	render: function (renderer, writeBuffer, readBuffer, delta) {
 
@@ -59,3 +62,5 @@ THREE.RenderPass.prototype = {
 	}
 
 };
+
+export default RenderPass;
