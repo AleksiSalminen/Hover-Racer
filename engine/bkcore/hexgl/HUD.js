@@ -51,7 +51,7 @@ export default class HUD {
 	// CONSTRUCTORS
 
 	constructor(opts) {
-		var self = this;
+		let self = this;
 
 		this.visible = true;
 		this.messageOnly = false;
@@ -156,33 +156,33 @@ export default class HUD {
 	}
 
 	update = function (speed, speedRatio, shield, shieldRatio) {
-		var SCREEN_WIDTH = this.width;
-		var SCREEN_HEIGHT = this.height;
+		let SCREEN_WIDTH = this.width;
+		let SCREEN_HEIGHT = this.height;
 
-		var SCREEN_HW = SCREEN_WIDTH / 2;
-		var SCREEN_HH = SCREEN_HEIGHT / 2;
+		let SCREEN_HW = SCREEN_WIDTH / 2;
+		let SCREEN_HH = SCREEN_HEIGHT / 2;
 
 		if (!this.visible) {
 			this.ctx.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 			return;
 		}
 
-		var w = this.bg.width;
-		var h = this.bg.height;
-		var r = h / w;
-		var nw = SCREEN_WIDTH;
-		var nh = nw * r;
-		var oh = SCREEN_HEIGHT - nh;
-		var o = 0;
+		let w = this.bg.width;
+		let h = this.bg.height;
+		let r = h / w;
+		let nw = SCREEN_WIDTH;
+		let nh = nw * r;
+		let oh = SCREEN_HEIGHT - nh;
+		let o = 0;
 		//speedbar
-		var ba = nh;
-		var bl = SCREEN_WIDTH / this.speedBarRatio;
-		var bw = bl * speedRatio;
+		let ba = nh;
+		let bl = SCREEN_WIDTH / this.speedBarRatio;
+		let bw = bl * speedRatio;
 		//shieldbar
-		var sw = SCREEN_WIDTH / this.shieldBarWRatio;
-		var sho = SCREEN_WIDTH / this.shieldBarHRatio;
-		var sh = sho * shieldRatio;
-		var sy = (SCREEN_WIDTH / this.shieldBarYRatio) + sho - sh;
+		let sw = SCREEN_WIDTH / this.shieldBarWRatio;
+		let sho = SCREEN_WIDTH / this.shieldBarHRatio;
+		let sh = sho * shieldRatio;
+		let sy = (SCREEN_WIDTH / this.shieldBarYRatio) + sho - sh;
 
 
 		if (this.step == 0) {
@@ -242,7 +242,7 @@ export default class HUD {
 			}
 
 			// MESSAGE
-			var my = SCREEN_HH - SCREEN_WIDTH / this.messageYRatio;
+			let my = SCREEN_HH - SCREEN_WIDTH / this.messageYRatio;
 
 			if (this.messageTiming > this.messageDuration + 2000) {
 				this.previousMessage = "";

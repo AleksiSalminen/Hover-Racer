@@ -7,7 +7,7 @@ import Shaders from "./threejs/Shaders.js";
   with given parameters
 */
 function createNormalMaterial(opts) {
-  var material, parameters, shader, shadername, uniforms;
+  let material, parameters, shader, shadername, uniforms;
   if (opts == null) {
     opts = {};
   }
@@ -63,7 +63,7 @@ function createNormalMaterial(opts) {
   @return THEE.Vector3 Projected verctor
 */
 function projectOnScreen(object, camera) {
-  var c, lPos, mat;
+  let c, lPos, mat;
   mat = new THREE.Matrix4();
   mat.multiply(camera.matrixWorldInverse, object.matrixWorld);
   mat.multiply(camera.projectionMatrix, mat);
@@ -95,7 +95,7 @@ function getURLParameter(name) {
   @param obj HTMLElement
 */
 function getOffsetTop(obj) {
-  var curtop;
+  let curtop;
   curtop = obj.offsetTop;
   if (obj.offsetParent) {
     while (obj = obj.offsetParent) {
@@ -122,7 +122,7 @@ function scrollTo(id) {
   @param  bool active   [description]
 */
 function updateClass(id, cssclass, active) {
-  var e;
+  let e;
   e = document.getElementById(id);
   if (e == null) {
     return;
@@ -143,7 +143,7 @@ function updateClass(id, cssclass, active) {
   @param  {Object}   data     [description]
 */
 function request(url, postData, callback, data) {
-  var XMLHttpFactories, createXMLHTTPObject, i, method, qdata, req, val;
+  let XMLHttpFactories, createXMLHTTPObject, i, method, qdata, req, val;
   XMLHttpFactories = [
     function () {
       return new XMLHttpRequest();
@@ -156,7 +156,7 @@ function request(url, postData, callback, data) {
     }
   ];
   createXMLHTTPObject = function () {
-    var e, i, xmlhttp, _i, _ref;
+    let e, i, xmlhttp, _i, _ref;
     xmlhttp = false;
     for (i = _i = 0, _ref = XMLHttpFactories.length; 0 <= _ref ? _i <= _ref : _i >= _ref; i = 0 <= _ref ? ++_i : --_i) {
       try {

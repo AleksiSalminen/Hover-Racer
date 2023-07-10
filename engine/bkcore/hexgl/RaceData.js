@@ -23,8 +23,8 @@ const RaceData = function (track, mode, shipControls) {
 
 RaceData.prototype.tick = function (time) {
 	if (this.rateState == 1) {
-		var p = this.shipControls.getPosition();
-		var q = this.shipControls.getQuaternion();
+		let p = this.shipControls.getPosition();
+		let q = this.shipControls.getQuaternion();
 		this.data.push([
 			time,
 			p.x, p.y, p.z,
@@ -43,7 +43,7 @@ RaceData.prototype.applyInterpolated = function (time) {
 	while (this.seek < this.last && this.data[this.seek + 1][0] < time)
 		++this.seek;
 
-	var prev = this.data[this.seek];
+	let prev = this.data[this.seek];
 	this._pp.set(prev[1], prev[2], prev[3]);
 	this._pq.set(prev[4], prev[5], prev[6], prev[7]);
 
@@ -57,11 +57,11 @@ RaceData.prototype.applyInterpolated = function (time) {
 		this.shipControls.teleport(this._pp, this._pq);
 
 	// interpolation
-	var next = this.data[this.seek + 1];
+	let next = this.data[this.seek + 1];
 	this._np.set(next[1], next[2], next[3]);
 	this._nq.set(next[4], next[5], next[6], next[7]);
 
-	var t = (time - prev[0]) / (next[0] - prev[0]);
+	let t = (time - prev[0]) / (next[0] - prev[0]);
 	this._p.copy(this._pp).lerpSelf(this._np, t);
 	this._q.copy(this._pq).slerpSelf(this._nq, t);
 
