@@ -5,7 +5,7 @@
  * @license MIT
  * 
  * Initialize the a RenderManager by passing a Renderer object:
- * 		var renderManager = new bkcore.threejs.RenderManager(new THREE.WebGLRenderer());
+ * 		let renderManager = new bkcore.threejs.RenderManager(new THREE.WebGLRenderer());
  * 
  * A render setup structure :
  * 		{
@@ -26,7 +26,7 @@
  * 			renderer.render(...);
  * 		}
  * 		
- * Use the "objects" attribute to store useful references and variables like time, geometries, materials, etc.
+ * Use the "objects" attribute to store useful references and letiables like time, geometries, materials, etc.
  * Example:
  * 		renderManager.add('mySetup', scene, camera, function(delta, renderer)
  *		{
@@ -40,80 +40,99 @@
  *		});
  */
 
-var bkcore = bkcore || {};
-bkcore.threejs = bkcore.threejs || {};
 
-(function (w) {
-	var perfNow;
-	var perfNowNames = ['now', 'webkitNow', 'msNow', 'mozNow'];
-	if (!!w['performance']) for (var i = 0; i < perfNowNames.length; ++i) {
-		var n = perfNowNames[i];
-		if (!!w['performance'][n]) {
-			perfNow = function () { return w['performance'][n]() };
-			break;
+export default class RenderManagerC {
+
+	// ATTRIBUTES
+
+	scene;
+	camera;
+	renderer;
+	time;
+	renders;
+	current;
+	size;
+	defaultRenderMethod;
+
+	// CONSTRUCTORS
+
+	constructor(renderer) {
+		this.renderer = renderer;
+		this.addWindowPerf(window);
+		this.time = window.perfNow();
+	
+		this.renders = {};
+		this.current = {};
+		this.size = 0;
+	
+		this.defaultRenderMethod = function (delta, renderer) {
+			renderer.render(this.scene, this.camera);
+		};
+	}
+
+	// METHODS
+
+	addWindowPerf(w) {
+		let perfNow;
+		let perfNowNames = ['now', 'webkitNow', 'msNow', 'mozNow'];
+		if (!!w['performance']) for (let i = 0; i < perfNowNames.length; ++i) {
+			let n = perfNowNames[i];
+			if (!!w['performance'][n]) {
+				perfNow = function () { return w['performance'][n]() };
+				break;
+			}
+		}
+		if (!perfNow) {
+			perfNow = Date.now;
+		}
+		w.perfNow = perfNow;
+	}
+
+	add(id, scene, camera, render, objects) {
+		render = render || this.defaultRenderMethod;
+		objects = objects || {};
+
+		this.renders[id] = {
+			id: id,
+			scene: scene,
+			camera: camera,
+			render: render,
+			objects: objects
+		};
+
+		if (this.size == 0) this.current = this.renders[id];
+
+		this.size++;
+	}
+
+	get(id) {
+		return this.renders[id];
+	}
+
+	remove(id) {
+		if (id in this.renders) {
+			delete this.renders[id];
+			this.size--;
 		}
 	}
-	if (!perfNow) {
-		perfNow = Date.now;
+
+	renderCurrent() {
+		if (this.current && this.current.render) {
+			let now = window.perfNow();
+			let delta = now - this.time;
+			this.time = now;
+
+			this.current.render.call(this.current, delta, this.renderer);
+		}
+		else console.warn('RenderManager: No current render defined.');
 	}
-	w.perfNow = perfNow;
-})(window);
 
-bkcore.threejs.RenderManager = function (renderer) {
-	this.renderer = renderer;
-	this.time = window.perfNow();
-
-	this.renders = {};
-	this.current = {};
-	this.size = 0;
-
-	this.defaultRenderMethod = function (delta, renderer) {
-		renderer.render(this.scene, this.camera);
-	};
-};
-
-bkcore.threejs.RenderManager.prototype.add = function (id, scene, camera, render, objects) {
-	render = render || this.defaultRenderMethod;
-	objects = objects || {};
-
-	this.renders[id] = {
-		id: id,
-		scene: scene,
-		camera: camera,
-		render: render,
-		objects: objects
-	};
-
-	if (this.size == 0) this.current = this.renders[id];
-
-	this.size++;
-};
-
-bkcore.threejs.RenderManager.prototype.get = function (id) {
-	return this.renders[id];
-};
-
-bkcore.threejs.RenderManager.prototype.remove = function (id) {
-	if (id in this.renders) {
-		delete this.renders[id];
-		this.size--;
+	setCurrent (id) {
+		if (id in this.renders) {
+			this.current = this.renders[id];
+		}
+		else console.warn('RenderManager: Render "' + id + '" not found.');
 	}
-};
 
-bkcore.threejs.RenderManager.prototype.renderCurrent = function () {
-	if (this.current && this.current.render) {
-		var now = window.perfNow();
-		var delta = now - this.time;
-		this.time = now;
+}
 
-		this.current.render.call(this.current, delta, this.renderer);
-	}
-	else console.warn('RenderManager: No current render defined.');
-};
-
-bkcore.threejs.RenderManager.prototype.setCurrent = function (id) {
-	if (id in this.renders) {
-		this.current = this.renders[id];
-	}
-	else console.warn('RenderManager: Render "' + id + '" not found.');
-};

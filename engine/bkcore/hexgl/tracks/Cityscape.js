@@ -1,3 +1,5 @@
+import LoaderC from "../../threejs/Loader.js";
+
 
 const Cityscape = {
 
@@ -28,7 +30,7 @@ const Cityscape = {
 	pixelRatio: 2048.0 / 6000.0,
 
 	load: function (opts, quality) {
-		this.lib = new bkcore.threejs.Loader(opts);
+		this.lib = new LoaderC(opts);
 
 		// desktop + quality low
 		// OR

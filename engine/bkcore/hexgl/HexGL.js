@@ -1,3 +1,6 @@
+import THREE from "../../libs/Three.dev.js";
+import RenderManagerC from "../threejs/RenderManager.js";
+import HUD from "./HUD.js";
 import tracks from "./Tracks.js";
 
 
@@ -99,9 +102,7 @@ export default class HexGLC {
 			game: null
 		};
 
-		console.log("A");
 		this.initRenderer();
-		console.log("B");
 
 		function onKeyPress(event) {
 			if (event.keyCode == 27/*escape*/) {
@@ -293,7 +294,6 @@ export default class HexGLC {
 			antialias: false,
 			clearColor: 0x000000
 		});
-		console.log("S");
 
 		// desktop + quality mid or high
 		if (this.quality > 2) {
@@ -312,12 +312,12 @@ export default class HexGLC {
 		this.containers.main.appendChild(renderer.domElement);
 		this.canvas = renderer.domElement;
 		this.renderer = renderer;
-		this.manager = new bkcore.threejs.RenderManager(renderer);
+		this.manager = new RenderManagerC(renderer);
 	}
 
 	initHUD() {
 		if (!this.displayHUD) return;
-		this.hud = new bkcore.hexgl.HUD({
+		this.hud = new HUD({
 			width: this.width,
 			height: this.height,
 			font: "BebasNeueRegular",

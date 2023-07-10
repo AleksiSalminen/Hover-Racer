@@ -1,142 +1,154 @@
-var bkcore = bkcore || {};
 
-bkcore.Audio = {};
-bkcore.Audio.sounds = {};
 
-bkcore.Audio.init = function () {
-	if (window.AudioContext || window.webkitAudioContext) {
-		bkcore.Audio._ctx = new (window.AudioContext || window.webkitAudioContext)();
-		bkcore.Audio._panner = bkcore.Audio._ctx.createPanner();
-		bkcore.Audio._panner.connect(bkcore.Audio._ctx.destination);
+export default class Audio {
+
+	// ATTRIBUTES
+
+	_ctx;
+	_panner;
+	posMultipler;
+	sounds;
+
+	// CONSTRUCTORS
+
+	constructor() {
+		if (window.AudioContext || window.webkitAudioContext) {
+			this._ctx = new (window.AudioContext || window.webkitAudioContext)();
+			this._panner = this._ctx.createPanner();
+			this._panner.connect(this._ctx.destination);
+		}
+		else {
+			this._ctx = null;
+		}
+
+		this.posMultipler = 1.5;
+		this.sounds = [];
 	}
-	else {
-		bkcore.Audio._ctx = null;
-	}
 
-	bkcore.Audio.posMultipler = 1.5;
-};
+	// METHODS
 
-bkcore.Audio.init();
+	addSound(src, id, loop, callback, usePanner) {
+		let ctx = this._ctx;
+		let audio = new Audio();
 
-bkcore.Audio.addSound = function (src, id, loop, callback, usePanner) {
-	var ctx = bkcore.Audio._ctx;
-	var audio = new Audio();
+		if (ctx) {
+			let audio = { src: null, gainNode: null, bufferNode: null, loop: loop };
+			let xhr = new XMLHttpRequest();
+			xhr.responseType = 'arraybuffer';
 
-	if (ctx) {
-		var audio = { src: null, gainNode: null, bufferNode: null, loop: loop };
-		var xhr = new XMLHttpRequest();
-		xhr.responseType = 'arraybuffer';
+			xhr.onload = () => {
+				ctx.decodeAudioData(xhr.response, function (b) {
+					// Create Gain Node
+					let gainNode = ctx.createGain();
 
-		xhr.onload = function () {
-			ctx.decodeAudioData(xhr.response, function (b) {
-				// Create Gain Node
-				var gainNode = ctx.createGain();
+					if (usePanner === true) {
+						gainNode.connect(this._panner);
+					}
+					else {
+						gainNode.connect(ctx.destination);
+					}
 
-				if (usePanner === true) {
-					gainNode.connect(bkcore.Audio._panner);
-				}
-				else {
-					gainNode.connect(ctx.destination);
-				}
+					// Add the audio source
+					audio.src = b;
 
-				// Add the audio source
-				audio.src = b;
+					//Remember the gain node
+					audio.gainNode = gainNode;
 
-				//Remember the gain node
-				audio.gainNode = gainNode;
+					callback();
+				}, function (e) {
+					console.error('Audio decode failed!', e);
+				});
+			};
+
+			xhr.open('GET', src, true);
+			xhr.send(null);
+		}
+		else {
+			// Workaround for old Safari
+			audio.addEventListener('canplay', function () {
+				audio.pause();
+				audio.currentTime = 0;
 
 				callback();
-			}, function (e) {
-				console.error('Audio decode failed!', e);
-			});
-		};
+			}, false);
 
-		xhr.open('GET', src, true);
-		xhr.send(null);
-	}
-	else {
-		// Workaround for old Safari
-		audio.addEventListener('canplay', function () {
-			audio.pause();
-			audio.currentTime = 0;
-
-			callback();
-		}, false);
-
-		audio.autoplay = true;
-		audio.loop = loop;
-		audio.src = src;
-	}
-
-	bkcore.Audio.sounds[id] = audio;
-};
-
-bkcore.Audio.play = function (id) {
-	var ctx = bkcore.Audio._ctx;
-
-	if (ctx) {
-		var sound = ctx.createBufferSource();
-		sound.connect(bkcore.Audio.sounds[id].gainNode);
-
-		sound.buffer = bkcore.Audio.sounds[id].src;
-		sound.loop = bkcore.Audio.sounds[id].loop;
-
-		bkcore.Audio.sounds[id].gainNode.gain.value = 1;
-		bkcore.Audio.sounds[id].bufferNode = sound;
-
-		sound.start ? sound.start(0) : sound.noteOn(0);
-	}
-	else {
-		if (bkcore.Audio.sounds[id].currentTime > 0) {
-			bkcore.Audio.sounds[id].pause();
-			bkcore.Audio.sounds[id].currentTime = 0;
+			audio.autoplay = true;
+			audio.loop = loop;
+			audio.src = src;
 		}
 
-		bkcore.Audio.sounds[id].play();
+		this.sounds[id] = audio;
 	}
-};
 
-bkcore.Audio.stop = function (id) {
-	var ctx = bkcore.Audio._ctx;
+	play(id) {
+		let ctx = this._ctx;
 
-	if (ctx) {
-		if (bkcore.Audio.sounds[id].bufferNode !== null) {
-			var bufferNode = bkcore.Audio.sounds[id].bufferNode;
-			bufferNode.stop ? bufferNode.stop(ctx.currentTime) : bufferNode.noteOff(ctx.currentTime);
+		if (ctx) {
+			let sound = ctx.createBufferSource();
+			sound.connect(this.sounds[id].gainNode);
+
+			sound.buffer = this.sounds[id].src;
+			sound.loop = this.sounds[id].loop;
+
+			this.sounds[id].gainNode.gain.value = 1;
+			this.sounds[id].bufferNode = sound;
+
+			sound.start ? sound.start(0) : sound.noteOn(0);
+		}
+		else {
+			if (this.sounds[id].currentTime > 0) {
+				this.sounds[id].pause();
+				this.sounds[id].currentTime = 0;
+			}
+
+			this.sounds[id].play();
 		}
 	}
-	else {
-		bkcore.Audio.sounds[id].pause();
-		bkcore.Audio.sounds[id].currentTime = 0;
-	}
-};
 
-bkcore.Audio.volume = function (id, volume) {
-	var ctx = bkcore.Audio._ctx;
+	stop(id) {
+		let ctx = this._ctx;
 
-	if (ctx) {
-		bkcore.Audio.sounds[id].gainNode.gain.value = volume;
+		if (ctx) {
+			if (this.sounds[id].bufferNode !== null) {
+				let bufferNode = this.sounds[id].bufferNode;
+				bufferNode.stop ? bufferNode.stop(ctx.currentTime) : bufferNode.noteOff(ctx.currentTime);
+			}
+		}
+		else {
+			this.sounds[id].pause();
+			this.sounds[id].currentTime = 0;
+		}
 	}
-	else {
-		bkcore.Audio.sounds[id].volume = volume;
-	}
-};
 
-bkcore.Audio.setListenerPos = function (vec) {
-	if (bkcore.Audio._ctx) {
-		var panner = bkcore.Audio._panner;
-		var vec2 = vec.normalize();
-		panner.setPosition(
-			vec2.x * bkcore.Audio.posMultipler,
-			vec2.y * bkcore.Audio.posMultipler,
-			vec2.z * bkcore.Audio.posMultipler
-		);
-	}
-};
+	volume(id, volume) {
+		let ctx = this._ctx;
 
-bkcore.Audio.setListenerVelocity = function (vec) {
-	if (bkcore.Audio._ctx) {
-		var panner = bkcore.Audio._panner;
-		//panner.setVelocity(vec.x, vec.y, vec.z);
+		if (ctx) {
+			this.sounds[id].gainNode.gain.value = volume;
+		}
+		else {
+			this.sounds[id].volume = volume;
+		}
 	}
-};
+
+	setListenerPos(vec) {
+		if (this._ctx) {
+			let panner = this._panner;
+			let vec2 = vec.normalize();
+			panner.setPosition(
+				vec2.x * this.posMultipler,
+				vec2.y * this.posMultipler,
+				vec2.z * this.posMultipler
+			);
+		}
+	}
+
+	setListenerVelocity(vec) {
+		if (this._ctx) {
+			let panner = this._panner;
+			//panner.setVelocity(vec.x, vec.y, vec.z);
+		}
+	}
+
+}
+
