@@ -10,6 +10,8 @@ import RenderManagerC from "../threejs/RenderManager.js";
 import Shaders from "../threejs/Shaders.js";
 import HUD from "./HUD.js";
 import tracks from "./Tracks.js";
+import Gameplay from "./Gameplay.js";
+import Timer from "../Timer.js";
 
 
 export default class HexGLC {
@@ -180,7 +182,7 @@ export default class HexGLC {
 	initGameplay() {
 		let self = this;
 
-		this.gameplay = new bkcore.hexgl.Gameplay({
+		this.gameplay = new Gameplay({
 			mode: this.mode,
 			hud: this.hud,
 			shipControls: this.components.shipControls,
@@ -196,19 +198,20 @@ export default class HexGLC {
 
 		this.gameplay.start();
 
-		bkcore.Audio.play('bg');
-		bkcore.Audio.play('wind');
-		bkcore.Audio.volume('wind', 0.35);
+		//bkcore.Audio.play('bg');
+		//bkcore.Audio.play('wind');
+		//bkcore.Audio.volume('wind', 0.35);
 	}
 
 	displayScore(f, l) {
 		this.active = false;
 
-		let tf = bkcore.Timer.msToTimeString(f);
+		let timer = new Timer();
+		let tf = timer.msToTimeString(f);
 		let tl = [
-			bkcore.Timer.msToTimeString(l[0]),
-			bkcore.Timer.msToTimeString(l[1]),
-			bkcore.Timer.msToTimeString(l[2])
+			timer.msToTimeString(l[0]),
+			timer.msToTimeString(l[1]),
+			timer.msToTimeString(l[2])
 		];
 
 		if (this.gameover !== null) {

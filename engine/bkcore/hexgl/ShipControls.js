@@ -385,9 +385,9 @@ export default class ShipControls {
 	}
 
 	destroy() {
-		bkcore.Audio.play('destroyed');
-		bkcore.Audio.stop('bg');
-		bkcore.Audio.stop('wind');
+		//bkcore.Audio.play('destroyed');
+		//bkcore.Audio.stop('bg');
+		//bkcore.Audio.stop('wind');
 	
 		this.active = false;
 		this.destroyed = true;
@@ -629,7 +629,7 @@ export default class ShipControls {
 		let color = this.collisionMap.getPixel(x, z);
 	
 		if (color.r == 255 && color.g < 127 && color.b < 127) {
-			bkcore.Audio.play('boost');
+			//bkcore.Audio.play('boost');
 			this.boost = this.boosterSpeed;
 		}
 	
@@ -656,7 +656,7 @@ export default class ShipControls {
 		let collision = this.collisionMap.getPixelBilinear(x, z);
 	
 		if (collision.r < 255) {
-			bkcore.Audio.play('crash');
+			//bkcore.Audio.play('crash');
 	
 			// Shield
 			let sr = (this.getRealSpeed() / this.maxSpeed);

@@ -1,14 +1,7 @@
-/*
-* HexGL
-* @author Thibaut 'BKcore' Despoulain <http://bkcore.com>
-* @license This work is licensed under the Creative Commons Attribution-NonCommercial 3.0 Unported License. 
-*          To view a copy of this license, visit http://creativecommons.org/licenses/by-nc/3.0/.
-*/
+import THREE from "../../libs/Three.dev.js";
 
-var bkcore = bkcore || {};
-bkcore.hexgl = bkcore.hexgl || {};
 
-bkcore.hexgl.RaceData = function (track, mode, shipControls) {
+const RaceData = function (track, mode, shipControls) {
 	this.track = track;
 	this.mode = mode;
 	this.shipControls = shipControls;
@@ -28,7 +21,7 @@ bkcore.hexgl.RaceData = function (track, mode, shipControls) {
 	this._nq = new THREE.Quaternion();
 }
 
-bkcore.hexgl.RaceData.prototype.tick = function (time) {
+RaceData.prototype.tick = function (time) {
 	if (this.rateState == 1) {
 		var p = this.shipControls.getPosition();
 		var q = this.shipControls.getQuaternion();
@@ -46,7 +39,7 @@ bkcore.hexgl.RaceData.prototype.tick = function (time) {
 	this.rate++;
 }
 
-bkcore.hexgl.RaceData.prototype.applyInterpolated = function (time) {
+RaceData.prototype.applyInterpolated = function (time) {
 	while (this.seek < this.last && this.data[this.seek + 1][0] < time)
 		++this.seek;
 
@@ -75,16 +68,19 @@ bkcore.hexgl.RaceData.prototype.applyInterpolated = function (time) {
 	this.shipControls.teleport(this._p, this._q);
 }
 
-bkcore.hexgl.RaceData.prototype.reset = function () {
+RaceData.prototype.reset = function () {
 	this.seek = 0;
 }
 
-bkcore.hexgl.RaceData.prototype.export = function () {
+RaceData.prototype.export = function () {
 	return this.data;
 }
 
-bkcore.hexgl.RaceData.prototype.import = function (imp) {
+RaceData.prototype.import = function (imp) {
 	this.data = imp;
 	this.last = this.data.length - 1;
 	console.log(this.data);
 }
+
+
+export default RaceData;

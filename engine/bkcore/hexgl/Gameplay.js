@@ -1,21 +1,15 @@
-/*
-* HexGL
-* @author Thibaut 'BKcore' Despoulain <http://bkcore.com>
-* @license This work is licensed under the Creative Commons Attribution-NonCommercial 3.0 Unported License. 
-*          To view a copy of this license, visit http://creativecommons.org/licenses/by-nc/3.0/.
-*/
+import Timer from "../Timer.js";
+import RaceData from "./RaceData.js";
 
-var bkcore = bkcore || {};
-bkcore.hexgl = bkcore.hexgl || {};
 
-bkcore.hexgl.Gameplay = function (opts) {
-	var self = this;
+const Gameplay = function (opts) {
+	let self = this;
 
 	this.startDelay = opts.hud == null ? 0 : 1000;
 	this.countDownDelay = opts.hud == null ? 1000 : 1500;
 
 	this.active = false;
-	this.timer = new bkcore.Timer();
+	this.timer = new Timer();
 	this.modes = {
 		'timeattack': null,
 		'survival': null,
@@ -56,11 +50,11 @@ bkcore.hexgl.Gameplay = function (opts) {
 		self.raceData.tick(this.timer.time.elapsed);
 
 		self.hud != null && self.hud.updateTime(self.timer.getElapsedTime());
-		var cp = self.checkPoint();
+		let cp = self.checkPoint();
 
 		if (cp == self.track.checkpoints.start && self.previousCheckPoint == self.track.checkpoints.last) {
 			self.previousCheckPoint = cp;
-			var t = self.timer.time.elapsed;
+			let t = self.timer.time.elapsed;
 			self.lapTimes.push(t - self.lapTimeElapsed);
 			self.lapTimeElapsed = t;
 
@@ -94,7 +88,7 @@ bkcore.hexgl.Gameplay = function (opts) {
 	};
 }
 
-bkcore.hexgl.Gameplay.prototype.simu = function () {
+Gameplay.prototype.simu = function () {
 	this.lapTimes = [92300, 91250, 90365];
 	this.finishTime = this.lapTimes[0] + this.lapTimes[1] + this.lapTimes[2];
 	if (this.hud != null) this.hud.display("Finish");
@@ -103,7 +97,7 @@ bkcore.hexgl.Gameplay.prototype.simu = function () {
 	this.shipControls.active = false;
 }
 
-bkcore.hexgl.Gameplay.prototype.start = function (opts) {
+Gameplay.prototype.start = function (opts) {
 	this.finishTime = null;
 	this.score = null;
 	this.lap = 1;
@@ -113,13 +107,13 @@ bkcore.hexgl.Gameplay.prototype.start = function (opts) {
 
 	this.previousCheckPoint = this.track.checkpoints.start;
 
-	this.raceData = new bkcore.hexgl.RaceData(this.track.name, this.mode, this.shipControls);
+	this.raceData = new RaceData(this.track.name, this.mode, this.shipControls);
 	if (this.mode == 'replay') {
 		this.cameraControls.mode = this.cameraControls.modes.ORBIT;
 		if (this.hud != null) this.hud.messageOnly = true;
 
 		try {
-			var d = localStorage['race-' + this.track.name + '-replay'];
+			let d = localStorage['race-' + this.track.name + '-replay'];
 			if (d == undefined) {
 				console.error('No replay data for ' + 'race-' + this.track.name + '-replay' + '.');
 				return false;
@@ -141,7 +135,7 @@ bkcore.hexgl.Gameplay.prototype.start = function (opts) {
 	}
 }
 
-bkcore.hexgl.Gameplay.prototype.end = function (result) {
+Gameplay.prototype.end = function (result) {
 	this.score = this.timer.getElapsedTime();
 	this.finishTime = this.timer.time.elapsed;
 	this.timer.start();
@@ -159,7 +153,7 @@ bkcore.hexgl.Gameplay.prototype.end = function (result) {
 	}
 }
 
-bkcore.hexgl.Gameplay.prototype.update = function () {
+Gameplay.prototype.update = function () {
 	if (!this.active) return;
 
 	this.timer.update();
@@ -193,14 +187,17 @@ bkcore.hexgl.Gameplay.prototype.update = function () {
 	}
 }
 
-bkcore.hexgl.Gameplay.prototype.checkPoint = function () {
-	var x = Math.round(this.analyser.pixels.width / 2 + this.shipControls.dummy.position.x * this.pixelRatio);
-	var z = Math.round(this.analyser.pixels.height / 2 + this.shipControls.dummy.position.z * this.pixelRatio);
+Gameplay.prototype.checkPoint = function () {
+	let x = Math.round(this.analyser.pixels.width / 2 + this.shipControls.dummy.position.x * this.pixelRatio);
+	let z = Math.round(this.analyser.pixels.height / 2 + this.shipControls.dummy.position.z * this.pixelRatio);
 
-	var color = this.analyser.getPixel(x, z);
+	let color = this.analyser.getPixel(x, z);
 
 	if (color.r == 255 && color.g == 255 && color.b < 250)
 		return color.b;
 	else
 		return -1;
 }
+
+
+export default Gameplay;
