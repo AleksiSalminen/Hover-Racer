@@ -16,7 +16,7 @@ const Shaders = {
 		},
 
 		vertexShader: [
-			"letying vec2 vUv;",
+			"varying vec2 vUv;",
 
 			"void main() {",
 
@@ -31,7 +31,7 @@ const Shaders = {
 			"uniform sampler2D tAdd;",
 			"uniform float fCoeff;",
 
-			"letying vec2 vUv;",
+			"varying vec2 vUv;",
 
 			"void main() {",
 
@@ -63,7 +63,7 @@ const Shaders = {
 
 		vertexShader: [
 
-			"letying vec2 vUv;",
+			"varying vec2 vUv;",
 
 			"void main() {",
 
@@ -85,7 +85,7 @@ const Shaders = {
 			"uniform sampler2D tDiffuse;",
 			"uniform sampler2D tHex;",
 
-			"letying vec2 vUv;",
+			"varying vec2 vUv;",
 
 			"void main() {",
 
@@ -190,10 +190,10 @@ const Shaders = {
 			"uniform float uNormalScale;",
 			"uniform float uReflectivity;",
 
-			"letying vec3 vTangent;",
-			"letying vec3 vBinormal;",
-			"letying vec3 vNormal;",
-			"letying vec2 vUv;",
+			"varying vec3 vTangent;",
+			"varying vec3 vBinormal;",
+			"varying vec3 vNormal;",
+			"varying vec2 vUv;",
 
 			"uniform vec3 ambientLightColor;",
 
@@ -212,7 +212,7 @@ const Shaders = {
 			"uniform vec3 wrapRGB;",
 			"#endif",
 
-			"letying vec3 vViewPosition;",
+			"varying vec3 vViewPosition;",
 
 			THREE.ShaderChunk["shadowmap_pars_fragment"],
 			THREE.ShaderChunk["fog_pars_fragment"],
@@ -461,12 +461,12 @@ const Shaders = {
 
 			"#endif",
 
-			"letying vec3 vTangent;",
-			"letying vec3 vBinormal;",
-			"letying vec3 vNormal;",
-			"letying vec2 vUv;",
+			"varying vec3 vTangent;",
+			"varying vec3 vBinormal;",
+			"varying vec3 vNormal;",
+			"varying vec2 vUv;",
 
-			"letying vec3 vViewPosition;",
+			"varying vec3 vViewPosition;",
 
 			THREE.ShaderChunk["shadowmap_pars_vertex"],
 
@@ -581,10 +581,10 @@ const Shaders = {
 			"uniform float uNormalScale;",
 			"uniform float uReflectivity;",
 
-			"letying vec3 vTangent;",
-			"letying vec3 vBinormal;",
-			"letying vec3 vNormal;",
-			"letying vec2 vUv;",
+			"varying vec3 vTangent;",
+			"varying vec3 vBinormal;",
+			"varying vec3 vNormal;",
+			"varying vec2 vUv;",
 
 			"uniform vec3 ambientLightColor;",
 
@@ -595,14 +595,14 @@ const Shaders = {
 
 			"#if MAX_POINT_LIGHTS > 0",
 			"uniform vec3 pointLightColor[ MAX_POINT_LIGHTS ];",
-			"letying vec4 vPointLight[ MAX_POINT_LIGHTS ];",
+			"varying vec4 vPointLight[ MAX_POINT_LIGHTS ];",
 			"#endif",
 
 			"#ifdef WRAP_AROUND",
 			"uniform vec3 wrapRGB;",
 			"#endif",
 
-			"letying vec3 vViewPosition;",
+			"varying vec3 vViewPosition;",
 
 			THREE.ShaderChunk["shadowmap_pars_fragment"],
 			THREE.ShaderChunk["fog_pars_fragment"],
@@ -829,21 +829,21 @@ const Shaders = {
 
 			"#endif",
 
-			"letying vec3 vTangent;",
-			"letying vec3 vBinormal;",
-			"letying vec3 vNormal;",
-			"letying vec2 vUv;",
+			"varying vec3 vTangent;",
+			"varying vec3 vBinormal;",
+			"varying vec3 vNormal;",
+			"varying vec2 vUv;",
 
 			"#if MAX_POINT_LIGHTS > 0",
 
 			"uniform vec3 pointLightPosition[ MAX_POINT_LIGHTS ];",
 			"uniform float pointLightDistance[ MAX_POINT_LIGHTS ];",
 
-			"letying vec4 vPointLight[ MAX_POINT_LIGHTS ];",
+			"varying vec4 vPointLight[ MAX_POINT_LIGHTS ];",
 
 			"#endif",
 
-			"letying vec3 vViewPosition;",
+			"varying vec3 vViewPosition;",
 
 			THREE.ShaderChunk["shadowmap_pars_vertex"],
 
@@ -918,7 +918,7 @@ const Shaders = {
 
 		vertexShader: [
 
-			"letying vec3 vViewPosition;",
+			"varying vec3 vViewPosition;",
 
 			"void main() {",
 
@@ -936,7 +936,7 @@ const Shaders = {
 			"uniform samplerCube tCube;",
 			"uniform float tFlip;",
 
-			"letying vec3 vViewPosition;",
+			"varying vec3 vViewPosition;",
 
 			"void main() {",
 
