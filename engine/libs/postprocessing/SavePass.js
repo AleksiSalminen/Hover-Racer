@@ -1,8 +1,11 @@
+import THREE from "../Three.dev.js";
+
 /**
  * @author alteredq / http://alteredqualia.com/
  */
 
-THREE.SavePass = function (renderTarget) {
+
+const SavePass = function (renderTarget) {
 
 	var shader = THREE.ShaderExtras["screen"];
 
@@ -33,7 +36,7 @@ THREE.SavePass = function (renderTarget) {
 
 };
 
-THREE.SavePass.prototype = {
+SavePass.prototype = {
 
 	render: function (renderer, writeBuffer, readBuffer, delta) {
 
@@ -50,3 +53,6 @@ THREE.SavePass.prototype = {
 	}
 
 };
+
+
+export default SavePass;

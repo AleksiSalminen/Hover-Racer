@@ -1,8 +1,11 @@
+import THREE from "../Three.dev.js";
+
 /**
  * @author alteredq / http://alteredqualia.com/
  */
 
-THREE.DotScreenPass = function (center, angle, scale) {
+
+const DotScreenPass = function (center, angle, scale) {
 
 	var shader = THREE.ShaderExtras["dotscreen"];
 
@@ -28,7 +31,7 @@ THREE.DotScreenPass = function (center, angle, scale) {
 
 };
 
-THREE.DotScreenPass.prototype = {
+DotScreenPass.prototype = {
 
 	render: function (renderer, writeBuffer, readBuffer, delta) {
 
@@ -50,3 +53,6 @@ THREE.DotScreenPass.prototype = {
 	}
 
 };
+
+
+export default DotScreenPass;

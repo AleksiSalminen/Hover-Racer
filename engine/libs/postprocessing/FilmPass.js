@@ -1,8 +1,11 @@
+import THREE from "../Three.dev.js";
+
 /**
  * @author alteredq / http://alteredqualia.com/
  */
 
-THREE.FilmPass = function (noiseIntensity, scanlinesIntensity, scanlinesCount, grayscale) {
+
+const FilmPass = function (noiseIntensity, scanlinesIntensity, scanlinesCount, grayscale) {
 
 	var shader = THREE.ShaderExtras["film"];
 
@@ -27,7 +30,7 @@ THREE.FilmPass = function (noiseIntensity, scanlinesIntensity, scanlinesCount, g
 
 };
 
-THREE.FilmPass.prototype = {
+FilmPass.prototype = {
 
 	render: function (renderer, writeBuffer, readBuffer, delta) {
 
@@ -49,3 +52,6 @@ THREE.FilmPass.prototype = {
 	}
 
 };
+
+
+export default FilmPass;

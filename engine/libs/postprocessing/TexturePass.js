@@ -1,8 +1,11 @@
+import THREE from "../Three.dev.js";
+
 /**
  * @author alteredq / http://alteredqualia.com/
  */
 
-THREE.TexturePass = function (texture, opacity) {
+
+const TexturePass = function (texture, opacity) {
 
 	var shader = THREE.ShaderExtras["screen"];
 
@@ -24,7 +27,7 @@ THREE.TexturePass = function (texture, opacity) {
 
 };
 
-THREE.TexturePass.prototype = {
+TexturePass.prototype = {
 
 	render: function (renderer, writeBuffer, readBuffer, delta) {
 
@@ -35,3 +38,6 @@ THREE.TexturePass.prototype = {
 	}
 
 };
+
+
+export default TexturePass;
