@@ -1,6 +1,10 @@
+import BKcoreC from "./bkcore/BKcore.js";
+
 
 function start() {
     console.log("INITIALIZING");
+
+    const BKcore = new BKcoreC();
 
     let $, a, defaultControls, getWebGL, hasWebGL, init, s, u, _fn, _i, _len;
 
@@ -9,21 +13,9 @@ function start() {
     };
 
     init = function (controlType, quality, hud, godmode) {
+        BKcore.init($, document, quality, controlType, hud, godmode);
         let hexGL, progressbar;
-        hexGL = new bkcore.hexgl.HexGL({
-            document: document,
-            width: window.innerWidth,
-            height: window.innerHeight,
-            container: $('main'),
-            overlay: $('overlay'),
-            gameover: $('step-5'),
-            quality: quality,
-            difficulty: 0,
-            hud: hud === 1,
-            controlType: controlType,
-            godmode: godmode,
-            track: 'Cityscape'
-        });
+        hexGL = BKcore.hexgl.HexGL;
         window.hexGL = hexGL;
         progressbar = $('progressbar');
         return hexGL.load({
@@ -44,9 +36,9 @@ function start() {
         });
     };
 
-    u = bkcore.Utils.getURLParameter;
+    u = BKcore.Utils.getURLParameter;
 
-    defaultControls = bkcore.Utils.isTouchDevice() ? 1 : 0;
+    defaultControls = BKcore.Utils.isTouchDevice() ? 1 : 0;
 
     s = [['controlType', ['KEYBOARD', 'TOUCH', 'LEAP MOTION CONTROLLER', 'GAMEPAD'], defaultControls, defaultControls, 'Controls: '], ['quality', ['LOW', 'MID', 'HIGH', 'VERY HIGH'], 3, 3, 'Quality: '], ['hud', ['OFF', 'ON'], 1, 1, 'HUD: '], ['godmode', ['OFF', 'ON'], 0, 1, 'Godmode: ']];
 
@@ -107,11 +99,12 @@ function start() {
         getWebGL.onclick = function () {
             return window.location.href = 'http://get.webgl.org/';
         };
-    } else {
+    }
+    else {
         $('start').onclick = function () {
             $('step-1').style.display = 'none';
             $('step-2').style.display = 'block';
-            return $('step-2').style.backgroundImage = "url(css/help-" + s[0][3] + ".png)";
+            return $('step-2').style.backgroundImage = "url(engine/css/help-" + s[0][3] + ".png)";
         };
     }
 }
