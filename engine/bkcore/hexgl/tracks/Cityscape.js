@@ -332,15 +332,15 @@ const Cityscape = {
 		this.analyser = this.lib.get("analysers", "track.cityscape.collision");
 
 		// SKYBOX
-		var sceneCube = new THREE.Scene();
+		let sceneCube = new THREE.Scene();
 
-		var cameraCube = new THREE.PerspectiveCamera(70, ctx.width / ctx.height, 1, 6000);
+		let cameraCube = new THREE.PerspectiveCamera(70, ctx.width / ctx.height, 1, 6000);
 		sceneCube.add(cameraCube);
 
-		var skyshader = THREE.ShaderUtils.lib["cube"];
+		let skyshader = THREE.ShaderUtils.lib["cube"];
 		skyshader.uniforms["tCube"].texture = this.lib.get("texturesCube", "skybox.dawnclouds");
 
-		var skymaterial = new THREE.ShaderMaterial(
+		let skymaterial = new THREE.ShaderMaterial(
 			{
 				fragmentShader: skyshader.fragmentShader,
 				vertexShader: skyshader.vertexShader,
@@ -348,24 +348,24 @@ const Cityscape = {
 				depthWrite: false
 			});
 
-		var mesh = new THREE.Mesh(new THREE.CubeGeometry(100, 100, 100), skymaterial);
+		let mesh = new THREE.Mesh(new THREE.CubeGeometry(100, 100, 100), skymaterial);
 		mesh.flipSided = true;
 
 		sceneCube.add(mesh);
 
 		ctx.manager.add("sky", sceneCube, cameraCube);
 
-		var ambient = 0xbbbbbb, diffuse = 0xffffff, specular = 0xffffff, shininess = 42, scale = 23;
+		let ambient = 0xbbbbbb, diffuse = 0xffffff, specular = 0xffffff, shininess = 42, scale = 23;
 
 		// MAIN SCENE
-		var camera = new THREE.PerspectiveCamera(70, ctx.width / ctx.height, 1, 60000);
+		let camera = new THREE.PerspectiveCamera(70, ctx.width / ctx.height, 1, 60000);
 
-		var scene = new THREE.Scene();
+		let scene = new THREE.Scene();
 		scene.add(camera);
 		scene.add(new THREE.AmbientLight(ambient));
 
 		// SUN
-		var sun = new THREE.DirectionalLight(diffuse, 1.5, 30000);
+		let sun = new THREE.DirectionalLight(diffuse, 1.5, 30000);
 		sun.position.set(-4000, 1200, 1800);
 		sun.lookAt(new THREE.Vector3());
 
@@ -387,12 +387,12 @@ const Cityscape = {
 		scene.add(sun);
 
 		// SHIP
-		var ship = ctx.createMesh(scene, this.lib.get("geometries", "ship.feisar"), -1134 * 2, 10, -443 * 2, this.materials.ship);
+		let ship = ctx.createMesh(scene, this.lib.get("geometries", "ship.feisar"), -1134 * 2, 10, -443 * 2, this.materials.ship);
 
-		var booster = ctx.createMesh(ship, this.lib.get("geometries", "booster"), 0, 0.665, -3.8, this.materials.booster);
+		let booster = ctx.createMesh(ship, this.lib.get("geometries", "booster"), 0, 0.665, -3.8, this.materials.booster);
 		booster.depthWrite = false;
 
-		var boosterSprite = new THREE.Sprite({
+		let boosterSprite = new THREE.Sprite({
 			map: this.lib.get("textures", "booster.sprite"),
 			blending: THREE.AdditiveBlending,
 			useScreenCoordinates: false,
@@ -402,7 +402,7 @@ const Cityscape = {
 		boosterSprite.mergeWith3D = false;
 		booster.add(boosterSprite);
 
-		var boosterLight = new THREE.PointLight(0x00a2ff, 4.0, 60);
+		let boosterLight = new THREE.PointLight(0x00a2ff, 4.0, 60);
 		boosterLight.position.set(0, 0.665, -4);
 
 		// desktop + quality low, mid or high
@@ -416,7 +416,7 @@ const Cityscape = {
 			ship.add(boosterLight);
 
 		// SHIP CONTROLS
-		var shipControls = new ShipControls(ctx);
+		let shipControls = new ShipControls(ctx);
 		shipControls.collisionMap = this.lib.get("analysers", "track.cityscape.collision");
 		shipControls.collisionPixelRatio = 2048.0 / 6000.0;
 		shipControls.collisionDetection = true;
@@ -429,7 +429,7 @@ const Cityscape = {
 		ctx.tweakShipControls();
 
 		// SHIP EFFECTS AND PARTICLES
-		var fxParams = {
+		let fxParams = {
 			scene: scene,
 			shipControls: shipControls,
 			booster: booster,
@@ -447,14 +447,14 @@ const Cityscape = {
 		ctx.components.shipEffects = new ShipEffects(fxParams);
 
 		// TRACK
-		var track = ctx.createMesh(scene, this.lib.get("geometries", "track.cityscape"), 0, -5, 0, this.materials.track);
-		var bonusBase = ctx.createMesh(scene, this.lib.get("geometries", "bonus.base"), 0, -5, 0, this.materials.bonusBase);
-		var bonusSpeed = ctx.createMesh(scene, this.lib.get("geometries", "track.cityscape.bonus.speed"), 0, -5, 0, this.materials.bonusSpeed);
+		let track = ctx.createMesh(scene, this.lib.get("geometries", "track.cityscape"), 0, -5, 0, this.materials.track);
+		let bonusBase = ctx.createMesh(scene, this.lib.get("geometries", "bonus.base"), 0, -5, 0, this.materials.bonusBase);
+		let bonusSpeed = ctx.createMesh(scene, this.lib.get("geometries", "track.cityscape.bonus.speed"), 0, -5, 0, this.materials.bonusSpeed);
 		bonusSpeed.receiveShadow = false;
-		var scrapers1 = ctx.createMesh(scene, this.lib.get("geometries", "track.cityscape.scrapers1"), 0, 0, 0, this.materials.scrapers1);
-		var scrapers2 = ctx.createMesh(scene, this.lib.get("geometries", "track.cityscape.scrapers2"), 0, 0, 0, this.materials.scrapers2);
-		var start = ctx.createMesh(scene, this.lib.get("geometries", "track.cityscape.start"), 0, -5, 0, this.materials.start);
-		var startbanner = ctx.createMesh(scene, this.lib.get("geometries", "track.cityscape.start.banner"), 0, -5, 0, this.materials.startBanner);
+		let scrapers1 = ctx.createMesh(scene, this.lib.get("geometries", "track.cityscape.scrapers1"), 0, 0, 0, this.materials.scrapers1);
+		let scrapers2 = ctx.createMesh(scene, this.lib.get("geometries", "track.cityscape.scrapers2"), 0, 0, 0, this.materials.scrapers2);
+		let start = ctx.createMesh(scene, this.lib.get("geometries", "track.cityscape.start"), 0, -5, 0, this.materials.start);
+		let startbanner = ctx.createMesh(scene, this.lib.get("geometries", "track.cityscape.start.banner"), 0, -5, 0, this.materials.startBanner);
 		startbanner.doubleSided = true;
 
 		// CAMERA
@@ -471,7 +471,7 @@ const Cityscape = {
 		ctx.manager.add("game", scene, camera, function (delta, renderer) {
 			if (delta > 25 && this.objects.lowFPS < 1000) this.objects.lowFPS++;
 
-			var dt = delta / 16.6;
+			let dt = delta / 16.6;
 
 			this.objects.components.shipControls.update(dt);
 
@@ -479,7 +479,7 @@ const Cityscape = {
 
 			this.objects.components.cameraChase.update(dt, this.objects.components.shipControls.getSpeedRatio());
 			/*this.objects.time += 0.002;
-			var c = this.objects.components.cameraChase.camera;
+			let c = this.objects.components.cameraChase.camera;
 			c.position.set(
 				Math.cos(this.objects.time)*15+this.objects.components.shipControls.dummy.position.x,
 				10+this.objects.components.shipControls.dummy.position.y,
