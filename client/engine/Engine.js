@@ -24,8 +24,6 @@ function init(controlType, quality, hud, godmode) {
         onLoad: function () {
             console.log('LOADED.');
             hexGL.init();
-            $('step-3').style.display = 'none';
-            $('step-4').style.display = 'block';
             return hexGL.start();
         },
         onError: function (s) {
