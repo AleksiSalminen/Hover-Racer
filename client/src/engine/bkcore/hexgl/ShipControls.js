@@ -411,7 +411,7 @@ export default class ShipControls {
 		this.collision.left = false;
 		this.collision.right = false;
 		this.falling = true;
-		_this = this;
+		let _this = this;
 		setTimeout(function () {
 			_this.destroyed = true;
 		}, 1500);
