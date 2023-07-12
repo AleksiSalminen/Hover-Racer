@@ -1,6 +1,6 @@
 import THREE from "../../../libs/Three.dev.js";
 import LoaderC from "../../threejs/Loader.js";
-import Utils from "../../Utils.js";
+import Utils from "../../utils/Utils.js";
 import ShipControls from "../ShipControls.js";
 import ShipEffects from "../ShipEffects.js";
 import CameraChase from "../CameraChase.js";

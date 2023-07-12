@@ -1,4 +1,4 @@
-import Timer from "../Timer.js";
+import Timer from "../utils/Timer.js";
 import RaceData from "./RaceData.js";
 
 

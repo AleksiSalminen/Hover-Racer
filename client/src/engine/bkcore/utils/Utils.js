@@ -1,5 +1,5 @@
-import THREE from "../libs/Three.dev.js";
-import Shaders from "./threejs/Shaders.js";
+import THREE from "../../libs/Three.dev.js";
+import Shaders from "../threejs/Shaders.js";
 
 
 /*

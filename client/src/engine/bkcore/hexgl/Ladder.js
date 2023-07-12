@@ -1,5 +1,5 @@
-import Utils from "../Utils.js";
-import Timer from "../Timer.js";
+import Utils from "../utils/Utils.js";
+import Timer from "../utils/Timer.js";
 
 
 export default class Ladder {

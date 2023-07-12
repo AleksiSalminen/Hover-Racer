@@ -1,6 +1,6 @@
 import THREE from "../../libs/Three.dev.js";
-import ImageData from "../ImageData.js";
-import Audio from "../Audio.js";
+import ImageData from "../utils/ImageData.js";
+import Audio from "../audio/Audio.js";
 
 /*!
  * @class bkcore.threejs.Loader

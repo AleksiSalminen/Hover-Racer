@@ -11,7 +11,7 @@ import Shaders from "../threejs/Shaders.js";
 import HUD from "./HUD.js";
 import tracks from "./Tracks.js";
 import Gameplay from "./Gameplay.js";
-import Timer from "../Timer.js";
+import Timer from "../utils/Timer.js";
 
 
 export default class HexGLC {
@@ -146,11 +146,11 @@ export default class HexGLC {
 		this.manager.get('game').objects.lowFPS = 0;
 		this.gameplay.start();
 
-		bkcore.Audio.stop('bg');
-		bkcore.Audio.stop('wind');
-		bkcore.Audio.volume('wind', 0.35);
-		bkcore.Audio.play('bg');
-		bkcore.Audio.play('wind');
+		//bkcore.Audio.stop('bg');
+		//bkcore.Audio.stop('wind');
+		//bkcore.Audio.volume('wind', 0.35);
+		//bkcore.Audio.play('bg');
+		//bkcore.Audio.play('wind');
 	}
 
 	restart() {

@@ -697,12 +697,15 @@ export default class ShipControls {
 			}
 	
 			// DIRTY GAMEOVER
+			// TODO: Fix this
 			if (rCol < 128 && lCol < 128) {
+				/*
 				let fCol = this.collisionMap.getPixel(Math.round(pos.x + 2), Math.round(pos.z + 2)).r;
 				if (fCol < 128) {
 					console.log('GAMEOVER');
 					this.fall();
 				}
+				*/
 			}
 	
 			this.speed *= this.collisionSpeedDecrease;
