@@ -1,3 +1,4 @@
+import { ControlType, Quality, HUD, Godmode, Difficulty } from "../config/Config.ts";
 import Utils from "./utils/Utils.js";
 import HexGLC from "./hexgl/HexGL.js";
 
@@ -6,29 +7,29 @@ export default class BKcoreC {
 
     // ATTRIBUTES
 
-    Utils;
-	hexgl;
+    Utils: typeof Utils;
+	hexgl: { HexGL: HexGLC | null };
 
 	// CONSTRUCTORS
 
 	constructor() {
         this.Utils = Utils;
+        this.hexgl = { HexGL: null }
     }
 
-    init($, document, quality, controlType, hud, godmode, gameEndCallback) {
+    init(document: Document, quality: Quality, controlType: ControlType, hud: HUD, godmode: Godmode, gameEndCallback: Function, container: HTMLElement | null, overlay: HTMLElement | null, track: string, difficulty: Difficulty) {
         const options = {
             document: document,
             width: window.innerWidth,
             height: window.innerHeight,
-            container: $('main'),
-            overlay: $('overlay'),
-            gameover: $('step-5'),
+            container: container,
+            overlay: overlay,
             quality: quality,
-            difficulty: 0,
+            difficulty: difficulty,
             hud: hud === 1,
             controlType: controlType,
             godmode: godmode,
-            track: 'Cityscape',
+            track: track,
             gameEndCallback: gameEndCallback
         };
 

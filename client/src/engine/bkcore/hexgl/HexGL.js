@@ -40,7 +40,6 @@ export default class HexGLC {
 	components;
 	extras;
 	containers;
-	gameover;
 	godmode;
 	hud;
 	gameplay;
@@ -66,7 +65,7 @@ export default class HexGLC {
 		this.player = opts.player == undefined ? "Anonym" : opts.player;
 
 		this.tracks = tracks;
-		this.track = this.tracks[opts.track == undefined ? 'Cityscape' : opts.track];
+		this.track = this.tracks[opts.track === undefined ? 'Cityscape' : opts.track];
 
 		this.mode = opts.mode == undefined ? 'timeattack' : opts.mode;
 
@@ -101,8 +100,6 @@ export default class HexGLC {
 		this.containers = {};
 		this.containers.main = opts.container == undefined ? document.body : opts.container;
 		this.containers.overlay = opts.overlay == undefined ? document.body : opts.overlay;
-
-		this.gameover = opts.gameover == undefined ? null : opts.gameover;
 
 		this.godmode = opts.godmode == undefined ? false : opts.godmode;
 

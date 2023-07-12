@@ -15,6 +15,10 @@ enum Godmode {
     OFF, ON
 }
 
+enum Difficulty {
+    EASY, NORMAL
+}
+
 export {
-    ControlType, Quality, HUD, Godmode
+    ControlType, Quality, HUD, Godmode, Difficulty
 };

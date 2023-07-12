@@ -14,7 +14,11 @@ function Game(props: Props) {
         const quality = Engine.getQualityInfo().LOW;
         const hud = Engine.getHUDInfo().ON;
         const godmode = Engine.getGodmodeInfo().ON;
-        Engine.start(controlType, quality, hud, godmode, endGame);
+        const difficulty = Engine.getDifficultyInfo().NORMAL;
+        const container = document.getElementById('main');
+        const overlay = document.getElementById('overlay');
+        const track = "Cityscape";
+        Engine.start(controlType, quality, hud, godmode, endGame, container, overlay, track, difficulty);
     }
 
     const endGame = () => {
@@ -27,9 +31,7 @@ function Game(props: Props) {
 
     return <>
         <div id="overlay"></div>
-        <div id="progressbar"></div>
         <div id="main"></div>
-        <p onClick={() => returnToHomePage()}>Game</p>
     </>
 }
 
