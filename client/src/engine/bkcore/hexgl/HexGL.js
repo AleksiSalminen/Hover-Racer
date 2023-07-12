@@ -6,6 +6,7 @@ THREE.EffectComposer = EffectComposer;
 import BloomPass from "../../libs/postprocessing/BloomPass.js";
 THREE.BloomPass = BloomPass;
 
+import { ControlType, Difficulty, Quality, Godmode } from "../../config/Config.ts";
 import RenderManagerC from "../threejs/RenderManager.js";
 import Shaders from "../threejs/Shaders.js";
 import HUD from "./HUD.js";
@@ -69,7 +70,7 @@ export default class HexGLC {
 
 		this.mode = opts.mode == undefined ? 'timeattack' : opts.mode;
 
-		this.controlType = opts.controlType == undefined ? 1 : opts.controlType;
+		this.controlType = opts.controlType == undefined ? ControlType.KEYBOARD : opts.controlType;
 
 		// 0 == low, 1 == mid, 2 == high, 3 == very high
 		// the old platform+quality combinations map to these new quality values
@@ -78,9 +79,9 @@ export default class HexGLC {
 		// mobile + mid quality OR desktop + low quality => 1 (MID)
 		// mobile + high quality => 2 (HIGH)
 		// desktop + mid or high quality => 3 (VERY HIGH)
-		this.quality = opts.quality == undefined ? 3 : opts.quality;
+		this.quality = opts.quality == undefined ? Quality.MEDIUM : opts.quality;
 
-		if (this.quality === 0) {
+		if (this.quality === Quality.LOW) {
 			this.width /= 2;
 			this.height /= 2;
 		}
@@ -101,7 +102,7 @@ export default class HexGLC {
 		this.containers.main = opts.container == undefined ? document.body : opts.container;
 		this.containers.overlay = opts.overlay == undefined ? document.body : opts.overlay;
 
-		this.godmode = opts.godmode == undefined ? false : opts.godmode;
+		this.godmode = opts.godmode == undefined ? Godmode.OFF : opts.godmode;
 
 		this.hud = null;
 
@@ -125,11 +126,8 @@ export default class HexGLC {
 	// METHODS
 
 	start() {
-
 		this.manager.setCurrent("game");
-
 		let self = this;
-
 		function raf() {
 			if (self && self.active) requestAnimationFrame(raf);
 			self.update();
@@ -153,8 +151,6 @@ export default class HexGLC {
 	}
 
 	restart() {
-		try { this.document.getElementById('finish').style.display = 'none'; }
-		catch (e) { };
 		this.reset();
 	}
 
@@ -327,7 +323,7 @@ export default class HexGLC {
 
 	tweakShipControls() {
 		let c = this.components.shipControls;
-		if (this.difficulty == 1) {
+		if (this.difficulty == Difficulty.NORMAL) {
 			c.airResist = 0.035;
 			c.airDrift = 0.07;
 			c.thrust = 0.035;
@@ -345,7 +341,7 @@ export default class HexGLC {
 			c.driftLerp = 0.4;
 			c.angularLerp = 0.4;
 		}
-		else if (this.difficulty == 0) {
+		else if (this.difficulty == Difficulty.EASY) {
 			c.airResist = 0.02;
 			c.airDrift = 0.06;
 			c.thrust = 0.02;
@@ -364,7 +360,7 @@ export default class HexGLC {
 			c.angularLerp = 0.4;
 		}
 
-		if (this.godmode)
+		if (this.godmode === Godmode.ON)
 			c.shieldDamage = 0.0;
 	}
 

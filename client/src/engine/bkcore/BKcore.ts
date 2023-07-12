@@ -26,7 +26,7 @@ export default class BKcoreC {
             overlay: overlay,
             quality: quality,
             difficulty: difficulty,
-            hud: hud === 1,
+            hud: hud === "ON",
             controlType: controlType,
             godmode: godmode,
             track: track,
