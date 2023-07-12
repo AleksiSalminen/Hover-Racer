@@ -15,7 +15,7 @@ export default class BKcoreC {
         this.Utils = Utils;
     }
 
-    init($, document, quality, controlType, hud, godmode) {
+    init($, document, quality, controlType, hud, godmode, gameEndCallback) {
         const options = {
             document: document,
             width: window.innerWidth,
@@ -28,7 +28,8 @@ export default class BKcoreC {
             hud: hud === 1,
             controlType: controlType,
             godmode: godmode,
-            track: 'Cityscape'
+            track: 'Cityscape',
+            gameEndCallback: gameEndCallback
         };
 
         const HexGL = new HexGLC(options);

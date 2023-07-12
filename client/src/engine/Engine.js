@@ -14,8 +14,8 @@ function getDefaultControls() {
     return BKcore.Utils.isTouchDevice() ? 1 : 0
 }
 
-function init(controlType, quality, hud, godmode) {
-    BKcore.init($, document, quality, controlType, hud, godmode);
+function init(controlType, quality, hud, godmode, gameEndCallback) {
+    BKcore.init($, document, quality, controlType, hud, godmode, gameEndCallback);
     let hexGL, progressbar;
     hexGL = BKcore.hexgl.HexGL;
     window.hexGL = hexGL;
@@ -51,7 +51,7 @@ function hasWebGL() {
     return gl != null;
 };
 
-function start(controlType, quality, hud, godmode) {
+function start(controlType, quality, hud, godmode, gameEndCallback) {
     if (!hasWebGL()) {
         let getWebGL = $('start');
         getWebGL.innerHTML = 'WebGL is not supported!';
@@ -60,7 +60,7 @@ function start(controlType, quality, hud, godmode) {
         };
     }
     else {
-        init(controlType, quality, hud, godmode);
+        init(controlType, quality, hud, godmode, gameEndCallback);
     }
 }
 

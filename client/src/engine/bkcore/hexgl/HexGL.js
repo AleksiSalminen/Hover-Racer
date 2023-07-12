@@ -21,6 +21,7 @@ export default class HexGLC {
 	document;
 	a;
 	active;
+	gameEndCallback;
 	displayHUD;
 	width;
 	height;
@@ -43,8 +44,7 @@ export default class HexGLC {
 	godmode;
 	hud;
 	gameplay;
-	composers
-
+	composers;
 
 	// CONSTRUCTORS
 
@@ -54,6 +54,8 @@ export default class HexGLC {
 		this.document = opts.document;
 
 		this.a = window.location.href;
+
+		this.gameEndCallback = opts.gameEndCallback;
 
 		this.active = true;
 		this.displayHUD = opts.hud == undefined ? true : opts.hud;
@@ -160,12 +162,19 @@ export default class HexGLC {
 	}
 
 	update() {
-		if (!this.active) return;
+		if (!this.active) {
+			this.end();
+			return;
+		}
 
 		if (this.gameplay != null)
 			this.gameplay.update();
 
 		this.manager.renderCurrent();
+	}
+
+	end() {
+		this.gameEndCallback();
 	}
 
 	init() {

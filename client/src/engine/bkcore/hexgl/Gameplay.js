@@ -100,7 +100,7 @@ Gameplay.prototype.simu = function () {
 Gameplay.prototype.start = function (opts) {
 	this.finishTime = null;
 	this.score = null;
-	this.lap = 1;
+	this.lap = 3;
 
 	this.shipControls.reset(this.track.spawn, this.track.spawnRotation);
 	this.shipControls.active = false;
