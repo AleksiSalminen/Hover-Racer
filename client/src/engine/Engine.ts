@@ -57,7 +57,6 @@ function start(controlType: ControlType, quality: Quality, hud: HUD, godmode: Go
 
 // GETTERS
 
-function $(_: string) { return document.getElementById(_); };
 function getURLParameter() { return BKcore.Utils.getURLParameter(); }
 function getDefaultControls() { return BKcore.Utils.isTouchDevice() ? 1 : 0; }
 function getControlTypeInfo() { return ControlType; }
