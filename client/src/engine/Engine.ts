@@ -57,18 +57,19 @@ function start(controlType: ControlType, quality: Quality, hud: HUD, godmode: Go
 
 // GETTERS
 
-function getURLParameter() { return BKcore.Utils.getURLParameter(); }
-function getDefaultControls() { return BKcore.Utils.isTouchDevice() ? 1 : 0; }
+function getConfig() { return { controls: getControlTypeInfo(), quality: getQualityInfo(), hud: getHUDInfo(), godmode: getGodmodeInfo() }; }
 function getControlTypeInfo() { return ControlType; }
 function getQualityInfo() { return Quality; }
 function getHUDInfo() { return HUD; }
 function getGodmodeInfo() { return Godmode; }
 function getDifficultyInfo() { return Difficulty; }
+function getURLParameter() { return BKcore.Utils.getURLParameter(); }
+function getDefaultControls() { return BKcore.Utils.isTouchDevice() ? 1 : 0; }
 
 // EXPORTS
 
 const Engine = {
-    start, getURLParameter, getDefaultControls, getControlTypeInfo,
+    start, getURLParameter, getDefaultControls, getConfig, getControlTypeInfo,
     getQualityInfo, getHUDInfo, getGodmodeInfo, getDifficultyInfo
 };
 export default Engine;

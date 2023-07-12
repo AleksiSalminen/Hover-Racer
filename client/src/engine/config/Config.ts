@@ -1,22 +1,22 @@
 
 enum ControlType {
-    KEYBOARD, TOUCH, LEAP_MOTION_CONTROLLER, GAMEPAD
+    KEYBOARD = "KEYBOARD", TOUCH = "TOUCH", GAMEPAD = "GAMEPAD"
 }
 
 enum Quality {
-    LOW, MID, HIGH, VERY_HIGH
+    LOW = "LOW", MEDIUM = "MEDIUM", HIGH = "HIGH", ULTIMATE = "ULTIMATE"
 }
 
 enum HUD {
-    OFF, ON
+    OFF = "OFF", ON = "ON"
 }
 
 enum Godmode {
-    OFF, ON
+    OFF = "OFF", ON = "ON"
 }
 
 enum Difficulty {
-    EASY, NORMAL
+    EASY = "EASY", NORMAL = "NORMAL"
 }
 
 export {
