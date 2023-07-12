@@ -116,14 +116,14 @@ export default class HUD {
 
 	// METHODS
 
-	resize = function (w, h) {
+	resize(w, h) {
 		this.width = w;
 		this.height = h;
 		this.canvas.width = w;
 		this.canvas.height = h;
 	}
 
-	display = function (msg, duration) {
+	display(msg, duration) {
 		this.messageTiming = 0;
 
 		if (this.message != "") {
@@ -139,23 +139,23 @@ export default class HUD {
 		this.messageDuration = duration == undefined ? this.messageDurationD : duration * 60;
 	}
 
-	updateLap = function (current, total) {
+	updateLap(current, total) {
 		this.lap = current + this.lapSeparator + total;
 	}
 
-	resetLap = function () {
+	resetLap() {
 		this.lap = "";
 	}
 
-	updateTime = function (time) {
+	updateTime(time) {
 		this.time = this.timeSeparators[0] + time.m + this.timeSeparators[1] + time.s + this.timeSeparators[2] + time.ms + this.timeSeparators[3];
 	}
 
-	resetTime = function () {
+	resetTime() {
 		this.time = "";
 	}
 
-	update = function (speed, speedRatio, shield, shieldRatio) {
+	update(speed, speedRatio, shield, shieldRatio) {
 		let SCREEN_WIDTH = this.width;
 		let SCREEN_HEIGHT = this.height;
 
