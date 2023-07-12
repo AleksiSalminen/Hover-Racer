@@ -10,9 +10,6 @@ function Game(props: Props) {
     }, []);
 
     const initGame = () => {
-        let defaultControls, url, settings;
-        url = Engine.getURLParameter();
-        defaultControls = Engine.getDefaultControls();
         const controlType = Engine.getControlTypeInfo().KEYBOARD;
         const quality = Engine.getQualityInfo().LOW;
         const hud = Engine.getHUDInfo().ON;
