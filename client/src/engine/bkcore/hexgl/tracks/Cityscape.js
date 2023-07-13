@@ -41,7 +41,7 @@ const Cityscape = {
 		// desktop + quality low
 		// OR
 		// mobile + quality low or mid
-		if (quality === Quality.LOWEST || quality === Quality.LOW) // LOW
+		if (quality.name === Quality.LOWEST || quality.name === Quality.LOW) // LOW
 		{
 			this.lib.load({
 				textures: {
@@ -196,7 +196,7 @@ const Cityscape = {
 		// desktop + quality low
 		// OR
 		// mobile + quality low or mid
-		if (quality === Quality.LOWEST || quality === Quality.LOW) // LOW
+		if (quality.name === Quality.LOWEST || quality.name === Quality.LOW) // LOW
 		{
 			this.materials.track = new THREE.MeshBasicMaterial({
 				map: this.lib.get("textures", "track.cityscape.diffuse"),
@@ -370,21 +370,22 @@ const Cityscape = {
 		sun.position.set(-4000, 1200, 1800);
 		sun.lookAt(new THREE.Vector3());
 
-		// desktop + quality mid or high
-		if (quality === Quality.HIGH || quality === Quality.ULTIMATE) {
-			sun.castShadow = true;
-			sun.shadowCameraNear = 50;
-			sun.shadowCameraFar = camera.far * 2;
-			sun.shadowCameraRight = 3000;
-			sun.shadowCameraLeft = -3000;
-			sun.shadowCameraTop = 3000;
-			sun.shadowCameraBottom = -3000;
-			//sun.shadowCameraVisible = true;
-			sun.shadowBias = 0.0001;
-			sun.shadowDarkness = 0.7;
-			sun.shadowMapWidth = 2048;
-			sun.shadowMapHeight = 2048;
+		// Cast sun shadows if high quality
+		if (quality.sun.castShadow) {
+			sun.castShadow = quality.sun.castShadow;
+			sun.shadowCameraNear = quality.sun.shadowCameraNear;
+			sun.shadowCameraFar = eval(quality.sun.shadowCameraFar);
+			sun.shadowCameraRight = quality.sun.shadowCameraRight;
+			sun.shadowCameraLeft = -quality.sun.shadowCameraLeft;
+			sun.shadowCameraTop = quality.sun.shadowCameraTop;
+			sun.shadowCameraBottom = -quality.sun.shadowCameraBottom;
+			//sun.shadowCameraVisible = quality.sun.shadowCameraVisible;
+			sun.shadowBias = quality.sun.shadowBias;
+			sun.shadowDarkness = quality.sun.shadowDarkness;
+			sun.shadowMapWidth = quality.sun.shadowMapWidth;
+			sun.shadowMapHeight = quality.sun.shadowMapHeight;
 		}
+		
 		scene.add(sun);
 
 		// SHIP
@@ -406,15 +407,10 @@ const Cityscape = {
 		let boosterLight = new THREE.PointLight(0x00a2ff, 4.0, 60);
 		boosterLight.position.set(0, 0.665, -4);
 
-		// desktop + quality low, mid or high
-		// OR
-		// mobile + quality mid or high
-		// NB booster is now enabled on desktop + low quality,
-		// when it wasn't before; this is because this booster setting
-		// is the only difference between mobile + mid quality
-		// and desktop + low quality, so I merged them for convenience
-		if (quality === Quality.LOW || quality === Quality.MEDIUM || quality === Quality.HIGH || quality === Quality.ULTIMATE)
+		// Show booster light if not very low quality
+		if (quality.showBoosterLight) {
 			ship.add(boosterLight);
+		}
 
 		// SHIP CONTROLS
 		let shipControls = new ShipControls(ctx);
@@ -439,12 +435,13 @@ const Cityscape = {
 			useParticles: false
 		};
 
-		// desktop + quality mid or high
-		if (quality === Quality.HIGH || quality === Quality.ULTIMATE) {
+		// Show particles if high enough quality
+		if (quality.useParticles) {
 			fxParams.textureCloud = this.lib.get("textures", "cloud");
 			fxParams.textureSpark = this.lib.get("textures", "spark");
 			fxParams.useParticles = true;
 		}
+		
 		ctx.components.shipEffects = new ShipEffects(fxParams);
 
 		// TRACK

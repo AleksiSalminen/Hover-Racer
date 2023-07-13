@@ -111,6 +111,130 @@ const settings = {
 			driftLerp: 0.3,
 			angularLerp: 0.4
         }
+    ],
+    quality: [
+        {
+            name: Quality.ULTIMATE,
+            resolutionScale: 1,
+            sun: {
+                castShadow: true,
+                shadowCameraNear: 50,
+                shadowCameraFar: "camera.far * 2",
+                shadowCameraRight: 3000,
+                shadowCameraLeft: -3000,
+                shadowCameraTop: 3000,
+                shadowCameraBottom: -3000,
+                //shadowCameraVisible: true,
+                shadowBias: 0.0001,
+                shadowDarkness: 0.7,
+                shadowMapWidth: 2048,
+                shadowMapHeight: 2048
+            },
+            showBoosterLight: true,
+            useParticles: true,
+            renderer: {
+                useShading: true,
+                physicallyBasedShading: true,
+                gammaInput: true,
+                gammaOutput: true,
+                shadowMapEnabled: true,
+                shadowMapSoft: true
+            },
+            showBloom: true,
+            showHex: true,
+            mesh: {
+                castShadow: true,
+			    receiveShadow: true
+            }
+        },
+        {
+            name: Quality.HIGH,
+            resolutionScale: 1,
+            sun: {
+                castShadow: true,
+                shadowCameraNear: 50,
+                shadowCameraFar: "camera.far * 2",
+                shadowCameraRight: 3000,
+                shadowCameraLeft: -3000,
+                shadowCameraTop: 3000,
+                shadowCameraBottom: -3000,
+                //shadowCameraVisible: true,
+                shadowBias: 0.0001,
+                shadowDarkness: 0.7,
+                shadowMapWidth: 2048,
+                shadowMapHeight: 2048
+            },
+            showBoosterLight: true,
+            useParticles: true,
+            renderer: {
+                useShading: true,
+                physicallyBasedShading: true,
+                gammaInput: true,
+                gammaOutput: true,
+                shadowMapEnabled: true,
+                shadowMapSoft: true
+            },
+            showBloom: true,
+            showHex: true,
+            mesh: {
+                castShadow: true,
+			    receiveShadow: true
+            }
+        },
+        {
+            name: Quality.MEDIUM,
+            resolutionScale: 1,
+            sun: {
+                castShadow: false
+            },
+            showBoosterLight: true,
+            useParticles: false,
+            renderer: {
+                useShading: false
+            },
+            showBloom: false,
+            showHex: true,
+            mesh: {
+                castShadow: false,
+			    receiveShadow: false
+            }
+        },
+        {
+            name: Quality.LOW,
+            resolutionScale: 0.5,
+            sun: {
+                castShadow: false
+            },
+            showBoosterLight: true,
+            useParticles: false,
+            renderer: {
+                useShading: false
+            },
+            showBloom: false,
+            showHex: false,
+            mesh: {
+                castShadow: false,
+			    receiveShadow: false
+            }
+        },
+        {
+            name: Quality.LOWEST,
+            resolutionScale: 0.25,
+            sun: {
+                castShadow: false
+            },
+            showBoosterLight: false,
+            useParticles: false,
+            renderer: {
+                useShading: false
+            },
+            showBloom: false,
+            showHex: false,
+            mesh: {
+                castShadow: false,
+			    receiveShadow: false
+            }
+        }
     ]
 };
 
