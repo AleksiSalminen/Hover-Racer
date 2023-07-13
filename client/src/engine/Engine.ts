@@ -1,4 +1,4 @@
-import { ControlType, Quality, HUD, Godmode, Difficulty } from "./config/Config.ts";
+import { Settings, ControlType, Quality, HUD, Godmode, Difficulty } from "./config/Config.ts";
 import BKcoreC from "./bkcore/BKcore.js";
 import HexGLC from "./bkcore/hexgl/HexGL.js";
 
@@ -57,7 +57,7 @@ function start(controlType: ControlType, quality: Quality, hud: HUD, godmode: Go
 
 // GETTERS
 
-function getConfig() { return { controls: getControlTypeInfo(), quality: getQualityInfo(), hud: getHUDInfo(), godmode: getGodmodeInfo() }; }
+function getConfig() { return { controls: getControlTypeInfo(), quality: getQualityInfo(), hud: getHUDInfo(), godmode: getGodmodeInfo(), difficulty: getDifficultyInfo() } }
 function getControlTypeInfo() { return ControlType; }
 function getQualityInfo() { return Quality; }
 function getHUDInfo() { return HUD; }

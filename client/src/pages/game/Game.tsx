@@ -1,19 +1,26 @@
 import { useEffect } from "react";
-import { Pages, Props } from "../../config/config";
+import { Pages } from "../../config/config";
 
+import { Settings } from '../../engine/config/Config';
 import Engine from "../../engine/Engine";
+
+type Props = {
+    setPage: Function,
+    settings: Settings
+}
+
 
 function Game(props: Props) {
 
     useEffect(() => {
-        initGame();
+        initGame(props.settings);
     }, []);
 
-    const initGame = () => {
-        const controlType = Engine.getControlTypeInfo().KEYBOARD;
-        const quality = Engine.getQualityInfo().LOW;
-        const hud = Engine.getHUDInfo().ON;
-        const godmode = Engine.getGodmodeInfo().ON;
+    const initGame = (settings: Settings) => {
+        const controlType = settings.controls;
+        const quality = settings.quality;
+        const hud = settings.hud;
+        const godmode = settings.godmode;
         const difficulty = Engine.getDifficultyInfo().NORMAL;
         const container = document.getElementById('main');
         const overlay = document.getElementById('overlay');

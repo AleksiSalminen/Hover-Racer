@@ -20,6 +20,14 @@ enum Difficulty {
     EASY = "EASY", NORMAL = "NORMAL"
 }
 
+export interface Settings {
+    controls: ControlType;
+    quality: Quality;
+    hud: HUD;
+    godmode: Godmode;
+    difficulty: Difficulty;
+}
+
 export {
     ControlType, Quality, HUD, Godmode, Difficulty
 };

@@ -1,20 +1,29 @@
 import { useState } from "react";
-import { Pages, Props } from "../../config/config";
 import Engine from "../../engine/Engine.ts";
 import "./css/global.css";
 import "./css/fonts.css";
 import "./css/multi.css";
 
+type Props = {
+    startGame: Function
+}
 
-function Home(props: Props) {
+function Home(props: any) {
     const config = Engine.getConfig();
     const [controls, setControls] = useState(config.controls.KEYBOARD);
     const [quality, setQuality] = useState(config.quality.LOW);
     const [hud, setHud] = useState(config.hud.ON);
     const [godmode, setGodmode] = useState(config.godmode.ON);
+    const [difficulty, setDifficulty] = useState(config.difficulty.NORMAL);
 
     const startGame = () => {
-        props.setPage(Pages.Game);
+        props.startGame({
+            controls: controls,
+            quality: quality,
+            hud: hud,
+            godmode: godmode,
+            difficulty: difficulty
+        });
     }
 
     const getEnumNextElem = (elem: string, enumm: any) => {
@@ -51,6 +60,11 @@ function Home(props: Props) {
         setGodmode(eval("config.godmode." + nextElem));
     }
 
+    const changeDifficulty = () => {
+        let nextElem = getEnumNextElem(difficulty, config.difficulty);
+        setDifficulty(eval("config.difficulty." + nextElem));
+    }
+
     return <>
         <div id="step-1">
             <div id="global"></div>
@@ -59,10 +73,11 @@ function Home(props: Props) {
             <div id="menucontainer">
                 <div id="menu">
                     <div id="start" onClick={() => startGame()}>Start</div>
+                    <div id="s-difficulty" onClick={() => changeDifficulty()}>Difficulty: {difficulty}</div>
+                    <div id="s-godmode" onClick={() => changeGodmode()}>Godmode: {godmode}</div>
                     <div id="s-controlType" onClick={() => changeControls()}>Controls: {controls}</div>
                     <div id="s-quality" onClick={() => changeQuality()}>Quality: {quality}</div>
                     <div id="s-hud" onClick={() => changeHUD()}>HUD: {hud}</div>
-                    <div id="s-godmode" onClick={() => changeGodmode()}>Godmode: {godmode}</div>
                     <div id="s-credits">Credits</div>
                 </div>
             </div>
