@@ -4,7 +4,8 @@ enum ControlType {
 }
 
 enum Quality {
-    LOW = "LOW", MEDIUM = "MEDIUM", HIGH = "HIGH", ULTIMATE = "ULTIMATE"
+    LOWEST = "LOWEST", LOW = "LOW", MEDIUM = "MEDIUM", HIGH = "HIGH",
+    ULTIMATE = "ULTIMATE"
 }
 
 enum HUD {

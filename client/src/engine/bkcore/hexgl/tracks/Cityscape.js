@@ -4,6 +4,7 @@ import Utils from "../../utils/Utils.js";
 import ShipControls from "../ShipControls.js";
 import ShipEffects from "../ShipEffects.js";
 import CameraChase from "../CameraChase.js";
+import { Quality } from "../../../config/Config.ts";
 
 
 const Cityscape = {
@@ -40,7 +41,7 @@ const Cityscape = {
 		// desktop + quality low
 		// OR
 		// mobile + quality low or mid
-		if (quality < 2) // LOW
+		if (quality === Quality.LOWEST || quality === Quality.LOW) // LOW
 		{
 			this.lib.load({
 				textures: {
@@ -195,7 +196,7 @@ const Cityscape = {
 		// desktop + quality low
 		// OR
 		// mobile + quality low or mid
-		if (quality < 2) // LOW
+		if (quality === Quality.LOWEST || quality === Quality.LOW) // LOW
 		{
 			this.materials.track = new THREE.MeshBasicMaterial({
 				map: this.lib.get("textures", "track.cityscape.diffuse"),
@@ -370,7 +371,7 @@ const Cityscape = {
 		sun.lookAt(new THREE.Vector3());
 
 		// desktop + quality mid or high
-		if (quality > 2) {
+		if (quality === Quality.HIGH || quality === Quality.ULTIMATE) {
 			sun.castShadow = true;
 			sun.shadowCameraNear = 50;
 			sun.shadowCameraFar = camera.far * 2;
@@ -412,7 +413,7 @@ const Cityscape = {
 		// when it wasn't before; this is because this booster setting
 		// is the only difference between mobile + mid quality
 		// and desktop + low quality, so I merged them for convenience
-		if (quality > 0)
+		if (quality === Quality.LOW || quality === Quality.MEDIUM || quality === Quality.HIGH || quality === Quality.ULTIMATE)
 			ship.add(boosterLight);
 
 		// SHIP CONTROLS
@@ -439,7 +440,7 @@ const Cityscape = {
 		};
 
 		// desktop + quality mid or high
-		if (quality > 2) {
+		if (quality === Quality.HIGH || quality === Quality.ULTIMATE) {
 			fxParams.textureCloud = this.lib.get("textures", "cloud");
 			fxParams.textureSpark = this.lib.get("textures", "spark");
 			fxParams.useParticles = true;

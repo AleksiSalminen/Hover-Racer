@@ -81,7 +81,11 @@ export default class HexGLC {
 		// desktop + mid or high quality => 3 (VERY HIGH)
 		this.quality = opts.quality == undefined ? Quality.MEDIUM : opts.quality;
 
-		if (this.quality === Quality.LOW) {
+		if (this.quality === Quality.LOWEST) {
+			this.width /= 4;
+			this.height /= 4;
+		}
+		else if (this.quality === Quality.LOW) {
 			this.width /= 2;
 			this.height /= 2;
 		}
@@ -216,7 +220,7 @@ export default class HexGLC {
 		});
 
 		// desktop + quality mid or high
-		if (this.quality > 2) {
+		if (this.quality === Quality.HIGH || this.quality === Quality.ULTIMATE) {
 			renderer.physicallyBasedShading = true;
 			renderer.gammaInput = true;
 			renderer.gammaOutput = true;
@@ -288,7 +292,7 @@ export default class HexGLC {
 		// }
 
 		// desktop + quality mid or high
-		if (this.quality > 2) {
+		if (this.quality === Quality.HIGH || this.quality === Quality.ULTIMATE) {
 			let effectBloom = new THREE.BloomPass(0.8, 25, 4, 256);
 
 			this.composers.game.addPass(effectBloom);
@@ -299,10 +303,10 @@ export default class HexGLC {
 		// desktop + quality low, mid or high
 		// OR
 		// mobile + quality mid or high
-		if (this.quality > 0)
-			this.composers.game.addPass(effectHex);
+		if (this.quality === Quality.LOWEST || this.quality === Quality.LOW)
+			this.composers.game.addPass(effectScreen);	
 		else
-			this.composers.game.addPass(effectScreen);
+			this.composers.game.addPass(effectHex);
 	}
 
 	createMesh(parent, geometry, x, y, z, mat) {
@@ -313,7 +317,7 @@ export default class HexGLC {
 		parent.add(mesh);
 
 		// desktop + quality mid or high
-		if (this.quality > 2) {
+		if (this.quality === Quality.HIGH || this.quality === Quality.ULTIMATE) {
 			mesh.castShadow = true;
 			mesh.receiveShadow = true;
 		}
