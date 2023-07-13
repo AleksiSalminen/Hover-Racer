@@ -6,7 +6,7 @@ THREE.EffectComposer = EffectComposer;
 import BloomPass from "../../libs/postprocessing/BloomPass.js";
 THREE.BloomPass = BloomPass;
 
-import { ControlType, Difficulty, Quality, Godmode } from "../../config/Config.ts";
+import { ControlType, Difficulty, Quality, Godmode, settings } from "../../config/Config.ts";
 import RenderManagerC from "../threejs/RenderManager.js";
 import Shaders from "../threejs/Shaders.js";
 import HUD from "./HUD.js";
@@ -327,78 +327,26 @@ export default class HexGLC {
 
 	tweakShipControls() {
 		let c = this.components.shipControls;
-		if (this.difficulty === Difficulty.INSANE) {
-			c.airResist = 0.065;
-			c.airDrift = 0.09;
-			c.thrust = 0.065;
-			c.airBrake = 0.07;
-			c.maxSpeed = 14.8;
-			c.boosterSpeed = c.maxSpeed * 0.35;
-			c.boosterDecay = 0.007;
-			c.angularSpeed = 0.017;
-			c.airAngularSpeed = 0.0225;
-			c.rollAngle = 0.6;
-			c.shieldDamage = 0.01;
-			c.collisionSpeedDecrease = 0.8;
-			c.collisionSpeedDecreaseCoef = 0.5;
-			c.rollLerp = 0.18;
-			c.driftLerp = 0.6;
-			c.angularLerp = 0.4;
-		}
-		else if (this.difficulty === Difficulty.HARD) {
-			c.airResist = 0.05;
-			c.airDrift = 0.08;
-			c.thrust = 0.05;
-			c.airBrake = 0.055;
-			c.maxSpeed = 12.2;
-			c.boosterSpeed = c.maxSpeed * 0.35;
-			c.boosterDecay = 0.007;
-			c.angularSpeed = 0.0155;
-			c.airAngularSpeed = 0.0195;
-			c.rollAngle = 0.6;
-			c.shieldDamage = 0.02;
-			c.collisionSpeedDecrease = 0.8;
-			c.collisionSpeedDecreaseCoef = 0.5;
-			c.rollLerp = 0.14;
-			c.driftLerp = 0.5;
-			c.angularLerp = 0.4;
-		}
-		else if (this.difficulty === Difficulty.NORMAL) {
-			c.airResist = 0.035;
-			c.airDrift = 0.07;
-			c.thrust = 0.035;
-			c.airBrake = 0.04;
-			c.maxSpeed = 9.6;
-			c.boosterSpeed = c.maxSpeed * 0.35;
-			c.boosterDecay = 0.007;
-			c.angularSpeed = 0.0140;
-			c.airAngularSpeed = 0.0165;
-			c.rollAngle = 0.6;
-			c.shieldDamage = 0.03;
-			c.collisionSpeedDecrease = 0.8;
-			c.collisionSpeedDecreaseCoef = 0.5;
-			c.rollLerp = 0.1;
-			c.driftLerp = 0.4;
-			c.angularLerp = 0.4;
-		}
-		else if (this.difficulty === Difficulty.EASY) {
-			c.airResist = 0.02;
-			c.airDrift = 0.06;
-			c.thrust = 0.02;
-			c.airBrake = 0.025;
-			c.maxSpeed = 7.0;
-			c.boosterSpeed = c.maxSpeed * 0.5;
-			c.boosterDecay = 0.007;
-			c.angularSpeed = 0.0125;
-			c.airAngularSpeed = 0.0135;
-			c.rollAngle = 0.6;
-			c.shieldDamage = 0.06;
-			c.collisionSpeedDecrease = 0.8;
-			c.collisionSpeedDecreaseCoef = 0.5;
-			c.rollLerp = 0.07;
-			c.driftLerp = 0.3;
-			c.angularLerp = 0.4;
-		}
+		settings.difficulty.forEach((setting) => {
+			if (setting.name === this.difficulty) {
+				c.airResist = setting.airResist;
+				c.airDrift = setting.airDrift;
+				c.thrust = setting.thrust;
+				c.airBrake = setting.airBrake;
+				c.maxSpeed = setting.maxSpeed;
+				c.boosterSpeed = setting.boosterSpeed;
+				c.boosterDecay = setting.boosterDecay;
+				c.angularSpeed = setting.angularSpeed;
+				c.airAngularSpeed = setting.airAngularSpeed;
+				c.rollAngle = setting.rollAngle;
+				c.shieldDamage = setting.shieldDamage;
+				c.collisionSpeedDecrease = setting.collisionSpeedDecrease;
+				c.collisionSpeedDecreaseCoef = setting.collisionSpeedDecreaseCoef;
+				c.rollLerp = setting.rollLerp;
+				c.driftLerp = setting.driftLerp;
+				c.angularLerp = setting.angularLerp;
+			}
+		});
 
 		if (this.godmode === Godmode.ON)
 			c.shieldDamage = 0.0;

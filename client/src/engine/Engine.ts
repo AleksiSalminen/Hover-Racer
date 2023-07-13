@@ -1,4 +1,4 @@
-import { Settings, ControlType, Quality, HUD, Godmode, Difficulty } from "./config/Config.ts";
+import { ControlType, Quality, HUD, Godmode, Difficulty } from "./config/Config.ts";
 import BKcoreC from "./bkcore/BKcore.js";
 import HexGLC from "./bkcore/hexgl/HexGL.js";
 
