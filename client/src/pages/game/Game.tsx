@@ -21,7 +21,7 @@ function Game(props: Props) {
         const quality = settings.quality;
         const hud = settings.hud;
         const godmode = settings.godmode;
-        const difficulty = Engine.getDifficultyInfo().NORMAL;
+        const difficulty = settings.difficulty;
         const container = document.getElementById('main');
         const overlay = document.getElementById('overlay');
         const track = "Cityscape";

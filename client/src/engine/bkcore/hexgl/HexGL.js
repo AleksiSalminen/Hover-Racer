@@ -62,7 +62,7 @@ export default class HexGLC {
 		this.width = opts.width == undefined ? window.innerWidth : opts.width;
 		this.height = opts.height == undefined ? window.innerHeight : opts.height;
 
-		this.difficulty = opts.difficulty == undefined ? 0 : opts.difficulty;
+		this.difficulty = opts.difficulty == undefined ? Difficulty.NORMAL : opts.difficulty;
 		this.player = opts.player == undefined ? "Anonym" : opts.player;
 
 		this.tracks = tracks;
@@ -327,7 +327,43 @@ export default class HexGLC {
 
 	tweakShipControls() {
 		let c = this.components.shipControls;
-		if (this.difficulty == Difficulty.NORMAL) {
+		if (this.difficulty === Difficulty.INSANE) {
+			c.airResist = 0.065;
+			c.airDrift = 0.09;
+			c.thrust = 0.065;
+			c.airBrake = 0.07;
+			c.maxSpeed = 14.8;
+			c.boosterSpeed = c.maxSpeed * 0.35;
+			c.boosterDecay = 0.007;
+			c.angularSpeed = 0.017;
+			c.airAngularSpeed = 0.0225;
+			c.rollAngle = 0.6;
+			c.shieldDamage = 0.01;
+			c.collisionSpeedDecrease = 0.8;
+			c.collisionSpeedDecreaseCoef = 0.5;
+			c.rollLerp = 0.18;
+			c.driftLerp = 0.6;
+			c.angularLerp = 0.4;
+		}
+		else if (this.difficulty === Difficulty.HARD) {
+			c.airResist = 0.05;
+			c.airDrift = 0.08;
+			c.thrust = 0.05;
+			c.airBrake = 0.055;
+			c.maxSpeed = 12.2;
+			c.boosterSpeed = c.maxSpeed * 0.35;
+			c.boosterDecay = 0.007;
+			c.angularSpeed = 0.0155;
+			c.airAngularSpeed = 0.0195;
+			c.rollAngle = 0.6;
+			c.shieldDamage = 0.02;
+			c.collisionSpeedDecrease = 0.8;
+			c.collisionSpeedDecreaseCoef = 0.5;
+			c.rollLerp = 0.14;
+			c.driftLerp = 0.5;
+			c.angularLerp = 0.4;
+		}
+		else if (this.difficulty === Difficulty.NORMAL) {
 			c.airResist = 0.035;
 			c.airDrift = 0.07;
 			c.thrust = 0.035;
@@ -345,7 +381,7 @@ export default class HexGLC {
 			c.driftLerp = 0.4;
 			c.angularLerp = 0.4;
 		}
-		else if (this.difficulty == Difficulty.EASY) {
+		else if (this.difficulty === Difficulty.EASY) {
 			c.airResist = 0.02;
 			c.airDrift = 0.06;
 			c.thrust = 0.02;

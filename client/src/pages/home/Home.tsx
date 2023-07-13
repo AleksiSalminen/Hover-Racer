@@ -8,7 +8,7 @@ type Props = {
     startGame: Function
 }
 
-function Home(props: any) {
+function Home(props: Props) {
     const config = Engine.getConfig();
     const [controls, setControls] = useState(config.controls.KEYBOARD);
     const [quality, setQuality] = useState(config.quality.LOW);

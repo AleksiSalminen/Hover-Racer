@@ -17,7 +17,7 @@ enum Godmode {
 }
 
 enum Difficulty {
-    EASY = "EASY", NORMAL = "NORMAL"
+    EASY = "EASY", NORMAL = "NORMAL", HARD = "HARD", INSANE = "INSANE"
 }
 
 export interface Settings {
