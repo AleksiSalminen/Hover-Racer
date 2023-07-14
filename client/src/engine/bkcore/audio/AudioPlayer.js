@@ -1,6 +1,6 @@
 
 
-export default class Audio {
+export default class AudioPlayer {
 
 	// ATTRIBUTES
 
@@ -28,6 +28,7 @@ export default class Audio {
 	// METHODS
 
 	addSound(src, id, loop, callback, usePanner) {
+		let self = this;
 		let ctx = this._ctx;
 		let audio = new Audio();
 
@@ -53,6 +54,8 @@ export default class Audio {
 
 					//Remember the gain node
 					audio.gainNode = gainNode;
+
+					self.sounds[id] = audio;
 
 					callback();
 				}, function (e) {

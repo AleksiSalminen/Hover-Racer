@@ -1,6 +1,5 @@
 import THREE from "../../libs/Three.dev.js";
 import ImageData from "../utils/ImageData.js";
-import Audio from "../audio/Audio.js";
 
 /*!
  * @class bkcore.threejs.Loader
@@ -67,7 +66,7 @@ export default class LoaderC {
 	 * Load the given list of resources
 	 * @param  {textures, texturesCube, geometries, analysers, images} data 
 	 */
-	load(data) {
+	load(data, audio) {
 		let self = this;
 
 		for (let k in this.types) {
@@ -96,7 +95,7 @@ export default class LoaderC {
 			this.loadImage(i, data.images[i]);
 
 		for (let s in data.sounds)
-			this.loadSound(data.sounds[s].src, s, data.sounds[s].loop, data.sounds[s].usePanner);
+			this.loadSound(audio, data.sounds[s].src, s, data.sounds[s].loop, data.sounds[s].usePanner);
 
 		this.progressCallback.call(this, this.progress);
 	}
@@ -224,11 +223,10 @@ export default class LoaderC {
 		this.data.images[name] = e;
 	}
 
-	loadSound(src, name, loop) {
+	loadSound(audio, src, name, loop) {
 		let self = this;
 		this.updateState("sounds", name, false);
 
-		const audio = new Audio();
 		audio.addSound(
 			src,
 			name,

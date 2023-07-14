@@ -13,6 +13,7 @@ import HUD from "./HUD.js";
 import tracks from "./Tracks.js";
 import Gameplay from "./Gameplay.js";
 import Timer from "../utils/Timer.js";
+import AudioPlayer from "../audio/AudioPlayer.js";
 
 
 export default class HexGLC {
@@ -45,6 +46,7 @@ export default class HexGLC {
 	hud;
 	gameplay;
 	composers;
+	audio;
 
 	// CONSTRUCTORS
 
@@ -117,6 +119,8 @@ export default class HexGLC {
 			game: null
 		};
 
+		this.audio = new AudioPlayer();
+
 		this.initRenderer();
 
 		function onKeyPress(event) {
@@ -148,11 +152,11 @@ export default class HexGLC {
 		this.manager.get('game').objects.lowFPS = 0;
 		this.gameplay.start();
 
-		//bkcore.Audio.stop('bg');
-		//bkcore.Audio.stop('wind');
-		//bkcore.Audio.volume('wind', 0.35);
-		//bkcore.Audio.play('bg');
-		//bkcore.Audio.play('wind');
+		this.audio.stop('bg');
+		this.audio.stop('wind');
+		this.audio.volume('wind', 0.35);
+		this.audio.play('bg');
+		this.audio.play('wind');
 	}
 
 	restart() {
@@ -178,12 +182,12 @@ export default class HexGLC {
 	init() {
 		this.initHUD();
 		this.track.buildMaterials(this.quality);
-		this.track.buildScenes(this, this.quality);
+		this.track.buildScenes(this, this.quality, this.audio);
 		this.initGameComposer();
 	}
 
 	load(opts) {
-		this.track.load(opts, this.quality);
+		this.track.load(opts, this.quality, this.audio);
 	}
 
 	initGameplay() {
@@ -205,9 +209,9 @@ export default class HexGLC {
 
 		this.gameplay.start();
 
-		//bkcore.Audio.play('bg');
-		//bkcore.Audio.play('wind');
-		//bkcore.Audio.volume('wind', 0.35);
+		this.audio.play('bg');
+		this.audio.play('wind');
+		this.audio.volume('wind', 0.35);
 	}
 
 	displayScore(f, l) {

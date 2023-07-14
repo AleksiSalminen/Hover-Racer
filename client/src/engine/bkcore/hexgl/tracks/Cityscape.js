@@ -35,12 +35,9 @@ const Cityscape = {
 	analyser: null,
 	pixelRatio: 2048.0 / 6000.0,
 
-	load: function (opts, quality) {
+	load: function (opts, quality, audio) {
 		this.lib = new LoaderC(opts);
 
-		// desktop + quality low
-		// OR
-		// mobile + quality low or mid
 		if (quality.name === Quality.LOWEST || quality.name === Quality.LOW) // LOW
 		{
 			this.lib.load({
@@ -108,14 +105,14 @@ const Cityscape = {
 						usePanner: true
 					}
 				}
-			});
+			},
+			audio);
 		}
 		// desktop + quality mid or high
 		// OR
 		// mobile + quality high
 		else // HIGH
 		{
-			console.log('HIGH');
 			this.lib.load({
 				textures: {
 					'hex': "../textures.full/hud/hex.jpg",
@@ -188,7 +185,8 @@ const Cityscape = {
 						loop: true
 					}
 				}
-			});
+			},
+			audio);
 		}
 	},
 
@@ -328,7 +326,7 @@ const Cityscape = {
 		}
 	},
 
-	buildScenes: function (ctx, quality) {
+	buildScenes: function (ctx, quality, audio) {
 		// IMPORTANT
 		this.analyser = this.lib.get("analysers", "track.cityscape.collision");
 
@@ -413,7 +411,7 @@ const Cityscape = {
 		}
 
 		// SHIP CONTROLS
-		let shipControls = new ShipControls(ctx);
+		let shipControls = new ShipControls(ctx, audio);
 		shipControls.collisionMap = this.lib.get("analysers", "track.cityscape.collision");
 		shipControls.collisionPixelRatio = 2048.0 / 6000.0;
 		shipControls.collisionDetection = true;

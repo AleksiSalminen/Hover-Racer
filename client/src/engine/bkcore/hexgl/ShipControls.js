@@ -86,10 +86,11 @@ export default class ShipControls {
 	leapBridge;
 	leapInfo;
 	leapController;
+	audio;
 
 	// CONSTRUCTORS
 
-	constructor(ctx) {
+	constructor(ctx, audio) {
 		let self = this;
 		let domElement = ctx.document;
 	
@@ -200,7 +201,9 @@ export default class ShipControls {
 	
 		this.touchController = null;
 		this.orientationController = null;
-		this.gamepadController = null
+		this.gamepadController = null;
+
+		this.audio = audio;
 	
 		if (ctx.controlType == 1 && bkcore.controllers.TouchController.isCompatible()) {
 			this.touchController = new bkcore.controllers.TouchController(
@@ -385,9 +388,9 @@ export default class ShipControls {
 	}
 
 	destroy() {
-		//bkcore.Audio.play('destroyed');
-		//bkcore.Audio.stop('bg');
-		//bkcore.Audio.stop('wind');
+		this.audio.play('destroyed');
+		this.audio.stop('bg');
+		this.audio.stop('wind');
 	
 		this.active = false;
 		this.destroyed = true;
@@ -573,8 +576,8 @@ export default class ShipControls {
 		}
 	
 		//Update listener position
-		//bkcore.Audio.setListenerPos(this.movement);
-		//bkcore.Audio.setListenerVelocity(this.currentVelocity);
+		this.audio.setListenerPos(this.movement);
+		this.audio.setListenerVelocity(this.currentVelocity);
 	}
 
 	teleport(pos, quat) {
@@ -619,7 +622,7 @@ export default class ShipControls {
 		this.boost -= this.boosterDecay * dt;
 		if (this.boost < 0) {
 			this.boost = 0.0;
-			//bkcore.Audio.stop('boost');
+			this.audio.stop('boost');
 		}
 	
 		let x = Math.round(this.collisionMap.pixels.width / 2 + this.dummy.position.x * this.collisionPixelRatio);
@@ -629,7 +632,7 @@ export default class ShipControls {
 		let color = this.collisionMap.getPixel(x, z);
 	
 		if (color.r == 255 && color.g < 127 && color.b < 127) {
-			//bkcore.Audio.play('boost');
+			this.audio.play('boost');
 			this.boost = this.boosterSpeed;
 		}
 	
@@ -656,7 +659,7 @@ export default class ShipControls {
 		let collision = this.collisionMap.getPixelBilinear(x, z);
 	
 		if (collision.r < 255) {
-			//bkcore.Audio.play('crash');
+			this.audio.play('crash');
 	
 			// Shield
 			let sr = (this.getRealSpeed() / this.maxSpeed);
