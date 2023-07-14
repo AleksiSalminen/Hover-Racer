@@ -69,7 +69,12 @@ export default class HexGLC {
 		this.difficulty = opts.difficulty == undefined ? Difficulty.NORMAL : opts.difficulty;
 		this.player = opts.player == undefined ? "Anonym" : opts.player;
 
-		this.track = opts.track;
+		settings.track.forEach((track) => {
+			if (track.name === opts.track) {
+				this.track = track.config;
+			}
+		});
+
 		this.ship = opts.ship;
 
 		this.mode = opts.mode == undefined ? 'timeattack' : opts.mode;

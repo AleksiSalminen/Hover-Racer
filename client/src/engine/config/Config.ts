@@ -1,3 +1,4 @@
+import Cityscape from "../../../game/tracks/Cityscape/Cityscape.ts";
 
 /** Available settings enums, interfaces and types */
 
@@ -44,6 +45,12 @@ export interface Settings {
 /** Settings configurations */
 
 const settings = {
+    track: [
+        {
+            name: Track.CITYSCAPE,
+            config: Cityscape
+        }
+    ],
     difficulty: [
         {
             name: Difficulty.INSANE,
