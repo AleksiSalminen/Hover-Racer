@@ -10,10 +10,12 @@ import { ControlType, Difficulty, Quality, Godmode, settings } from "../../confi
 import RenderManagerC from "../threejs/RenderManager.js";
 import Shaders from "../threejs/Shaders.js";
 import HUD from "./HUD.js";
-import tracks from "./Tracks.js";
 import Gameplay from "./Gameplay.js";
 import Timer from "../utils/Timer.js";
 import AudioPlayer from "../audio/AudioPlayer.js";
+import { load, buildMaterials, buildScenes } from "./Tracks.js";
+
+import Cityscape from "../../../../tracks/Cityscape.js";
 
 
 export default class HexGLC {
@@ -67,8 +69,7 @@ export default class HexGLC {
 		this.difficulty = opts.difficulty == undefined ? Difficulty.NORMAL : opts.difficulty;
 		this.player = opts.player == undefined ? "Anonym" : opts.player;
 
-		this.tracks = tracks;
-		this.track = this.tracks[opts.track === undefined ? 'Cityscape' : opts.track];
+		this.track = Cityscape;
 
 		this.mode = opts.mode == undefined ? 'timeattack' : opts.mode;
 
@@ -181,13 +182,14 @@ export default class HexGLC {
 
 	init() {
 		this.initHUD();
-		this.track.buildMaterials(this.quality);
-		this.track.buildScenes(this, this.quality, this.audio);
+		buildMaterials(this.track, this.quality);
+		buildScenes(this, this.track, this.quality, this.audio);
 		this.initGameComposer();
 	}
 
 	load(opts) {
-		this.track.load(opts, this.quality, this.audio);
+		load(this.track, opts, this.quality, this.audio);
+		//this.track.load(opts, this.quality, this.audio);
 	}
 
 	initGameplay() {
