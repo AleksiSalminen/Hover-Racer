@@ -1,4 +1,4 @@
-import { ControlType, Quality, HUD, Godmode, Difficulty } from "./config/Config.ts";
+import { Track, Ship, ControlType, Quality, HUD, Godmode, Difficulty } from "./config/Config.ts";
 import BKcoreC from "./bkcore/BKcore.js";
 import HexGLC from "./bkcore/hexgl/HexGL.js";
 
@@ -21,13 +21,13 @@ function hasWebGL() {
     return gl !== null;
 };
 
-function start(controlType: ControlType, quality: Quality, hud: HUD, godmode: Godmode, gameEndCallback: Function, container: HTMLElement | null, overlay: HTMLElement | null, track: string, difficulty: Difficulty) {
+function start(track: Track, ship: Ship, difficulty: Difficulty, controlType: ControlType, quality: Quality, hud: HUD, godmode: Godmode, gameEndCallback: Function, container: HTMLElement | null, overlay: HTMLElement | null) {
     if (!hasWebGL()) {
         console.log("WebGL is not supported! Cannot launch the game!");
         alert("WebGL is not supported! Cannot launch the game!");
     }
     else {
-        BKcore.init(document, quality, controlType, hud, godmode, gameEndCallback, container, overlay, track, difficulty);
+        BKcore.init(document, track, ship, difficulty, quality, controlType, hud, godmode, gameEndCallback, container, overlay);
         let hexGL: HexGLC | null = BKcore.hexgl.HexGL;
         if (hexGL !== null) {
             return hexGL.load({
@@ -57,7 +57,9 @@ function start(controlType: ControlType, quality: Quality, hud: HUD, godmode: Go
 
 // GETTERS
 
-function getConfig() { return { controls: getControlTypeInfo(), quality: getQualityInfo(), hud: getHUDInfo(), godmode: getGodmodeInfo(), difficulty: getDifficultyInfo() } }
+function getConfig() { return { track: getTrackInfo(), ship: getShipInfo(), controls: getControlTypeInfo(), quality: getQualityInfo(), hud: getHUDInfo(), godmode: getGodmodeInfo(), difficulty: getDifficultyInfo() } }
+function getTrackInfo() { return Track; }
+function getShipInfo() { return Ship; }
 function getControlTypeInfo() { return ControlType; }
 function getQualityInfo() { return Quality; }
 function getHUDInfo() { return HUD; }
@@ -69,7 +71,8 @@ function getDefaultControls() { return BKcore.Utils.isTouchDevice() ? 1 : 0; }
 // EXPORTS
 
 const Engine = {
-    start, getURLParameter, getDefaultControls, getConfig, getControlTypeInfo,
-    getQualityInfo, getHUDInfo, getGodmodeInfo, getDifficultyInfo
+    start, getURLParameter, getDefaultControls, getConfig, getTrackInfo, 
+    getShipInfo, getControlTypeInfo, getQualityInfo, getHUDInfo,
+    getGodmodeInfo, getDifficultyInfo
 };
 export default Engine;

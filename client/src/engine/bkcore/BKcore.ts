@@ -1,4 +1,4 @@
-import { ControlType, Quality, HUD, Godmode, Difficulty } from "../config/Config.ts";
+import { Track, Ship, ControlType, Quality, HUD, Godmode, Difficulty } from "../config/Config.ts";
 import Utils from "./utils/Utils.js";
 import HexGLC from "./hexgl/HexGL.js";
 
@@ -17,19 +17,20 @@ export default class BKcoreC {
         this.hexgl = { HexGL: null }
     }
 
-    init(document: Document, quality: Quality, controlType: ControlType, hud: HUD, godmode: Godmode, gameEndCallback: Function, container: HTMLElement | null, overlay: HTMLElement | null, track: string, difficulty: Difficulty) {
+    init(document: Document, track: Track, ship: Ship, difficulty: Difficulty, quality: Quality, controlType: ControlType, hud: HUD, godmode: Godmode, gameEndCallback: Function, container: HTMLElement | null, overlay: HTMLElement | null) {
         const options = {
             document: document,
             width: window.innerWidth,
             height: window.innerHeight,
             container: container,
             overlay: overlay,
+            track: track,
+            ship: ship,
             quality: quality,
             difficulty: difficulty,
             hud: hud === "ON",
             controlType: controlType,
             godmode: godmode,
-            track: track,
             gameEndCallback: gameEndCallback
         };
 

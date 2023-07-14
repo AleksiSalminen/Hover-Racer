@@ -1,6 +1,14 @@
 
 /** Available settings enums, interfaces and types */
 
+enum Track {
+    CITYSCAPE = "CITYSCAPE"
+}
+
+enum Ship {
+    FEISAR = "FEISAR"
+}
+
 enum ControlType {
     KEYBOARD = "KEYBOARD", TOUCH = "TOUCH", GAMEPAD = "GAMEPAD"
 }
@@ -23,6 +31,8 @@ enum Difficulty {
 }
 
 export interface Settings {
+    track: Track;
+    ship: Ship;
     controls: ControlType;
     quality: Quality;
     hud: HUD;
@@ -242,5 +252,5 @@ const settings = {
 /** ---------- */
 
 export {
-    ControlType, Quality, HUD, Godmode, Difficulty, settings
+    Track, Ship, ControlType, Quality, HUD, Godmode, Difficulty, settings
 };

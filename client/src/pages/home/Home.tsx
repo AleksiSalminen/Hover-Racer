@@ -10,6 +10,8 @@ type Props = {
 
 function Home(props: Props) {
     const config = Engine.getConfig();
+    const [track, setTrack] = useState(config.track.CITYSCAPE);
+    const [ship, setShip] = useState(config.ship.FEISAR);
     const [controls, setControls] = useState(config.controls.KEYBOARD);
     const [quality, setQuality] = useState(config.quality.LOW);
     const [hud, setHud] = useState(config.hud.ON);
@@ -18,6 +20,8 @@ function Home(props: Props) {
 
     const startGame = () => {
         props.startGame({
+            track: track,
+            ship: ship,
             controls: controls,
             quality: quality,
             hud: hud,
@@ -38,6 +42,16 @@ function Home(props: Props) {
                 }
             }
         }
+    }
+
+    const changeTrack = () => {
+        let nextElem = getEnumNextElem(track, config.track);
+        setTrack(eval("config.track." + nextElem));
+    }
+
+    const changeShip = () => {
+        let nextElem = getEnumNextElem(ship, config.ship);
+        setShip(eval("config.ship." + nextElem));
     }
 
     const changeControls = () => {
@@ -73,6 +87,8 @@ function Home(props: Props) {
             <div id="menucontainer">
                 <div id="menu">
                     <div id="start" onClick={() => startGame()}>Start</div>
+                    <div id="s-track" onClick={() => changeTrack()}>Track: {track}</div>
+                    <div id="s-ship" onClick={() => changeShip()}>Ship: {ship}</div>
                     <div id="s-difficulty" onClick={() => changeDifficulty()}>Difficulty: {difficulty}</div>
                     <div id="s-godmode" onClick={() => changeGodmode()}>Godmode: {godmode}</div>
                     <div id="s-controlType" onClick={() => changeControls()}>Controls: {controls}</div>

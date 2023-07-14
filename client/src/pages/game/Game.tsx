@@ -17,6 +17,8 @@ function Game(props: Props) {
     }, []);
 
     const initGame = (settings: Settings) => {
+        const track = settings.track;
+        const ship = settings.ship;
         const controlType = settings.controls;
         const quality = settings.quality;
         const hud = settings.hud;
@@ -24,8 +26,7 @@ function Game(props: Props) {
         const difficulty = settings.difficulty;
         const container = document.getElementById('main');
         const overlay = document.getElementById('overlay');
-        const track = "Cityscape";
-        Engine.start(controlType, quality, hud, godmode, endGame, container, overlay, track, difficulty);
+        Engine.start(track, ship, difficulty, controlType, quality, hud, godmode, endGame, container, overlay);
     }
 
     const endGame = () => {
