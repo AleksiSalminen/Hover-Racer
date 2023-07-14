@@ -1,4 +1,6 @@
 import Cityscape from "../../../game/tracks/Cityscape/Cityscape.ts";
+import Feisar from "../../../game/ships/Feisar/Feisar.ts";
+import UI from "../../../game/ui/UI.ts";
 
 /** Available settings enums, interfaces and types */
 
@@ -45,10 +47,19 @@ export interface Settings {
 /** Settings configurations */
 
 const settings = {
+    ui: {
+        config: UI
+    },
     track: [
         {
             name: Track.CITYSCAPE,
             config: Cityscape
+        }
+    ],
+    ship: [
+        {
+            name: Ship.FEISAR,
+            config: Feisar
         }
     ],
     difficulty: [

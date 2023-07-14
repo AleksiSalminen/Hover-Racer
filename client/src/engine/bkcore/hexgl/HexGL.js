@@ -75,7 +75,11 @@ export default class HexGLC {
 			}
 		});
 
-		this.ship = opts.ship;
+		settings.ship.forEach((ship) => {
+			if (ship.name === opts.ship) {
+				this.ship = ship.config;
+			}
+		});
 
 		this.mode = opts.mode == undefined ? 'timeattack' : opts.mode;
 
