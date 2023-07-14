@@ -128,11 +128,11 @@ export default class LoaderC {
 	 */
 	get(type, name) {
 		if (!(type in this.types)) {
-			console.warn("Unkown loader type.");
+			console.warn("Unkown loader type: " + type);
 			return null;
 		}
 		if (!(name in this.data[type])) {
-			console.warn("Unkown file.");
+			console.warn("Unkown file: " + name);
 			return null;
 		}
 

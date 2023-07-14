@@ -33,6 +33,7 @@ export default class HexGLC {
 	player;
 	track;
 	ship;
+	ui;
 	mode;
 	controlType;
 	quality;
@@ -80,6 +81,8 @@ export default class HexGLC {
 				this.ship = ship.config;
 			}
 		});
+
+		this.ui = settings.ui.config;
 
 		this.mode = opts.mode == undefined ? 'timeattack' : opts.mode;
 
@@ -192,14 +195,13 @@ export default class HexGLC {
 
 	init() {
 		this.initHUD();
-		buildMaterials(this.track, this.quality);
-		buildScenes(this, this.track, this.quality, this.audio);
+		buildMaterials(this.track, this.ship, this.ui, this.quality);
+		buildScenes(this, this.track, this.ship, this.ui, this.quality, this.audio);
 		this.initGameComposer();
 	}
 
 	load(opts) {
-		load(this.track, opts, this.quality, this.audio);
-		//this.track.load(opts, this.quality, this.audio);
+		load(this.track, this.ship, this.ui, opts, this.quality, this.audio);
 	}
 
 	initGameplay() {
@@ -262,9 +264,9 @@ export default class HexGLC {
 			width: this.width,
 			height: this.height,
 			font: "BebasNeueRegular",
-			bg: this.track.lib.get("images", "hud.bg"),
-			speed: this.track.lib.get("images", "hud.speed"),
-			shield: this.track.lib.get("images", "hud.shield")
+			bg: this.ui.lib.get("images", "hud.bg"),
+			speed: this.ui.lib.get("images", "hud.speed"),
+			shield: this.ui.lib.get("images", "hud.shield")
 		});
 		this.containers.overlay.appendChild(this.hud.canvas);
 	}
@@ -289,7 +291,7 @@ export default class HexGLC {
 		effectHex.uniforms['size'].value = 512.0 * (this.width / 1633);
 		effectHex.uniforms['rx'].value = this.width;
 		effectHex.uniforms['ry'].value = this.height;
-		effectHex.uniforms['tHex'].texture = this.track.lib.get("textures", "hex");
+		effectHex.uniforms['tHex'].texture = this.ui.lib.get("textures", "hex");
 		effectHex.uniforms['color'].value = this.extras.vignetteColor;
 
 		effectHex.renderToScreen = true;
