@@ -15,7 +15,7 @@ import Timer from "../utils/Timer.js";
 import AudioPlayer from "../audio/AudioPlayer.js";
 import { load, buildMaterials, buildScenes } from "./Tracks.js";
 
-import Cityscape from "../../../../tracks/Cityscape.js";
+import Cityscape from "../../../../game/tracks/Cityscape/Cityscape.ts";
 
 
 export default class HexGLC {
@@ -227,7 +227,7 @@ export default class HexGLC {
 		});
 
 		// Add shading if high enough quality
-		if (this.quality.renderer.useShading) {console.log("A");
+		if (this.quality.renderer.useShading) {
 			renderer.physicallyBasedShading = this.quality.renderer.physicallyBasedShading;
 			renderer.gammaInput = this.quality.renderer.gammaInput;
 			renderer.gammaOutput = this.quality.renderer.gammaOutput;
