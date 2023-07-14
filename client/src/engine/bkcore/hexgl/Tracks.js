@@ -284,7 +284,7 @@ function buildScenes(ctx, track, ship, ui, quality, audio) {
 
     // CAMERA
     ctx.components.cameraChase = new CameraChase({
-        target: ship,
+        target: shipMesh,
         camera: camera,
         cameraCube: ctx.manager.get("sky").camera,
         lerp: 0.5,
