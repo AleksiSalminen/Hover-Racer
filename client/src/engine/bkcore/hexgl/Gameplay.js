@@ -1,5 +1,5 @@
 import Timer from "../utils/Timer.js";
-import RaceData from "./RaceData.js";
+import RaceData from "./RaceData.ts";
 
 
 const Gameplay = function (opts) {
