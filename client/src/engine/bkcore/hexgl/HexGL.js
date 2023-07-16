@@ -12,7 +12,7 @@ import Shaders from "../threejs/Shaders.js";
 import HUD from "./HUD.js";
 import Gameplay from "./Gameplay.js";
 import Timer from "../utils/Timer.js";
-import AudioPlayer from "../audio/AudioPlayer.js";
+import AudioPlayer from "../audio/AudioPlayer.ts";
 import { load, buildMaterials, buildScenes } from "./Tracks.js";
 
 import Cityscape from "../../../../game/tracks/Cityscape/Cityscape.ts";

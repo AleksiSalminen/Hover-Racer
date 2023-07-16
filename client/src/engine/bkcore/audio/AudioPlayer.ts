@@ -1,39 +1,50 @@
 
+type Vector3 = {
+	x: number, y: number, z: number, normalize: Function
+};
+
+type SoundObj = {
+	[key: string]: HTMLAudioElement & {
+		src: AudioBuffer | null, gainNode: GainNode | null,
+		bufferNode: object | null, loop: boolean
+	}
+};
+
 
 export default class AudioPlayer {
 
 	// ATTRIBUTES
 
-	_ctx;
-	_panner;
-	posMultipler;
-	sounds;
+	_ctx: AudioContext;
+	_panner: PannerNode;
+	posMultipler: number;
+	sounds: SoundObj;
 
 	// CONSTRUCTORS
 
 	constructor() {
-		if (window.AudioContext || window.webkitAudioContext) {
-			this._ctx = new (window.AudioContext || window.webkitAudioContext)();
+		if (window.AudioContext) {
+			this._ctx = new (window.AudioContext)();
 			this._panner = this._ctx.createPanner();
 			this._panner.connect(this._ctx.destination);
+			this.posMultipler = 1.5;
+			this.sounds = {};
 		}
 		else {
-			this._ctx = null;
+			throw new Error("Cannot create audio context: No browser support");
 		}
-
-		this.posMultipler = 1.5;
-		this.sounds = [];
 	}
 
 	// METHODS
 
-	addSound(src, id, loop, callback, usePanner) {
+	addSound(src: string, id: string, loop: boolean, callback: Function, usePanner?: boolean) {
 		let self = this;
 		let ctx = this._ctx;
 		let audio = new Audio();
 
 		if (ctx) {
-			let audio = { src: null, gainNode: null, bufferNode: null, loop: loop };
+			let audio: HTMLAudioElement & { src: AudioBuffer | null, gainNode: GainNode | null, bufferNode: object | null, loop: boolean };
+			audio = { src: null, gainNode: null, bufferNode: null, loop: loop };
 			let xhr = new XMLHttpRequest();
 			xhr.responseType = 'arraybuffer';
 
@@ -43,7 +54,7 @@ export default class AudioPlayer {
 					let gainNode = ctx.createGain();
 
 					if (usePanner === true) {
-						gainNode.connect(this._panner);
+						gainNode.connect(self._panner);
 					}
 					else {
 						gainNode.connect(ctx.destination);
@@ -83,7 +94,7 @@ export default class AudioPlayer {
 		this.sounds[id] = audio;
 	}
 
-	play(id) {
+	play(id: string) {
 		let ctx = this._ctx;
 
 		if (ctx && this.sounds[id].gainNode) {
@@ -108,9 +119,8 @@ export default class AudioPlayer {
 		}
 	}
 
-	stop(id) {
+	stop(id: string) {
 		let ctx = this._ctx;
-
 		if (ctx) {
 			if (this.sounds[id].bufferNode !== null && this.sounds[id].bufferNode !== undefined) {
 				let bufferNode = this.sounds[id].bufferNode;
@@ -123,7 +133,7 @@ export default class AudioPlayer {
 		}
 	}
 
-	volume(id, volume) {
+	volume(id:string, volume: number) {
 		let ctx = this._ctx;
 
 		if (ctx && this.sounds[id].gainNode) {
@@ -134,7 +144,7 @@ export default class AudioPlayer {
 		}
 	}
 
-	setListenerPos(vec) {
+	setListenerPos(vec: Vector3) {
 		if (this._ctx) {
 			let panner = this._panner;
 			let vec2 = vec.normalize();
@@ -146,7 +156,7 @@ export default class AudioPlayer {
 		}
 	}
 
-	setListenerVelocity(vec) {
+	setListenerVelocity(vec: Vector3) {
 		if (this._ctx) {
 			let panner = this._panner;
 			//panner.setVelocity(vec.x, vec.y, vec.z);
