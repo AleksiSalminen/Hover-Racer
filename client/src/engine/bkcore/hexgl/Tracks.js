@@ -9,8 +9,8 @@ import { Quality } from "../../config/Config.ts";
 
 function load(track, ship, ui, opts, quality, audio) {
     track.lib = new LoaderC(opts);
-    ship.lib = new LoaderC(opts);
-    ui.lib = new LoaderC(opts);
+    ship.lib = track.lib;
+    ui.lib = track.lib;
 
     if (quality.name === Quality.LOWEST || quality.name === Quality.LOW) {
         track.lib.load(track.resources.low, audio);
@@ -270,7 +270,7 @@ function buildScenes(ctx, track, ship, ui, quality, audio) {
     }
 
     ctx.components.shipEffects = new ShipEffects(fxParams);
-
+    
     // TRACK
     let trackMesh = ctx.createMesh(scene, track.lib.get("geometries", "track"), 0, -5, 0, track.materials.track);
     let bonusBase = ctx.createMesh(scene, ship.lib.get("geometries", "bonus.base"), 0, -5, 0, ship.materials.bonusBase);

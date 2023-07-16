@@ -166,7 +166,7 @@ export default class HUD {
 			this.ctx.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 			return;
 		}
-
+		
 		let w = this.bg.width;
 		let h = this.bg.height;
 		let r = h / w;
@@ -184,10 +184,10 @@ export default class HUD {
 		let sh = sho * shieldRatio;
 		let sy = (SCREEN_WIDTH / this.shieldBarYRatio) + sho - sh;
 
-
+		
 		if (this.step == 0) {
 			this.ctx.clearRect(0, oh, SCREEN_WIDTH, nh);
-
+			
 			if (!this.messageOnly) {
 				this.ctx.drawImage(this.bg, o, oh, nw, nh);
 
@@ -226,7 +226,7 @@ export default class HUD {
 		}
 		else if (this.step == 1) {
 			this.ctx.clearRect(0, 0, SCREEN_WIDTH, oh);
-
+			
 			// TIME
 			if (this.time != "") {
 				this.ctx.font = (SCREEN_WIDTH / this.timeFontRatio) + "px " + this.font;
@@ -279,7 +279,7 @@ export default class HUD {
 					this.messageAS = this.messageFontAlpha;
 					this.messageFontRatio = this.messageFontRatioEnd;
 				}
-
+				
 				this.ctx.font = (SCREEN_WIDTH / this.messageFontRatio) + "px " + this.font;
 				this.ctx.fillStyle = "rgba(255, 255, 255, " + this.messageAS + ")";
 				this.ctx.fillText(this.message, SCREEN_HW, my);

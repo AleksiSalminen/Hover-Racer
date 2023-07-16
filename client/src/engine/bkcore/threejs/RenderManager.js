@@ -121,7 +121,7 @@ export default class RenderManagerC {
 			let now = window.perfNow();
 			let delta = now - this.time;
 			this.time = now;
-
+			
 			this.current.render.call(this.current, delta, this.renderer);
 		}
 		else console.warn('RenderManager: No current render defined.');

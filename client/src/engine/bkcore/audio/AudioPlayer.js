@@ -86,7 +86,7 @@ export default class AudioPlayer {
 	play(id) {
 		let ctx = this._ctx;
 
-		if (ctx) {
+		if (ctx && this.sounds[id].gainNode) {
 			let sound = ctx.createBufferSource();
 			sound.connect(this.sounds[id].gainNode);
 
@@ -112,7 +112,7 @@ export default class AudioPlayer {
 		let ctx = this._ctx;
 
 		if (ctx) {
-			if (this.sounds[id].bufferNode !== null) {
+			if (this.sounds[id].bufferNode !== null && this.sounds[id].bufferNode !== undefined) {
 				let bufferNode = this.sounds[id].bufferNode;
 				bufferNode.stop ? bufferNode.stop(ctx.currentTime) : bufferNode.noteOff(ctx.currentTime);
 			}
@@ -126,7 +126,7 @@ export default class AudioPlayer {
 	volume(id, volume) {
 		let ctx = this._ctx;
 
-		if (ctx) {
+		if (ctx && this.sounds[id].gainNode) {
 			this.sounds[id].gainNode.gain.value = volume;
 		}
 		else {

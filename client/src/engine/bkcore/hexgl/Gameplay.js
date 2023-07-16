@@ -157,7 +157,7 @@ Gameplay.prototype.update = function () {
 	if (!this.active) return;
 
 	this.timer.update();
-
+		
 	if (this.step == 0 && this.timer.time.elapsed >= this.countDownDelay + this.startDelay) {
 		if (this.hud != null) this.hud.display("3");
 		this.step = 1;

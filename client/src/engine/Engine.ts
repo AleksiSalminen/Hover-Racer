@@ -3,6 +3,7 @@ import BKcoreC from "./bkcore/BKcore.js";
 import HexGLC from "./bkcore/hexgl/HexGL.js";
 
 const BKcore = new BKcoreC();
+let loaded = false;
 
 // CORE FUNCTIONALITY
 
@@ -32,13 +33,16 @@ function start(track: Track, ship: Ship, difficulty: Difficulty, controlType: Co
         if (hexGL !== null) {
             return hexGL.load({
                 onLoad: function () {
-                    console.log('LOADED.');
-                    if (hexGL !== null) {
-                        hexGL.init();
-                        return hexGL.start();
-                    }
-                    else {
-                        return Error("HexGL is null!");
+                    if (!loaded) {
+                        loaded = true;
+                        console.log('LOADED.');
+                        if (hexGL !== null) {
+                            hexGL.init();
+                            return hexGL.start();
+                        }
+                        else {
+                            return Error("HexGL is null!");
+                        }
                     }
                 },
                 onError: function (error: Error) {
