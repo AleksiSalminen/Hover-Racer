@@ -3,11 +3,17 @@ import LoaderC from "../threejs/Loader.js";
 import Utils from "../utils/Utils.js";
 import ShipControls from "./ShipControls.js";
 import ShipEffects from "./ShipEffects.js";
-import CameraChase from "./CameraChase.js";
+import CameraChase from "./CameraChase.ts";
 import { Quality } from "../../config/Config.ts";
 
 
-function load(track, ship, ui, opts, quality, audio) {
+type QualityPlus = Quality & {
+    name: string, sun: any, showBoosterLight: boolean,
+    useParticles: boolean
+}
+
+
+function load(track: any, ship: any, ui: any, opts: any, quality: QualityPlus, audio: any): void {
     track.lib = new LoaderC(opts);
     ship.lib = track.lib;
     ui.lib = track.lib;
@@ -16,64 +22,62 @@ function load(track, ship, ui, opts, quality, audio) {
         track.lib.load(track.resources.low, audio);
         ship.lib.load(ship.resources.low, audio);
         ui.lib.load(ui.resources.low, audio);
-    }
-    else {
+    } else {
         track.lib.load(track.resources.high, audio);
         ship.lib.load(ship.resources.high, audio);
         ui.lib.load(ui.resources.high, audio);
     }
 }
 
-function buildMaterials(track, ship, ui, quality) {
+function buildMaterials(track: any, ship: any, ui: any, quality: QualityPlus): void {
     ui.materials = {};
     ship.materials = {};
 
     if (quality.name === Quality.LOWEST || quality.name === Quality.LOW) {
         track.materials.track = new THREE.MeshBasicMaterial({
             map: track.lib.get("textures", "track.diffuse"),
-            ambient: 0xcccccc
+            ambient: 0xcccccc,
         });
 
         ui.materials.bonusBase = new THREE.MeshBasicMaterial({
             map: ui.lib.get("textures", "bonus.base.diffuse"),
-            ambient: 0xcccccc
+            ambient: 0xcccccc,
         });
 
         ui.materials.bonusSpeed = new THREE.MeshBasicMaterial({
-            color: 0x0096ff
+            color: 0x0096ff,
         });
 
         ship.materials.ship = new THREE.MeshBasicMaterial({
             map: ship.lib.get("textures", "ship.feisar.diffuse"),
-            ambient: 0xaaaaaa
+            ambient: 0xaaaaaa,
         });
 
         ship.materials.booster = new THREE.MeshBasicMaterial({
             map: ship.lib.get("textures", "booster.diffuse"),
-            transparent: true
+            transparent: true,
         });
 
         track.materials.scrapers1 = new THREE.MeshBasicMaterial({
             map: track.lib.get("textures", "track.scrapers1.diffuse"),
-            ambient: 0xcccccc
+            ambient: 0xcccccc,
         });
 
         track.materials.scrapers2 = new THREE.MeshBasicMaterial({
             map: track.lib.get("textures", "track.scrapers2.diffuse"),
-            ambient: 0xcccccc
+            ambient: 0xcccccc,
         });
 
         track.materials.start = new THREE.MeshBasicMaterial({
             map: track.lib.get("textures", "track.start.diffuse"),
-            ambient: 0xcccccc
+            ambient: 0xcccccc,
         });
 
         track.materials.startBanner = new THREE.MeshBasicMaterial({
             map: track.lib.get("textures", "track.start.banner"),
-            transparent: false
+            transparent: false,
         });
-    }
-    else {
+    } else {
         track.materials.track = Utils.createNormalMaterial({
             diffuse: track.lib.get("textures", "track.diffuse"),
             specular: track.lib.get("textures", "track.specular"),
@@ -81,7 +85,7 @@ function buildMaterials(track, ship, ui, quality) {
             ambient: 0xffffff,
             shininess: 42,
             metal: true,
-            perPixel: true
+            perPixel: true,
         });
 
         ui.materials.bonusBase = Utils.createNormalMaterial({
@@ -92,11 +96,11 @@ function buildMaterials(track, ship, ui, quality) {
             ambient: 0x444444,
             shininess: 42,
             metal: false,
-            perPixel: false
+            perPixel: false,
         });
 
         ui.materials.bonusSpeed = new THREE.MeshBasicMaterial({
-            color: 0x0096ff
+            color: 0x0096ff,
         });
 
         ship.materials.ship = Utils.createNormalMaterial({
@@ -106,12 +110,12 @@ function buildMaterials(track, ship, ui, quality) {
             ambient: 0x444444,
             shininess: 42,
             metal: true,
-            perPixel: false
+            perPixel: false,
         });
 
         ship.materials.booster = new THREE.MeshBasicMaterial({
             map: ship.lib.get("textures", "booster.diffuse"),
-            transparent: true
+            transparent: true,
         });
 
         track.materials.scrapers1 = Utils.createNormalMaterial({
@@ -123,7 +127,7 @@ function buildMaterials(track, ship, ui, quality) {
             ambient: 0x444444,
             shininess: 42,
             metal: false,
-            perPixel: false
+            perPixel: false,
         });
 
         track.materials.scrapers2 = Utils.createNormalMaterial({
@@ -135,7 +139,7 @@ function buildMaterials(track, ship, ui, quality) {
             ambient: 0x000000,
             shininess: 42,
             metal: false,
-            perPixel: false
+            perPixel: false,
         });
 
         track.materials.start = Utils.createNormalMaterial({
@@ -145,45 +149,59 @@ function buildMaterials(track, ship, ui, quality) {
             ambient: 0xaaaaaa,
             shininess: 42,
             metal: false,
-            perPixel: false
+            perPixel: false,
         });
 
         track.materials.startBanner = new THREE.MeshBasicMaterial({
             map: track.lib.get("textures", "track.start.banner"),
-            transparent: false
+            transparent: false,
         });
     }
 }
 
-function buildScenes(ctx, track, ship, ui, quality, audio) {
+const buildScenes = (ctx: any, track: any, ship: any, ui: any, quality: QualityPlus, audio: any): void => {
     // IMPORTANT
     track.analyser = track.lib.get("analysers", "track.collision");
 
     // SKYBOX
     let sceneCube = new THREE.Scene();
 
-    let cameraCube = new THREE.PerspectiveCamera(70, ctx.width / ctx.height, 1, 6000);
+    let cameraCube = new THREE.PerspectiveCamera(
+        70,
+        ctx.width / ctx.height,
+        1,
+        6000
+    );
     sceneCube.add(cameraCube);
 
     let skyshader = THREE.ShaderUtils.lib["cube"];
-    skyshader.uniforms["tCube"].texture = track.lib.get("texturesCube", "skybox.dawnclouds");
+    skyshader.uniforms["tCube"].texture = track.lib.get(
+        "texturesCube",
+        "skybox.dawnclouds"
+    );
 
-    let skymaterial = new THREE.ShaderMaterial(
-        {
-            fragmentShader: skyshader.fragmentShader,
-            vertexShader: skyshader.vertexShader,
-            uniforms: skyshader.uniforms,
-            depthWrite: false
-        });
+    let skymaterial = new THREE.ShaderMaterial({
+        fragmentShader: skyshader.fragmentShader,
+        vertexShader: skyshader.vertexShader,
+        uniforms: skyshader.uniforms,
+        depthWrite: false,
+    });
 
-    let mesh = new THREE.Mesh(new THREE.CubeGeometry(100, 100, 100), skymaterial);
+    let mesh = new THREE.Mesh(
+        new THREE.CubeGeometry(100, 100, 100),
+        skymaterial
+    );
     mesh.flipSided = true;
 
     sceneCube.add(mesh);
 
     ctx.manager.add("sky", sceneCube, cameraCube);
 
-    let ambient = 0xbbbbbb, diffuse = 0xffffff, specular = 0xffffff, shininess = 42, scale = 23;
+    let ambient = 0xbbbbbb,
+        diffuse = 0xffffff,
+        specular = 0xffffff,
+        shininess = 42,
+        scale = 23;
 
     // MAIN SCENE
     let camera = new THREE.PerspectiveCamera(70, ctx.width / ctx.height, 1, 60000);
@@ -216,16 +234,30 @@ function buildScenes(ctx, track, ship, ui, quality, audio) {
     scene.add(sun);
 
     // SHIP
-    let shipMesh = ctx.createMesh(scene, ship.lib.get("geometries", "ship.feisar"), -1134 * 2, 10, -443 * 2, ship.materials.ship);
+    let shipMesh = ctx.createMesh(
+        scene,
+        ship.lib.get("geometries", "ship.feisar"),
+        -1134 * 2,
+        10,
+        -443 * 2,
+        ship.materials.ship
+    );
 
-    let booster = ctx.createMesh(shipMesh, ship.lib.get("geometries", "booster"), 0, 0.665, -3.8, ship.materials.booster);
+    let booster = ctx.createMesh(
+        shipMesh,
+        ship.lib.get("geometries", "booster"),
+        0,
+        0.665,
+        -3.8,
+        ship.materials.booster
+    );
     booster.depthWrite = false;
 
     let boosterSprite = new THREE.Sprite({
         map: ship.lib.get("textures", "booster.sprite"),
         blending: THREE.AdditiveBlending,
         useScreenCoordinates: false,
-        color: 0xffffff
+        color: 0xffffff,
     });
     boosterSprite.scale.set(0.02, 0.02, 0.02);
     boosterSprite.mergeWith3D = false;
@@ -244,7 +276,7 @@ function buildScenes(ctx, track, ship, ui, quality, audio) {
     shipControls.collisionMap = track.lib.get("analysers", "track.collision");
     shipControls.collisionPixelRatio = 2048.0 / 6000.0;
     shipControls.collisionDetection = true;
-    shipControls.heightMap = track.lib.get("analysers", "track.height");;
+    shipControls.heightMap = track.lib.get("analysers", "track.height");
     shipControls.heightPixelRatio = 2048.0 / 6000.0;
     shipControls.heightBias = 4.0;
     shipControls.heightScale = 10.0;
@@ -259,7 +291,9 @@ function buildScenes(ctx, track, ship, ui, quality, audio) {
         booster: booster,
         boosterSprite: boosterSprite,
         boosterLight: boosterLight,
-        useParticles: false
+        useParticles: false,
+        textureCloud: undefined,
+        textureSpark: undefined
     };
 
     // Show particles if high enough quality
@@ -270,31 +304,81 @@ function buildScenes(ctx, track, ship, ui, quality, audio) {
     }
 
     ctx.components.shipEffects = new ShipEffects(fxParams);
-    
+
     // TRACK
-    let trackMesh = ctx.createMesh(scene, track.lib.get("geometries", "track"), 0, -5, 0, track.materials.track);
-    let bonusBase = ctx.createMesh(scene, ship.lib.get("geometries", "bonus.base"), 0, -5, 0, ship.materials.bonusBase);
-    let bonusSpeed = ctx.createMesh(scene, track.lib.get("geometries", "track.bonus.speed"), 0, -5, 0, track.materials.bonusSpeed);
+    let trackMesh = ctx.createMesh(
+        scene,
+        track.lib.get("geometries", "track"),
+        0,
+        -5,
+        0,
+        track.materials.track
+    );
+    let bonusBase = ctx.createMesh(
+        scene,
+        ship.lib.get("geometries", "bonus.base"),
+        0,
+        -5,
+        0,
+        ship.materials.bonusBase
+    );
+    let bonusSpeed = ctx.createMesh(
+        scene,
+        track.lib.get("geometries", "track.bonus.speed"),
+        0,
+        -5,
+        0,
+        track.materials.bonusSpeed
+    );
     bonusSpeed.receiveShadow = false;
-    let scrapers1 = ctx.createMesh(scene, track.lib.get("geometries", "track.scrapers1"), 0, 0, 0, track.materials.scrapers1);
-    let scrapers2 = ctx.createMesh(scene, track.lib.get("geometries", "track.scrapers2"), 0, 0, 0, track.materials.scrapers2);
-    let start = ctx.createMesh(scene, track.lib.get("geometries", "track.start"), 0, -5, 0, track.materials.start);
-    let startbanner = ctx.createMesh(scene, track.lib.get("geometries", "track.start.banner"), 0, -5, 0, track.materials.startBanner);
+    let scrapers1 = ctx.createMesh(
+        scene,
+        track.lib.get("geometries", "track.scrapers1"),
+        0,
+        0,
+        0,
+        track.materials.scrapers1
+    );
+    let scrapers2 = ctx.createMesh(
+        scene,
+        track.lib.get("geometries", "track.scrapers2"),
+        0,
+        0,
+        0,
+        track.materials.scrapers2
+    );
+    let start = ctx.createMesh(
+        scene,
+        track.lib.get("geometries", "track.start"),
+        0,
+        -5,
+        0,
+        track.materials.start
+    );
+    let startbanner = ctx.createMesh(
+        scene,
+        track.lib.get("geometries", "track.start.banner"),
+        0,
+        -5,
+        0,
+        track.materials.startBanner
+    );
     startbanner.doubleSided = true;
 
     // CAMERA
     ctx.components.cameraChase = new CameraChase({
-        target: shipMesh,
         camera: camera,
+        target: shipMesh,
         cameraCube: ctx.manager.get("sky").camera,
         lerp: 0.5,
         yoffset: 8.0,
         zoffset: 10.0,
-        viewOffset: 10.0
+        viewOffset: 10.0,
     });
 
-    ctx.manager.add("game", scene, camera, function (delta, renderer) {
-        if (delta > 25 && this.objects.lowFPS < 1000) this.objects.lowFPS++;
+    ctx.manager.add("game", scene, camera, function (delta: number, renderer: any) {
+        if (delta > 25 && this.objects.lowFPS < 1000)
+            this.objects.lowFPS++;
 
         let dt = delta / 16.6;
 
@@ -302,7 +386,11 @@ function buildScenes(ctx, track, ship, ui, quality, audio) {
 
         this.objects.components.shipEffects.update(dt);
 
-        this.objects.components.cameraChase.update(dt, this.objects.components.shipControls.getSpeedRatio());
+        this.objects.components.cameraChase.update(
+            dt,
+            this.objects.components.shipControls.getSpeedRatio()
+        );
+
         /*this.objects.time += 0.002;
         let c = this.objects.components.cameraChase.camera;
         c.position.set(
@@ -314,29 +402,28 @@ function buildScenes(ctx, track, ship, ui, quality, audio) {
         this.objects.components.cameraChase.cameraCube.rotation.copy(c.rotation);*/
 
         this.objects.composers.game.render(dt);
-        if (this.objects.hud) this.objects.hud.update(
-            this.objects.components.shipControls.getRealSpeed(100),
-            this.objects.components.shipControls.getRealSpeedRatio(),
-            this.objects.components.shipControls.getShield(100),
-            this.objects.components.shipControls.getShieldRatio()
-        );
+        if (this.objects.hud)
+            this.objects.hud.update(
+                this.objects.components.shipControls.getRealSpeed(100),
+                this.objects.components.shipControls.getRealSpeedRatio(),
+                this.objects.components.shipControls.getShield(100),
+                this.objects.components.shipControls.getShieldRatio()
+            );
         if (this.objects.components.shipControls.getShieldRatio() < 0.2)
             this.objects.extras.vignetteColor.setHex(0x992020);
-        else
-            this.objects.extras.vignetteColor.setHex(0x458ab1);
+        else this.objects.extras.vignetteColor.setHex(0x458ab1);
     },
-    {
-        components: ctx.components,
-        composers: ctx.composers,
-        extras: ctx.extras,
-        quality: quality,
-        hud: ctx.hud,
-        time: 0.0,
-        lowFPS: 0
-    });
+        {
+            components: ctx.components,
+            composers: ctx.composers,
+            extras: ctx.extras,
+            quality: quality,
+            hud: ctx.hud,
+            time: 0.0,
+            lowFPS: 0,
+        }
+    );
 }
 
 
-export {
-    load, buildMaterials, buildScenes
-};
+export { load, buildMaterials, buildScenes };

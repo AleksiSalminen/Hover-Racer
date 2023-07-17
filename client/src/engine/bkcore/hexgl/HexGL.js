@@ -9,11 +9,11 @@ THREE.BloomPass = BloomPass;
 import { ControlType, Difficulty, Quality, Godmode, settings } from "../../config/Config.ts";
 import RenderManagerC from "../threejs/RenderManager.js";
 import Shaders from "../threejs/Shaders.js";
-import HUD from "./HUD.js";
-import Gameplay from "./Gameplay.js";
+import HUD from "./HUD.ts";
+import Gameplay from "./Gameplay.ts";
 import Timer from "../utils/Timer.js";
 import AudioPlayer from "../audio/AudioPlayer.ts";
-import { load, buildMaterials, buildScenes } from "./Tracks.js";
+import { load, buildMaterials, buildScenes } from "./Tracks.ts";
 
 import Cityscape from "../../../../game/tracks/Cityscape/Cityscape.ts";
 

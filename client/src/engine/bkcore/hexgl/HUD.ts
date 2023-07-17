@@ -4,55 +4,53 @@ export default class HUD {
 
 	// ATTRIBUTES
 
-	visible;
-	messageOnly;
-	width;
-	height;
-	canvas;
-	ctx;
-	bg;
-	fgspeed;
-	fgshield;
-	speedFontRatio;
-	speedBarRatio;
-	shieldFontRatio;
-	shieldBarYRatio;
-	shieldBarWRatio;
-	shieldBarHRatio;
-	timeMarginRatio;
-	timeFontRatio;
-	font;
-	time;
-	message;
-	previousMessage;
-	messageTiming;
-	messagePos;
-	messagePosTarget;
-	messagePosTargetRatio;
-	messageA;
-	messageAS;
-	messageDuration;
-	messageDurationD;
-	messageDurationS;
-	messageYRatio;
-	messageFontRatio;
-	messageFontRatioStart;
-	messageFontRatioEnd;
-	messageFontLerp;
-	messageLerp;
-	messageFontAlpha;y
-	lapMarginRatio;
-	lap;
-	lapSeparator;
-	timeSeparators;
-	step;
-	maxStep;
+	visible: boolean;
+	messageOnly: boolean;
+	width: number;
+	height: number;
+	canvas: HTMLCanvasElement;
+	ctx: CanvasRenderingContext2D;
+	bg: any;
+	fgspeed: any;
+	fgshield: any;
+	speedFontRatio: number;
+	speedBarRatio: number;
+	shieldFontRatio: number;
+	shieldBarYRatio: number;
+	shieldBarWRatio: number;
+	shieldBarHRatio: number;
+	timeMarginRatio: number;
+	timeFontRatio: number;
+	font: string;
+	time: string;
+	message: string;
+	previousMessage: string;
+	messageTiming: number;
+	messagePos: number;
+	messagePosTarget: number;
+	messagePosTargetRatio: number;
+	messageA: number;
+	messageAS: number;
+	messageDuration: number;
+	messageDurationD: number;
+	messageDurationS: number;
+	messageYRatio: number;
+	messageFontRatio: number;
+	messageFontRatioStart: number;
+	messageFontRatioEnd: number;
+	messageFontLerp: number;
+	messageLerp: number;
+	messageFontAlpha: number;
+	lapMarginRatio: number;
+	lap: string;
+	lapSeparator: string;
+	timeSeparators: string[];
+	step: number;
+	maxStep: number;
 
 	// CONSTRUCTORS
 
-	constructor(opts) {
-		let self = this;
-
+	constructor(opts: { width: number; height: number; bg: string; speed: string; shield: string; font?: string; }) {
 		this.visible = true;
 		this.messageOnly = false;
 
@@ -63,14 +61,14 @@ export default class HUD {
 		this.canvas.width = this.width;
 		this.canvas.height = this.height;
 
-		this.ctx = this.canvas.getContext('2d');
+		this.ctx = this.canvas.getContext('2d')!;
 		this.ctx.textAlign = "center";
 
-		this.bg = opts.bg;//"textures/hud/hud-bg.png";
+		this.bg = opts.bg;
 
-		this.fgspeed = opts.speed;//"textures/hud/hud-fg-speed.png";
+		this.fgspeed = opts.speed;
 
-		this.fgshield = opts.shield;//"textures/hud/hud-fg-shield.png";
+		this.fgshield = opts.shield;
 
 		this.speedFontRatio = 24;
 		this.speedBarRatio = 2.91;
@@ -116,14 +114,14 @@ export default class HUD {
 
 	// METHODS
 
-	resize(w, h) {
+	resize(w: number, h: number) {
 		this.width = w;
 		this.height = h;
 		this.canvas.width = w;
 		this.canvas.height = h;
 	}
 
-	display(msg, duration) {
+	display(msg: string, duration?: number) {
 		this.messageTiming = 0;
 
 		if (this.message != "") {
@@ -136,10 +134,10 @@ export default class HUD {
 		this.messageFontRatio = this.messageFontRatioStart;
 		this.messageAS = 0.0;
 		this.message = msg;
-		this.messageDuration = duration == undefined ? this.messageDurationD : duration * 60;
+		this.messageDuration = duration === undefined ? this.messageDurationD : duration * 60;
 	}
 
-	updateLap(current, total) {
+	updateLap(current: string, total: string) {
 		this.lap = current + this.lapSeparator + total;
 	}
 
@@ -147,7 +145,7 @@ export default class HUD {
 		this.lap = "";
 	}
 
-	updateTime(time) {
+	updateTime(time: { m: string; s: string; ms: string; }) {
 		this.time = this.timeSeparators[0] + time.m + this.timeSeparators[1] + time.s + this.timeSeparators[2] + time.ms + this.timeSeparators[3];
 	}
 
@@ -155,7 +153,7 @@ export default class HUD {
 		this.time = "";
 	}
 
-	update(speed, speedRatio, shield, shieldRatio) {
+	update(speed: string, speedRatio: number, shield: string, shieldRatio: number) {
 		let SCREEN_WIDTH = this.width;
 		let SCREEN_HEIGHT = this.height;
 
@@ -166,7 +164,7 @@ export default class HUD {
 			this.ctx.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 			return;
 		}
-		
+
 		let w = this.bg.width;
 		let h = this.bg.height;
 		let r = h / w;
@@ -184,10 +182,10 @@ export default class HUD {
 		let sh = sho * shieldRatio;
 		let sy = (SCREEN_WIDTH / this.shieldBarYRatio) + sho - sh;
 
-		
-		if (this.step == 0) {
+
+		if (this.step === 0) {
 			this.ctx.clearRect(0, oh, SCREEN_WIDTH, nh);
-			
+
 			if (!this.messageOnly) {
 				this.ctx.drawImage(this.bg, o, oh, nw, nh);
 
@@ -224,18 +222,18 @@ export default class HUD {
 				this.ctx.fillText(shield, SCREEN_HW, SCREEN_HEIGHT - nh * 0.44);
 			}
 		}
-		else if (this.step == 1) {
+		else if (this.step === 1) {
 			this.ctx.clearRect(0, 0, SCREEN_WIDTH, oh);
-			
+
 			// TIME
-			if (this.time != "") {
+			if (this.time !== "") {
 				this.ctx.font = (SCREEN_WIDTH / this.timeFontRatio) + "px " + this.font;
 				this.ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
 				this.ctx.fillText(this.time, SCREEN_HW, SCREEN_WIDTH / this.timeMarginRatio);
 			}
 
 			// LAPS
-			if (this.lap != "") {
+			if (this.lap !== "") {
 				this.ctx.font = (SCREEN_WIDTH / this.timeFontRatio) + "px " + this.font;
 				this.ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
 				this.ctx.fillText(this.lap, SCREEN_WIDTH - SCREEN_WIDTH / this.lapMarginRatio, SCREEN_WIDTH / this.timeMarginRatio);
@@ -249,7 +247,7 @@ export default class HUD {
 				this.message = "";
 				this.messageA = 0.0;
 			}
-			else if (this.messageTiming > this.messageDuration && this.message != "") {
+			else if (this.messageTiming > this.messageDuration && this.message !== "") {
 				this.previousMessage = this.message;
 				this.message = "";
 				this.messagePos = 0.0;
@@ -257,7 +255,7 @@ export default class HUD {
 				this.messageA = this.messageFontAlpha;
 			}
 
-			if (this.previousMessage != "") {
+			if (this.previousMessage !== "") {
 				if (this.messageA < 0.001)
 					this.messageA = 0.0;
 				else
@@ -270,7 +268,7 @@ export default class HUD {
 				this.ctx.fillText(this.previousMessage, SCREEN_HW, my + this.messagePos);
 			}
 
-			if (this.message != "") {
+			if (this.message !== "") {
 				if (this.messageTiming < this.messageDurationS) {
 					this.messageAS += (this.messageFontAlpha - this.messageAS) * this.messageFontLerp;
 					this.messageFontRatio += (this.messageFontRatioEnd - this.messageFontRatio) * this.messageFontLerp;
@@ -279,7 +277,7 @@ export default class HUD {
 					this.messageAS = this.messageFontAlpha;
 					this.messageFontRatio = this.messageFontRatioEnd;
 				}
-				
+
 				this.ctx.font = (SCREEN_WIDTH / this.messageFontRatio) + "px " + this.font;
 				this.ctx.fillStyle = "rgba(255, 255, 255, " + this.messageAS + ")";
 				this.ctx.fillText(this.message, SCREEN_HW, my);
@@ -289,8 +287,7 @@ export default class HUD {
 		this.messageTiming++;
 
 		this.step++;
-		if (this.step == this.maxStep) this.step = 0;
+		if (this.step === this.maxStep) this.step = 0;
 	}
 
 }
-
