@@ -2,36 +2,55 @@ import THREE from "../../libs/Three.dev.js";
 import Particles from "../threejs/Particles.js";
 
 
+type ScenePlus = THREE.Scene & { add: Function }
+
+
 export default class ShipEffects {
 
 	// ATTRIBUTES
 
-	scene;
-	shipControls;
-	booster;
-	boosterLight;
-	boosterSprite;
-	useParticles;
-	pVel;
-	pOffset;
-	pRad;
-	shipVelocity;
-	pVelS;
-	pOffsetS;
-	pRadS;
-	particles;
+	scene: ScenePlus;
+	shipControls: any;
+	booster: any;
+	boosterLight: any;
+	boosterSprite: any;
+	useParticles: boolean;
+	pVel: THREE.Vector3;
+	pOffset: THREE.Vector3;
+	pRad: THREE.Vector3;
+	shipVelocity: THREE.Vector3;
+	pVelS: number;
+	pOffsetS: number;
+	pRadS: number;
+	particles: {
+		leftSparks: Particles;
+		leftClouds: Particles;
+		rightSparks: Particles;
+		rightClouds: Particles;
+	};
 
-	// CONSTRUCTORS
-
-	constructor(opts) {
+	constructor(opts: { scene: ScenePlus; shipControls: any; booster: any;
+	boosterLight: any; boosterSprite: any; useParticles: boolean;
+	textureSpark: any; textureCloud: any; }) {
 		this.scene = opts.scene;
 		this.shipControls = opts.shipControls;
-
 		this.booster = opts.booster;
 		this.boosterLight = opts.boosterLight;
 		this.boosterSprite = opts.boosterSprite;
-
 		this.useParticles = opts.useParticles;
+		this.pVel = new THREE.Vector3();
+		this.pOffset = new THREE.Vector3();
+		this.pRad = new THREE.Vector3();
+		this.shipVelocity = new THREE.Vector3();
+		this.pVelS = 0;
+		this.pOffsetS = 0;
+		this.pRadS = 0;
+		this.particles = {
+			leftSparks: new Particles(),
+			leftClouds: new Particles(),
+			rightSparks: new Particles(),
+			rightClouds: new Particles()
+		};
 
 		if (this.useParticles) {
 			this.pVel = new THREE.Vector3(0.5, 0, 0);
@@ -49,64 +68,59 @@ export default class ShipEffects {
 			this.pRad.normalize();
 
 			this.particles = {
+				leftSparks: new Particles({
+					randomness: new THREE.Vector3(0.4, 0.4, 0.4),
+					tint: 0xffffff,
+					color: 0xffc000,
+					color2: 0xffffff,
+					texture: opts.textureSpark,
+					size: 2,
+					life: 60,
+					max: 200,
+				}),
 
-				leftSparks: new Particles(
-					{
-						randomness: new THREE.Vector3(0.4, 0.4, 0.4),
-						tint: 0xffffff,
-						color: 0xffc000,
-						color2: 0xffffff,
-						texture: opts.textureSpark,
-						size: 2,
-						life: 60,
-						max: 200
-					}),
+				leftClouds: new Particles({
+					opacity: 0.8,
+					tint: 0xffffff,
+					color: 0x666666,
+					color2: 0xa4f1ff,
+					texture: opts.textureCloud,
+					size: 6,
+					blending: THREE.NormalBlending,
+					life: 60,
+					max: 200,
+					spawn: new THREE.Vector3(3, -0.3, 0),
+					spawnRadius: new THREE.Vector3(1, 1, 2),
+					velocity: new THREE.Vector3(0, 0, -0.4),
+					randomness: new THREE.Vector3(0.05, 0.05, 0.1),
+				}),
 
-				leftClouds: new Particles(
-					{
-						opacity: 0.8,
-						tint: 0xffffff,
-						color: 0x666666,
-						color2: 0xa4f1ff,
-						texture: opts.textureCloud,
-						size: 6,
-						blending: THREE.NormalBlending,
-						life: 60,
-						max: 200,
-						spawn: new THREE.Vector3(3, -0.3, 0),
-						spawnRadius: new THREE.Vector3(1, 1, 2),
-						velocity: new THREE.Vector3(0, 0, -0.4),
-						randomness: new THREE.Vector3(0.05, 0.05, 0.1)
-					}),
+				rightSparks: new Particles({
+					randomness: new THREE.Vector3(0.4, 0.4, 0.4),
+					tint: 0xffffff,
+					color: 0xffc000,
+					color2: 0xffffff,
+					texture: opts.textureSpark,
+					size: 2,
+					life: 60,
+					max: 200,
+				}),
 
-				rightSparks: new Particles(
-					{
-						randomness: new THREE.Vector3(0.4, 0.4, 0.4),
-						tint: 0xffffff,
-						color: 0xffc000,
-						color2: 0xffffff,
-						texture: opts.textureSpark,
-						size: 2,
-						life: 60,
-						max: 200
-					}),
-
-				rightClouds: new Particles(
-					{
-						opacity: 0.8,
-						tint: 0xffffff,
-						color: 0x666666,
-						color2: 0xa4f1ff,
-						texture: opts.textureCloud,
-						size: 6,
-						blending: THREE.NormalBlending,
-						life: 60,
-						max: 200,
-						spawn: new THREE.Vector3(-3, -0.3, 0),
-						spawnRadius: new THREE.Vector3(1, 1, 2),
-						velocity: new THREE.Vector3(0, 0, -0.4),
-						randomness: new THREE.Vector3(0.05, 0.05, 0.1)
-					})
+				rightClouds: new Particles({
+					opacity: 0.8,
+					tint: 0xffffff,
+					color: 0x666666,
+					color2: 0xa4f1ff,
+					texture: opts.textureCloud,
+					size: 6,
+					blending: THREE.NormalBlending,
+					life: 60,
+					max: 200,
+					spawn: new THREE.Vector3(-3, -0.3, 0),
+					spawnRadius: new THREE.Vector3(1, 1, 2),
+					velocity: new THREE.Vector3(0, 0, -0.4),
+					randomness: new THREE.Vector3(0.05, 0.05, 0.1),
+				}),
 			};
 
 			this.shipControls.mesh.add(this.particles.leftClouds.system);
@@ -118,16 +132,19 @@ export default class ShipEffects {
 
 	// METHODS
 
-	update(dt) {
-		let boostRatio, opacity, scale, intensity, random;
+	update(dt: number) {
+		let boostRatio: number,
+			opacity: number,
+			scale: number,
+			intensity: number,
+			random: number;
 
 		if (this.shipControls.destroyed) {
 			opacity = 0;
 			scale = 0;
 			intensity = 0;
 			random = 0;
-		}
-		else {
+		} else {
 			boostRatio = this.shipControls.getBoostRatio();
 			opacity = this.shipControls.key.forward ? 0.8 : 0.3 + boostRatio * 0.4;
 			scale = (this.shipControls.key.forward ? 1.0 : 0.8) + boostRatio * 0.5;
@@ -157,20 +174,20 @@ export default class ShipEffects {
 			if (this.shipControls.mesh) {
 				// RIGHT
 				this.shipControls.mesh.matrix.rotateAxis(this.particles.rightSparks.spawn);
-				this.particles.rightSparks.spawn.multiplyScalar(this.pOffsetS).addSelf(this.shipControls.dummy.position);
+				this.particles.rightSparks.spawn.multiplyScalar(this.pOffsetS).add(this.shipControls.dummy.position);
 
 				this.shipControls.mesh.matrix.rotateAxis(this.particles.rightSparks.velocity);
-				this.particles.rightSparks.velocity.multiplyScalar(this.pVelS).addSelf(this.shipVelocity);
+				this.particles.rightSparks.velocity.multiplyScalar(this.pVelS).add(this.shipVelocity);
 
 				this.shipControls.mesh.matrix.rotateAxis(this.particles.rightSparks.spawnRadius);
 				this.particles.rightSparks.spawnRadius.multiplyScalar(this.pRadS);
 
 				// LEFT
 				this.shipControls.mesh.matrix.rotateAxis(this.particles.leftSparks.spawn);
-				this.particles.leftSparks.spawn.multiplyScalar(this.pOffsetS).addSelf(this.shipControls.dummy.position);
+				this.particles.leftSparks.spawn.multiplyScalar(this.pOffsetS).add(this.shipControls.dummy.position);
 
 				this.shipControls.mesh.matrix.rotateAxis(this.particles.leftSparks.velocity);
-				this.particles.leftSparks.velocity.multiplyScalar(this.pVelS).addSelf(this.shipVelocity);
+				this.particles.leftSparks.velocity.multiplyScalar(this.pVelS).add(this.shipVelocity);
 
 				this.particles.leftSparks.spawnRadius.copy(this.particles.rightSparks.spawnRadius);
 			}
@@ -191,6 +208,4 @@ export default class ShipEffects {
 			this.particles.leftClouds.update(dt);
 		}
 	}
-
 }
-
