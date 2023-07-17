@@ -27,11 +27,15 @@ export default class ShipEffects {
 		leftClouds: Particles;
 		rightSparks: Particles;
 		rightClouds: Particles;
-	};
+	} | undefined;
 
-	constructor(opts: { scene: ScenePlus; shipControls: any; booster: any;
-	boosterLight: any; boosterSprite: any; useParticles: boolean;
-	textureSpark: any; textureCloud: any; }) {
+	// CONSTRUCTORS
+
+	constructor(opts: {
+		scene: ScenePlus; shipControls: any; booster: any;
+		boosterLight: any; boosterSprite: any; useParticles: boolean;
+		textureSpark: any; textureCloud: any;
+	}) {
 		this.scene = opts.scene;
 		this.shipControls = opts.shipControls;
 		this.booster = opts.booster;
@@ -45,12 +49,6 @@ export default class ShipEffects {
 		this.pVelS = 0;
 		this.pOffsetS = 0;
 		this.pRadS = 0;
-		this.particles = {
-			leftSparks: new Particles(),
-			leftClouds: new Particles(),
-			rightSparks: new Particles(),
-			rightClouds: new Particles()
-		};
 
 		if (this.useParticles) {
 			this.pVel = new THREE.Vector3(0.5, 0, 0);
@@ -144,7 +142,8 @@ export default class ShipEffects {
 			scale = 0;
 			intensity = 0;
 			random = 0;
-		} else {
+		}
+		else {
 			boostRatio = this.shipControls.getBoostRatio();
 			opacity = this.shipControls.key.forward ? 0.8 : 0.3 + boostRatio * 0.4;
 			scale = (this.shipControls.key.forward ? 1.0 : 0.8) + boostRatio * 0.5;
@@ -161,7 +160,7 @@ export default class ShipEffects {
 		}
 
 		// PARTICLES
-		if (this.useParticles) {
+		if (this.useParticles && this.particles !== undefined) {
 			this.shipVelocity.copy(this.shipControls.currentVelocity).multiplyScalar(0.7);
 
 			this.particles.rightSparks.velocity.copy(this.pVel);

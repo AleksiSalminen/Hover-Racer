@@ -9,37 +9,64 @@ import Particle from "./Particle.js";
  * @author Thibaut 'BKcore' Despoulain <http://bkcore.com>
  */
 
+type GeometryPlus = THREE.Geometry & {
+	lerp: any, verticesNeedUpdate: boolean,
+	colorsNeedUpdate: boolean
+}
+
 
 export default class Particles {
 
 	// ATTRIBUTES
 
-	black;
-	white;
-	material;
-	max;
-	spawnRate;
-	spawn;
-	velocity;
-	randomness;
-	force;
-	spawnRadius;
-	life;
-	ageing;
-	friction;
-	color;
-	color2;
-	position;
-	rotation;
-	sort;
-	pool;
-	buffer;
-	geometry;
-	system;
+	black: THREE.Color;
+	white: THREE.Color;
+	material: THREE.ParticleBasicMaterial;
+	max: number;
+	spawnRate: number;
+	spawn: THREE.Vector3;
+	velocity: THREE.Vector3;
+	randomness: THREE.Vector3;
+	force: THREE.Vector3;
+	spawnRadius: THREE.Vector3;
+	life: number;
+	ageing: number;
+	friction: number;
+	color: THREE.Color;
+	color2: THREE.Color | null;
+	position: THREE.Vector3;
+	rotation: THREE.Vector3;
+	sort: boolean;
+	pool: Particle[];
+	buffer: Particle[];
+	geometry: GeometryPlus;
+	system: THREE.ParticleSystem;
 
 	// CONSTRUCTORS
 
-	constructor(opts) {
+	constructor(opts?: {
+		tint?: number;
+		texture?: any;
+		size?: number;
+		blending?: number;
+		depthTest?: boolean;
+		transparent?: boolean;
+		opacity?: number;
+		max?: number;
+		spawnRate?: number;
+		spawn?: THREE.Vector3;
+		velocity?: THREE.Vector3;
+		randomness?: THREE.Vector3;
+		force?: THREE.Vector3;
+		spawnRadius?: THREE.Vector3;
+		life?: number;
+		friction?: number;
+		color?: number;
+		color2?: number;
+		position?: THREE.Vector3;
+		rotation?: THREE.Vector3;
+		sort?: boolean;
+	}) {
 		if (opts) {
 			this.black = new THREE.Color(0x000000);
 			this.white = new THREE.Color(0xffffff);
@@ -76,10 +103,13 @@ export default class Particles {
 
 			this.pool = [];
 			this.buffer = [];
-			this.geometry = null;
+			this.geometry = new THREE.Geometry();
 			this.system = null;
 
 			this.build();
+		}
+		else {
+			throw Error("Options not given");
 		}
 	}
 
@@ -110,25 +140,27 @@ export default class Particles {
 	 * Emits given number of particles
 	 * @param  int count
 	 */
-	emit(count) {
+	emit(count: number) {
 		let emitable = Math.min(count, this.pool.length);
 		for (let i = 0; i < emitable; ++i) {
 			let p = this.pool.pop();
-			p.available = false;
-			p.position.copy(this.spawn)
-				.addSelf(
-					this.randomVector()
-						.multiplySelf(this.spawnRadius)
-				);
-			p.velocity.copy(this.velocity)
-				.addSelf(
-					this.randomVector()
-						.multiplySelf(this.randomness)
-				);
-			p.force.copy(this.force);
-			p.basecolor.copy(this.color);
-			if (this.color2 != undefined) p.basecolor.lerpSelf(this.color2, Math.random());
-			p.life = 1.0;
+			if (p !== undefined && p !== null) {
+				p.available = false;
+				p.position.copy(this.spawn)
+					.add(
+						this.randomVector()
+							.multiply(this.spawnRadius)
+					);
+				p.velocity.copy(this.velocity)
+					.add(
+						this.randomVector()
+							.multiply(this.randomness)
+					);
+				p.force.copy(this.force);
+				p.basecolor.copy(this.color);
+				if (this.color2 != undefined) p.basecolor.lerp(this.color2, Math.random());
+				p.life = 1.0;
+			}
 		}
 	}
 
@@ -144,7 +176,7 @@ export default class Particles {
 	 * Updates particles (should be call in a RAF loop)
 	 * @param  float dt time delta ~1.0
 	 */
-	update(dt) {
+	update(dt: number) {
 		let p, l;
 		let df = new THREE.Vector3();
 		let dv = new THREE.Vector3();
@@ -173,10 +205,10 @@ export default class Particles {
 				p.velocity.multiplyScalar(this.friction);
 
 			df.copy(p.force).multiplyScalar(dt);
-			p.velocity.addSelf(df);
+			p.velocity.add(df);
 
 			dv.copy(p.velocity).multiplyScalar(dt);
-			p.position.addSelf(dv);
+			p.position.add(dv);
 		}
 
 		if (this.spawnRate > 0)
@@ -187,4 +219,3 @@ export default class Particles {
 	}
 
 }
-

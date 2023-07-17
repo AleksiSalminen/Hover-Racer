@@ -5,13 +5,13 @@ export default class Particle {
 
     // ATTRIBUTES
 
-    position;
-	velocity;
-	force;
-	color;
-	basecolor;
-	life;
-	available;
+    position: THREE.Vector3;
+    velocity: THREE.Vector3;
+    force: THREE.Vector3;
+    color: THREE.Color;
+    basecolor: THREE.Color;
+    life: number;
+    available: boolean;
 
     // CONSTRUCTORS
 
@@ -26,7 +26,7 @@ export default class Particle {
     }
 
     // METHODS
-
+    
     reset() {
         this.position.set(0, -100000, 0);
         this.velocity.set(0, 0, 0);
@@ -36,6 +36,4 @@ export default class Particle {
         this.life = 0.0;
         this.available = true;
     }
-
-} 
-
+}
