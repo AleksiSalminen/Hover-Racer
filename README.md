@@ -4,6 +4,10 @@
 
 A futuristic hover-craft -style 3D racing game
 
+![Main Menu Image](https://github.com/AleksiSalminen/Hover-Racer/blob/main/github-images/main_menu.png "Main Menu Image")
+
+![Game Image](https://github.com/AleksiSalminen/Hover-Racer/blob/main/github-images/game.png "Game Image")
+
 Game modes: time attack
 
 This project is based on a racing game called [HexGL](https://hexgl.bkcore.com/) -> source code: [GitHub](https://github.com/BKcore/HexGL) -> license: [MIT License](https://github.com/AleksiSalminen/Hover-Racer/blob/main/client/LICENSE)
